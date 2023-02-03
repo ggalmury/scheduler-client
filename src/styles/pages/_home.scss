@@ -1,0 +1,94 @@
+#auth-wrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, $main-mint 60%, rgb(206, 206, 206));
+}
+
+#auth-box {
+  display: flex;
+  flex-direction: column;
+  width: 480px;
+  height: 550px;
+  background-color: white;
+  overflow: hidden;
+}
+
+#auth-header {
+  display: flex;
+  height: 100px;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  color: $main-mint;
+}
+
+#login-form {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  align-items: center;
+
+  #email {
+    @include defaultLoginForm;
+
+    margin-top: 60px;
+  }
+
+  #credential {
+    @include defaultLoginForm;
+
+    margin-top: 40px;
+  }
+}
+
+#login-option {
+  display: flex;
+  height: 40px;
+  margin-left: 35px;
+  margin-right: 40px;
+  align-items: center;
+
+  #user-save {
+    display: flex;
+    width: 150px;
+    align-items: center;
+
+    &-label {
+      font-size: 0.8em;
+      cursor: pointer;
+    }
+  }
+
+  #find-pw {
+    flex: 1;
+    text-align: right;
+    font-size: 0.8em;
+    color: $main-mint;
+
+    cursor: pointer;
+  }
+}
+
+#signin-box {
+  display: flex;
+  height: 150px;
+  align-items: center;
+  justify-content: center;
+}
+
+#auth-footer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8em;
+
+  #signup {
+    text-indent: 10px;
+    color: $main-mint;
+    cursor: pointer;
+  }
+}

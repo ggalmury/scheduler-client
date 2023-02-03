@@ -1,0 +1,17 @@
+@mixin defaultLoginForm {
+  width: 400px;
+  height: 40px;
+  background-color: white;
+  border: none;
+  border-bottom: 1px solid gray;
+  font-size: 1em;
+  text-indent: 17px;
+
+  &:hover {
+    border-bottom: 2px solid $main-mint;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
