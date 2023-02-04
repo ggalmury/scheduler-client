@@ -1,4 +1,4 @@
-@mixin defaultLoginForm {
+@mixin defaultLoginForm($margin-top) {
   width: 400px;
   height: 40px;
   background-color: white;
@@ -6,6 +6,7 @@
   border-bottom: 1px solid gray;
   font-size: 1em;
   text-indent: 17px;
+  margin-top: $margin-top;
 
   &:hover {
     border-bottom: 2px solid $main-mint;

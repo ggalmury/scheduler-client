@@ -1,16 +1,50 @@
+import React, { useState } from "react";
+import axios, { AxiosResponse } from "axios";
+import { setEnv } from "../../common/util/envConfig";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState<string>("");
+  const [credential, setCredential] = useState<string>("");
+
+  const attemptLogin = async () => {
+    try {
+      const result: AxiosResponse = await axios.post(`${setEnv()}/auth/signin`, { email, credential });
+
+      alert("hi");
+    } catch (err) {
+      alert("Invalid user");
+      console.log(err);
+    }
+  };
+
+  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const inputCredential = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCredential(event.target.value);
+  };
+
   const resetPassword = (): any => {
+    // TODO: implememt password reset page
     alert("reset password!");
   };
 
+  const goTosignUp = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    navigate(`/signup`);
+  };
+
   return (
-    <div id="auth-wrapper">
-      <div id="auth-box">
-        <div id="auth-header">HELLO!</div>
-        <div id="auth-content">
-          <div id="login-form">
-            <input id="email" type="email" placeholder="email"></input>
-            <input id="credential" type="password" placeholder="password"></input>
+    <div className="auth-wrapper">
+      <div className="auth-box">
+        <div className="auth-header">HELLO!</div>
+        <div className="auth-content">
+          <div className="auth-form">
+            <input className="login-email" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
+            <input className="login-credential" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
           </div>
           <div id="login-option">
             <div id="user-save">
@@ -23,13 +57,17 @@ const Login = () => {
               Forgot password?
             </div>
           </div>
-          <div id="signin-box">
-            <button id="btn-signin">LOG IN</button>
+          <div className="signin-box">
+            <button className="btn-submit" onClick={attemptLogin}>
+              LOG IN
+            </button>
           </div>
         </div>
-        <div id="auth-footer">
+        <div className="auth-footer">
           <div>Don't have an account?</div>
-          <div id="signup">Sign Uo</div>
+          <div className="signup-or-signin" onClick={goTosignUp}>
+            Sign Up
+          </div>
         </div>
       </div>
     </div>

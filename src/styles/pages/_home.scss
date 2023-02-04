@@ -1,4 +1,4 @@
-#auth-wrapper {
+.auth-wrapper {
   display: flex;
   width: 100vw;
   height: 100vh;
@@ -7,7 +7,7 @@
   background: linear-gradient(to bottom, $main-mint 60%, rgb(206, 206, 206));
 }
 
-#auth-box {
+.auth-box {
   display: flex;
   flex-direction: column;
   width: 480px;
@@ -16,7 +16,7 @@
   overflow: hidden;
 }
 
-#auth-header {
+.auth-header {
   display: flex;
   height: 100px;
   justify-content: center;
@@ -25,23 +25,27 @@
   color: $main-mint;
 }
 
-#login-form {
+.auth-form {
   display: flex;
   flex-direction: column;
   height: 200px;
   align-items: center;
 
-  #email {
-    @include defaultLoginForm;
-
-    margin-top: 60px;
+  .login-email {
+    @include defaultLoginForm(60px);
   }
 
-  #credential {
-    @include defaultLoginForm;
-
-    margin-top: 40px;
+  .login-credential {
+    @include defaultLoginForm(40px);
   }
+
+  .register-input {
+    @include defaultLoginForm(30px);
+  }
+}
+
+.signup-form {
+  height: 240px;
 }
 
 #login-option {
@@ -72,21 +76,21 @@
   }
 }
 
-#signin-box {
+.signin-box {
   display: flex;
   height: 150px;
   align-items: center;
   justify-content: center;
 }
 
-#auth-footer {
+.auth-footer {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: center;
   font-size: 0.8em;
 
-  #signup {
+  .signup-or-signin {
     text-indent: 10px;
     color: $main-mint;
     cursor: pointer;
