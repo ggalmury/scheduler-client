@@ -1,16 +1,42 @@
 import React, { useState } from "react";
 import axios, { AxiosResponse } from "axios";
-import { setEnv } from "../../common/util/envConfig";
+import { setEnv } from "../../common/utils/envConfig";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setAccount, setAuth } from "../../store/slices/accountSlice";
+import { LoginData } from "../../common/interfaces/responseData";
+import { Account, Auth } from "../../common/interfaces/store";
+import { RootState } from "../../store/rootReducer";
 
 const Login = () => {
   const navigate = useNavigate();
+  const userAccount = useSelector((state: RootState) => state.account);
+  const dispatch = useDispatch();
   const [email, setEmail] = useState<string>("");
   const [credential, setCredential] = useState<string>("");
 
   const attemptLogin = async () => {
     try {
       const result: AxiosResponse = await axios.post(`${setEnv()}/auth/signin`, { email, credential });
+      const data: LoginData = result.data;
+
+      const account: Account = {
+        uid: data.uid,
+        userName: data.userName,
+        email: data.email,
+        createdDt: data.createdDt,
+      };
+
+      const auth: Auth = {
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+      };
+
+      console.log(account);
+      console.log(auth);
+
+      dispatch(setAccount(account));
+      dispatch(setAuth(auth));
 
       alert("hi");
     } catch (err) {
@@ -29,7 +55,8 @@ const Login = () => {
 
   const resetPassword = (): any => {
     // TODO: implememt password reset page
-    alert("reset password!");
+    // alert("reset password!");
+    console.log(userAccount);
   };
 
   const goTosignUp = (event: React.MouseEvent<HTMLElement>) => {

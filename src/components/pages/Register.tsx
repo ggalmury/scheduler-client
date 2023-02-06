@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios, { AxiosResponse } from "axios";
-import { setEnv } from "../../common/util/envConfig";
+import { setEnv } from "../../common/utils/envConfig";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -12,8 +12,9 @@ const Register = () => {
   const attemptRegister = async () => {
     try {
       const result: AxiosResponse = await axios.post(`${setEnv()}/auth/signup`, { userName, email, credential });
+      console.log(result);
 
-      alert("hi");
+      alert("Registered");
       navigate("/");
     } catch (err) {
       console.log(err);
