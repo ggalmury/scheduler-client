@@ -1,48 +1,26 @@
-import React, { useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import { setEnv } from "../../common/utils/envConfig";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { setAccount, setAuth } from "../../store/slices/accountSlice";
-import { LoginData } from "../../common/interfaces/responseData";
-import { Account, Auth } from "../../common/interfaces/store";
-import { RootState } from "../../store/rootReducer";
+import { RootState } from "../../../store/rootReducer";
+import { LoginRequest } from "../../../common/interfaces/requestData";
+import { fetchLogin } from "../../../store/axios/authRequest";
+import { logout } from "../../../store/slices/loginSlice";
 
 const Login = () => {
   const navigate = useNavigate();
-  const userAccount = useSelector((state: RootState) => state.account);
   const dispatch = useDispatch();
+  const userAccount = useSelector((state: RootState) => state.login.account);
+  const userAuth = useSelector((state: RootState) => state.login.auth);
+  const userStatus = useSelector((state: RootState) => state.login.status);
   const [email, setEmail] = useState<string>("");
   const [credential, setCredential] = useState<string>("");
 
+  useEffect(() => {});
+
   const attemptLogin = async () => {
-    try {
-      const result: AxiosResponse = await axios.post(`${setEnv()}/auth/signin`, { email, credential });
-      const data: LoginData = result.data;
+    const loginRequest: LoginRequest = { email, credential };
 
-      const account: Account = {
-        uid: data.uid,
-        userName: data.userName,
-        email: data.email,
-        createdDt: data.createdDt,
-      };
-
-      const auth: Auth = {
-        accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
-      };
-
-      console.log(account);
-      console.log(auth);
-
-      dispatch(setAccount(account));
-      dispatch(setAuth(auth));
-
-      alert("hi");
-    } catch (err) {
-      alert("Invalid user");
-      console.log(err);
-    }
+    dispatch(fetchLogin(loginRequest) as any);
   };
 
   const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,6 +35,10 @@ const Login = () => {
     // TODO: implememt password reset page
     // alert("reset password!");
     console.log(userAccount);
+  };
+
+  const logouttest = () => {
+    dispatch(logout(null));
   };
 
   const goTosignUp = (event: React.MouseEvent<HTMLElement>) => {
@@ -75,7 +57,7 @@ const Login = () => {
           </div>
           <div id="login-option">
             <div id="user-save">
-              <input id="user-save-check" type="checkbox"></input>
+              <input id="user-save-check" type="checkbox" onClick={logouttest}></input>
               <label id="user-save-label" htmlFor="user-save-check">
                 Remember Me!
               </label>

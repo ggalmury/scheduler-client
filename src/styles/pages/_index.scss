@@ -1,5 +1,15 @@
 body {
+  width: 100vw;
+  height: 100vh;
   margin: 0;
-  background-color: rgb(197, 197, 197);
+  // background-color: $main-mint;
+  background: $main-background;
   overflow-x: hidden;
+  font-family: "GmarketSansMedium";
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }

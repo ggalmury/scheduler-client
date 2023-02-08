@@ -1,24 +1,25 @@
-import React, { useState } from "react";
-import axios, { AxiosResponse } from "axios";
-import { setEnv } from "../../common/utils/envConfig";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { RegisterRequest } from "../../../common/interfaces/requestData";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRegister } from "../../../store/axios/authRequest";
+import { RootState } from "../../../store/rootReducer";
 
 const Register = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [userName, setUserName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [credential, setCredential] = useState<string>("");
 
-  const attemptRegister = async () => {
-    try {
-      const result: AxiosResponse = await axios.post(`${setEnv()}/auth/signup`, { userName, email, credential });
-      console.log(result);
+  const userStatus = useSelector((state: RootState) => state.login.status);
 
-      alert("Registered");
-      navigate("/");
-    } catch (err) {
-      console.log(err);
-    }
+  useEffect(() => {});
+
+  const attemptRegister = async () => {
+    const registerRequest: RegisterRequest = { userName, email, credential };
+
+    dispatch(fetchRegister(registerRequest) as any);
   };
 
   const inputUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,11 +32,6 @@ const Register = () => {
 
   const inputCredential = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCredential(event.target.value);
-  };
-
-  const resetPassword = () => {
-    // TODO: implememt password reset page
-    alert("reset password!");
   };
 
   const goTosignIn = (event: React.MouseEvent<HTMLElement>) => {

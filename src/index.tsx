@@ -1,19 +1,26 @@
-import { configureStore, createStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
+import persistStore from "redux-persist/es/persistStore";
+import { PersistGate } from "redux-persist/integration/react";
 import MainRouter from "./components/routers/MainRouter";
 import reportWebVitals from "./reportWebVitals";
-import { rootReducer } from "./store/rootReducer";
+import rootReducer from "./store/rootReducer";
 import "./styles/main.scss";
 
-export const store = configureStore({
+const store = configureStore({
   reducer: rootReducer,
+  middleware: (defaultMiddleware) => defaultMiddleware({ serializableCheck: false }),
 });
+
+const persistor = persistStore(store);
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <Provider store={store}>
-    <MainRouter />
+    <PersistGate loading={null} persistor={persistor}>
+      <MainRouter />
+    </PersistGate>
   </Provider>
 );
 

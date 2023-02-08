@@ -2,9 +2,17 @@
 @import "abstract/mixin";
 @import "abstract/variables";
 
+// base
+@import "base/font";
+
 // components
 @import "components/button";
 
+// layout
+@import "layout/header";
+@import "layout/nav";
+
 // pages
 @import "pages/index";
+@import "pages/auth";
 @import "pages/home";

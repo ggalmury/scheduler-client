@@ -9,3 +9,9 @@ export interface Auth {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface AccountStatus {
+  loading: boolean;
+  error: boolean;
+  isLoggedin: boolean;
+}
