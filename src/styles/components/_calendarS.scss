@@ -1,0 +1,36 @@
+#small-cal {
+  display: flex;
+  flex-direction: column;
+  width: 440px;
+  height: 320px;
+  align-items: center;
+  justify-content: center;
+  margin-right: 25px;
+
+  td {
+    font-size: 0.7em;
+  }
+
+  th {
+    font-size: 0.8em;
+  }
+
+  &-caption {
+    height: 35px;
+    font-size: 1.1em;
+  }
+
+  &-tb {
+    width: 400px;
+    height: 225px;
+  }
+
+  &-today {
+    background-color: rgba(251, 73, 73, 0.729);
+    border-radius: 100%;
+  }
+
+  .small-cal-except {
+    color: rgb(163, 163, 163);
+  }
+}

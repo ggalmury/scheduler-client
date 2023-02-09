@@ -28,11 +28,12 @@
   background-color: whitesmoke;
   border-top-left-radius: 20px;
   border-bottom-left-radius: 20px;
+  color: #00ada1;
 }
 
 .grayer {
   &:hover {
-    background-color: rgba(170, 170, 170, 0.686);
+    background-color: #88d3ce;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     transition: 0.25s;

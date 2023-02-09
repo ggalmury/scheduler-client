@@ -15,7 +15,7 @@ const Nav = () => {
     setActiveButton(RouteName.CALENDAR);
   };
 
-  const goToTasks = () => {
+  const goToTimeline = () => {
     setActiveButton(RouteName.TASKS);
   };
 
@@ -34,7 +34,7 @@ const Nav = () => {
             <div>Calendar</div>
           </div>
         </div>
-        <div className={`category ${activeButton === RouteName.TASKS ? "whiter" : "grayer"}`} onClick={goToTasks}>
+        <div className={`category ${activeButton === RouteName.TASKS ? "whiter" : "grayer"}`} onClick={goToTimeline}>
           <div className="category-content">
             <TaskSvg></TaskSvg>
             <div>Tasks</div>

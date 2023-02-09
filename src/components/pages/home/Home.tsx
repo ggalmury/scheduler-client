@@ -1,9 +1,12 @@
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { RootState } from "../../store/rootReducer";
-import Header from "../molecules/Header";
-import Nav from "../molecules/Nav";
+import { CalendarType } from "../../../common/utils/enums";
+import { RootState } from "../../../store/rootReducer";
+import Header from "../../molecules/Header";
+import Nav from "../../molecules/Nav";
+import Calendar from "../../shared/Calendar";
+import TaskSumm from "./TaskSumm";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -21,7 +24,12 @@ const Home = () => {
       <Header></Header>
       <div id="main-content">
         <Nav></Nav>
-        <div id="article"></div>
+        <div id="article">
+          <div id="article-upper">
+            <TaskSumm></TaskSumm>
+            <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
+          </div>
+        </div>
       </div>
     </Fragment>
   );
