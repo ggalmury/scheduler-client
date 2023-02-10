@@ -1,13 +1,25 @@
 #nav {
   display: flex;
   flex-direction: column;
-  width: 250px;
+  width: 210px;
+}
+
+#title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70px;
+  margin-top: 20px;
+
+  &-name {
+    font-size: 1.2em;
+  }
 }
 
 #menu {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
 .category {
@@ -15,7 +27,8 @@
   align-items: center;
   height: 45px;
   margin-top: 10px;
-  margin-left: 40px;
+  margin-left: 20px;
+  font-size: 0.9em;
   cursor: pointer;
 
   &-content {
@@ -33,7 +46,7 @@
 
 .grayer {
   &:hover {
-    background-color: #88d3ce;
+    background-color: $main-mint;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     transition: 0.25s;
@@ -41,6 +54,6 @@
 }
 
 .menu-hr {
-  width: 200px;
+  width: 160px;
   border: 1px solid whitesmoke;
 }

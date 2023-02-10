@@ -8,9 +8,6 @@ const Header = () => {
   return (
     <div id="header">
       <div className="header-content">
-        <div id="title">
-          <div id="title-name">Schedy</div>
-        </div>
         <div id="welcome-user">
           <div id="welcome-user-1">Hello, {userAccount.userName}!</div>
           <div id="welcome-user-2">How's everything going?</div>

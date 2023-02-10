@@ -1,11 +1,7 @@
 #small-cal {
   display: flex;
   flex-direction: column;
-  width: 440px;
-  height: 320px;
-  align-items: center;
-  justify-content: center;
-  margin-right: 25px;
+  margin-top: 20px;
 
   td {
     font-size: 0.7em;
@@ -21,8 +17,8 @@
   }
 
   &-tb {
-    width: 400px;
-    height: 225px;
+    width: 300px;
+    height: 215px;
   }
 
   &-today {
@@ -33,4 +29,11 @@
   .small-cal-except {
     color: rgb(163, 163, 163);
   }
+}
+
+.task-modal {
+  display: none;
+  position: relative;
+  width: 200px;
+  background-color: yellow;
 }

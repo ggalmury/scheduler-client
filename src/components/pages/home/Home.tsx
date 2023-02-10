@@ -1,16 +1,13 @@
-import { Fragment, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { CalendarType } from "../../../common/utils/enums";
 import { RootState } from "../../../store/rootReducer";
-import Header from "../../molecules/Header";
-import Nav from "../../molecules/Nav";
 import Calendar from "../../shared/Calendar";
 import TaskSumm from "./TaskSumm";
 
 const Home = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const userStatus = useSelector((state: RootState) => state.login.status);
 
   useEffect(() => {
@@ -20,18 +17,10 @@ const Home = () => {
   });
 
   return (
-    <Fragment>
-      <Header></Header>
-      <div id="main-content">
-        <Nav></Nav>
-        <div id="article">
-          <div id="article-upper">
-            <TaskSumm></TaskSumm>
-            <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
-          </div>
-        </div>
-      </div>
-    </Fragment>
+    <div id="article-upper">
+      <TaskSumm></TaskSumm>
+      <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
+    </div>
   );
 };
 

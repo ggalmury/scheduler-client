@@ -1,15 +1,18 @@
 #main-content {
   display: flex;
   flex: 1;
+  flex-direction: column;
+  background-color: whitesmoke;
+  border-radius: 30px;
+  margin-top: 15px;
+  margin-right: 15px;
+  margin-bottom: 15px;
 }
 
 #article {
-  background-color: whitesmoke;
-  flex: 1;
-  border-radius: 30px;
-  margin-right: 25px;
-  margin-bottom: 25px;
+  display: flex;
   text-align: center;
+  flex: 1;
 
   &-upper {
     display: flex;

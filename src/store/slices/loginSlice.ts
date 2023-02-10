@@ -48,7 +48,7 @@ const loginSlice = createSlice({
       state.account = action.payload.account;
       state.auth = action.payload.auth;
       Swal.fire({ icon: "success", title: `Welcome, ${state.account.userName}!`, showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
-        window.location.href = "/home";
+        window.location.href = "/main/home";
       });
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {

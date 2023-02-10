@@ -1,0 +1,80 @@
+#task-content {
+  display: flex;
+  flex: 1;
+  height: 680px;
+}
+
+#task-detail {
+  display: flex;
+  flex-direction: column;
+  width: 840px;
+  border-right: $inner-border;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    height: 80px;
+    border-bottom: $inner-border;
+
+    &-left {
+      width: 270px;
+      text-indent: 40px;
+    }
+
+    &-right {
+      width: 160px;
+    }
+
+    #task {
+      &-month {
+        font-size: 1.3em;
+        line-height: 50px;
+      }
+
+      &-today {
+        font-size: 0.8em;
+
+        color: gray;
+      }
+    }
+  }
+
+  &-body {
+    flex: 1;
+    overflow: scroll;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    .task-box {
+      display: flex;
+      height: 120px;
+      border-bottom: $inner-border;
+
+      &-timestamp {
+        width: 120px;
+        line-height: 40px;
+        text-indent: 30px;
+        font-size: 0.7em;
+        color: gray;
+        border-right: $inner-border;
+      }
+
+      &-data {
+      }
+    }
+  }
+}
+
+#task-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}

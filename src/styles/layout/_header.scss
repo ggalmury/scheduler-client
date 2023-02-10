@@ -1,36 +1,27 @@
 #header {
   display: flex;
   justify-content: space-between;
-  height: 110px;
+  height: 80px;
   align-items: center;
+  border-bottom: $inner-border;
 }
 
 .header-content {
   display: flex;
 }
 
-#title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 250px;
-
-  &-name {
-    font-size: 1.2em;
-  }
-}
-
 #welcome-user {
   width: 220px;
   text-align: center;
+  text-indent: 30px;
 
   &-1 {
     line-height: 40px;
-    font-size: 1.45em;
+    font-size: 1.2em;
   }
 
   &-2 {
-    font-size: 0.9em;
+    font-size: 0.7em;
   }
 }
 
@@ -66,10 +57,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
+    width: 60px;
 
     img {
-      width: 60px;
+      width: 40px;
     }
   }
 
@@ -80,12 +71,12 @@
     justify-content: center;
 
     &-username {
-      font-size: 1em;
+      font-size: 0.8em;
       line-height: 30px;
     }
 
     &-role {
-      font-size: 0.8em;
+      font-size: 0.7em;
       line-height: 20px;
     }
   }

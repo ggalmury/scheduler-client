@@ -2,7 +2,7 @@ const TaskSumm = () => {
   return (
     <div id="task-summ">
       <div id="task-summ-header">
-        <div id="recent-tasks">Recent Tasks</div>
+        <div id="recent-tasks">Today's tasks</div>
         <div id="goto-task-list">Task list</div>
       </div>
       <div className="task-summ-list">

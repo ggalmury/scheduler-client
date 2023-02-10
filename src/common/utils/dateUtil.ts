@@ -1,3 +1,8 @@
-export const getDatesInMonth = (year: number, month: number): number => {
-  return new Date(year, month, 0).getDate();
+import moment from "moment";
+import { DateFormat } from "./enums";
+
+export const getMoment = moment();
+
+export const getDate = (format: DateFormat | string): string | number => {
+  return getMoment.format(format);
 };
