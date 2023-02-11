@@ -1,7 +1,7 @@
 #task-content {
   display: flex;
   flex: 1;
-  height: 680px;
+  height: 700px;
 }
 
 #task-detail {
@@ -55,7 +55,7 @@
     .task-box {
       display: flex;
       height: 120px;
-      border-bottom: $inner-border;
+      border-top: $inner-border;
 
       &-timestamp {
         width: 120px;
@@ -67,6 +67,14 @@
       }
 
       &-data {
+        display: flex;
+        flex: 1;
+
+        &-chart {
+          display: flex;
+          justify-content: center;
+          flex: 1;
+        }
       }
     }
   }

@@ -17,31 +17,31 @@ const Login = () => {
 
   useEffect(() => {});
 
-  const attemptLogin = async () => {
+  const attemptLogin = async (): Promise<void> => {
     const loginRequest: LoginRequest = { email, credential };
 
     dispatch(fetchLogin(loginRequest) as any);
   };
 
-  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setEmail(event.target.value);
   };
 
-  const inputCredential = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const inputCredential = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setCredential(event.target.value);
   };
 
-  const resetPassword = (): any => {
+  const resetPassword = (): void => {
     // TODO: implememt password reset page
     // alert("reset password!");
     console.log(userAccount);
   };
 
-  const logouttest = () => {
+  const logouttest = (): void => {
     dispatch(logout(null));
   };
 
-  const goTosignUp = (event: React.MouseEvent<HTMLElement>) => {
+  const goTosignUp = (event: React.MouseEvent<HTMLElement>): void => {
     event.preventDefault();
     navigate(`/signup`);
   };

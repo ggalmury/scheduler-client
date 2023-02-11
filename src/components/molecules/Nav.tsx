@@ -4,10 +4,19 @@ import CalendarSvg from "../../common/svgs/CalendarSvg";
 import HomeSvg from "../../common/svgs/HomeSvg";
 import TaskSvg from "../../common/svgs/TaskSvg";
 import { RouteName } from "../../common/utils/enums";
+import { setClientEnv } from "../../config/envConfig";
 
 const Nav = () => {
   const navigate = useNavigate();
   const [activeButton, setActiveButton] = useState<string>(RouteName.HOME);
+
+  useState(() => {
+    if (window.location.href === `${setClientEnv()}/main/home`) {
+      setActiveButton(RouteName.HOME);
+    } else if (window.location.href === `${setClientEnv()}/main/task`) {
+      setActiveButton(RouteName.TASKS);
+    }
+  });
 
   const goToHome = () => {
     setActiveButton(RouteName.HOME);
