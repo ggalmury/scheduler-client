@@ -8,7 +8,7 @@ import reportWebVitals from "./reportWebVitals";
 import rootReducer from "./store/rootReducer";
 import "./styles/main.scss";
 
-const store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
   middleware: (defaultMiddleware) => defaultMiddleware({ serializableCheck: false }),
 });
