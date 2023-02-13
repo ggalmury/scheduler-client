@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Account, AccountStatus, Auth } from "../../common/interfaces/store";
-import { fetchLogin } from "../axios/authRequest";
+import { fetchLogin, fetchToken } from "../axios/authRequest";
 import Swal from "sweetalert2";
 
 const initialState = {
@@ -54,6 +54,22 @@ const loginSlice = createSlice({
     builder.addCase(fetchLogin.rejected, (state, action) => {
       state.status = { loading: false, error: true, isLoggedin: false };
       Swal.fire({ icon: "error", title: "Oops!", text: "Invalid user", showCancelButton: false, confirmButtonText: "confirm" });
+    });
+    builder.addCase(fetchToken.fulfilled, (state, action) => {
+      state.account.email = action.payload.email;
+      state.auth.accessToken = action.payload.accessToken;
+      state.auth.refreshToken = action.payload.refreshToken;
+      console.log("Token saved");
+    });
+    builder.addCase(fetchToken.rejected, (state, action) => {
+      state.account = initialState.account;
+      state.auth = initialState.auth;
+      state.status = initialState.status;
+      console.log(state);
+      Swal.fire({ icon: "error", title: "Oops!", text: "Session expired. Please log in", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
+        window.location.href = "/";
+        return;
+      });
     });
   },
 });

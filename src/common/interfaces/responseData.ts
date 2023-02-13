@@ -13,3 +13,9 @@ export interface RegisterResponse {
   email: string;
   createDt: Date;
 }
+
+export interface TokenResponse {
+  email: string;
+  accessToken: string;
+  refreshToken: string;
+}

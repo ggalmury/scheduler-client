@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { store } from "..";
+import { fetchToken } from "../store/axios/authRequest";
 import { RootState } from "../store/rootReducer";
 import { setServerEnv } from "./envConfig";
 
@@ -15,17 +16,16 @@ customAxiosRequest.interceptors.request.use((req: InternalAxiosRequestConfig): I
 
 customAxiosRequest.interceptors.response.use(
   (res: AxiosResponse): AxiosResponse => {
-    console.log(res);
-    console.log("1234");
+    console.log("success request first");
 
     return res;
   },
-  (err: any) => {
+  async (err: any) => {
     if (err instanceof AxiosError) {
-      // TODO: implement token regenerate logic
-      // access token expire(401) -> request both tokens -> if 401 then refresh token expired(user logout)
-    }
+      console.log("fail request first");
+      await store.dispatch(fetchToken() as any);
 
-    return Promise.reject(err);
+      return Promise.reject(err);
+    }
   }
 );

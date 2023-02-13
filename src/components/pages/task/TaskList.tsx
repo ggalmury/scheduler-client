@@ -1,10 +1,8 @@
-import axios, { AxiosResponse } from "axios";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Auth } from "../../../common/interfaces/store";
 import { getDate } from "../../../common/utils/dateUtil";
 import { CalendarType, DateFormat } from "../../../common/utils/enums";
-import { setServerEnv } from "../../../config/envConfig";
 import { fetchTaskCreate } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 import Calendar from "../../shared/Calendar";

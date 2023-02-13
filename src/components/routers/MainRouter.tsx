@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
@@ -6,6 +7,8 @@ import Main from "../pages/Main";
 import TaskList from "../pages/task/TaskList";
 
 const MainRouter = () => {
+  useAuth();
+
   return (
     <BrowserRouter>
       <Routes>

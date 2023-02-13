@@ -1,9 +1,11 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
+import { store } from "../..";
 import { LoginRequest, RegisterRequest } from "../../common/interfaces/requestData";
-import { LoginResponse, RegisterResponse } from "../../common/interfaces/responseData";
+import { LoginResponse, RegisterResponse, TokenResponse } from "../../common/interfaces/responseData";
 import { Account, Auth } from "../../common/interfaces/store";
 import { setServerEnv } from "../../config/envConfig";
+import { RootState } from "../rootReducer";
 
 export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<{ account: Account; auth: Auth }> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signin`, { email, credential });
@@ -27,6 +29,18 @@ export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, creden
 export const fetchRegister = createAsyncThunk("auth/signup", async ({ userName, email, credential }: RegisterRequest): Promise<RegisterResponse> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signup`, { userName, email, credential });
   const data: RegisterResponse = response.data;
+
+  return data;
+});
+
+export const fetchToken = createAsyncThunk("auth/token", async (_, thunkApi) => {
+  const state = store.getState() as RootState;
+
+  const email: string = state.login.account.email;
+  const { accessToken, refreshToken } = state.login.auth;
+
+  const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/token`, { email, accessToken, refreshToken });
+  const data: TokenResponse = response.data;
 
   return data;
 });
