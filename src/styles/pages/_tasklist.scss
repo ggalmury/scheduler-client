@@ -1,6 +1,7 @@
 #task-content {
   display: flex;
   flex: 1;
+  position: relative;
   height: 700px;
 }
 
@@ -34,7 +35,7 @@
       }
 
       &-today {
-        font-size: 0.8em;
+        font-size: 0.7em;
 
         color: gray;
       }

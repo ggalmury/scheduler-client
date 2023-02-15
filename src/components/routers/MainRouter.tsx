@@ -1,9 +1,11 @@
+import { Fragment } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
 import Main from "../pages/Main";
+import TaskCreateModal from "../pages/modal/TaskCreateModal";
 import TaskList from "../pages/task/TaskList";
 
 const MainRouter = () => {

@@ -3,6 +3,7 @@ import { store } from "..";
 import { fetchToken } from "../store/axios/authRequest";
 import { RootState } from "../store/rootReducer";
 import { setServerEnv } from "./envConfig";
+import { AxiosErrorMessage, CustomErrorMessage } from "../common/enums/errorCode";
 
 export const customAxiosRequest = axios.create({ baseURL: `${setServerEnv()}` });
 
@@ -22,10 +23,22 @@ customAxiosRequest.interceptors.response.use(
   },
   async (err: any) => {
     if (err instanceof AxiosError) {
-      console.log("fail request first");
-      await store.dispatch(fetchToken() as any);
+      if (err.message === AxiosErrorMessage.UNAUTHORIZED) {
+        const url: string | undefined = err.config?.url;
+        const data: string | undefined = JSON.parse(err.config?.data);
 
-      return Promise.reject(err);
+        if (url && data) {
+          const test = await store.dispatch(fetchToken() as any);
+          if (test.error.message === AxiosErrorMessage.UNAUTHORIZED) {
+            throw new Error(CustomErrorMessage.SESSION_EXPIRED);
+          }
+          const result: AxiosResponse = await customAxiosRequest.post(url, data);
+
+          return Promise.resolve(result);
+        }
+      }
     }
+
+    return Promise.reject(err);
   }
 );
