@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TaskRequest } from "../../../common/interfaces/requestData";
+import Swal from "sweetalert2";
+import { TaskTimeDetail } from "../../../common/interfaces/global";
+import { CreateTaskToggleProp } from "../../../common/interfaces/props";
+import { TaskCreateRequest } from "../../../common/interfaces/requestData";
 import { Account } from "../../../common/interfaces/store";
 import { getMoment } from "../../../common/utils/dateUtil";
 import { fetchTaskCreate } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
-const TaskCreateModal = () => {
+const TaskCreateModal = ({ createTaskModal, setCreateTaskModal }: CreateTaskToggleProp) => {
   const dispatch = useDispatch();
   const userAccount: Account = useSelector((state: RootState) => state.login.account);
+  const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [location, setLocation] = useState<string>("");
-  const [startTime, setStartTime] = useState<{ hour: number; minute: number }>({ hour: 0, minute: 0 });
-  const [endTime, setEndTime] = useState<{ hour: number; minute: number }>({ hour: 0, minute: 0 });
+  const [startTime, setStartTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
+  const [endTime, setEndTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
   const [color, setColor] = useState<string>("#88d3ce");
   const [privacy, setPrivacy] = useState<string>("public");
+
+  useEffect(() => {}, [createTaskModal]);
 
   const getTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -60,7 +66,7 @@ const TaskCreateModal = () => {
       return;
     }
 
-    const taskRequest: TaskRequest = {
+    const taskRequest: TaskCreateRequest = {
       uid: userAccount.uid,
       userName: userAccount.userName,
       email: userAccount.email,
@@ -68,12 +74,16 @@ const TaskCreateModal = () => {
       description,
       color,
       location,
-      date: getMoment.toDate(),
+      date: date.moment.toDate(),
       time: { startAt: startTime, endAt: endTime },
       privacy,
     };
 
     dispatch(fetchTaskCreate(taskRequest) as any);
+
+    Swal.fire({ icon: "success", text: "Task successfully created", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
+      setCreateTaskModal(false);
+    });
   };
 
   return (

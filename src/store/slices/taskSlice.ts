@@ -1,9 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Swal from "sweetalert2";
 import { CustomErrorMessage } from "../../common/enums/errorCode";
-import { fetchTaskCreate } from "../axios/taskRequest";
+import { TaskResponse } from "../../common/interfaces/responseData";
+import { TaskInitialState } from "../../common/interfaces/store";
+import { fetchTaskCreate, fetchTaskList } from "../axios/taskRequest";
+import { enableMapSet } from "immer";
 
-const initialState = {};
+const initialState: TaskInitialState = {
+  tasks: new Map(),
+};
 
 const taskSlice = createSlice({
   name: "task",
@@ -11,7 +16,6 @@ const taskSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchTaskCreate.fulfilled, (state, action) => {
-      console.log("success request second");
       console.log(action.payload);
     });
     builder.addCase(fetchTaskCreate.rejected, (state, action) => {
@@ -24,6 +28,21 @@ const taskSlice = createSlice({
       }
 
       Swal.fire({ icon: "error", title: "Oops!", text: "Something went wrong. Please try again", showCancelButton: false, confirmButtonText: "confirm" });
+    });
+    builder.addCase(fetchTaskList.fulfilled, (state, action) => {
+      enableMapSet();
+      const tasks: TaskResponse[] = action.payload;
+      const taskByDate = new Map<number, TaskResponse[]>();
+
+      for (let i = 0; i < 31; i++) {
+        const result: TaskResponse[] = tasks.filter((task) => new Date(task.date).getDate() === i);
+
+        if (result.length !== 0) {
+          taskByDate.set(i, result);
+        }
+      }
+
+      state.tasks = taskByDate;
     });
   },
 });

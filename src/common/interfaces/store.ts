@@ -1,4 +1,4 @@
-import { TaskPrivacy } from "../enums/task";
+import { TaskResponse } from "./responseData";
 
 export interface Account {
   uid: number;
@@ -18,15 +18,6 @@ export interface AccountStatus {
   isLoggedin: boolean;
 }
 
-export interface TaskDetail {
-  uid: number;
-  userName: string;
-  email: string;
-  title: string;
-  description: string;
-  color: string;
-  location: string;
-  date: Date;
-  time: { startAt: { hour: number; minute: number }; endAt: { hour: number; minute: number } };
-  privacy: TaskPrivacy;
+export interface TaskInitialState {
+  tasks: Map<number, TaskResponse[]>;
 }

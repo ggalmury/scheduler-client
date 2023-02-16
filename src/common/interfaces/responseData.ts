@@ -1,3 +1,5 @@
+import { TaskTime } from "./global";
+
 export interface LoginResponse {
   uid: number;
   userName: string;
@@ -18,4 +20,19 @@ export interface TokenResponse {
   email: string;
   accessToken: string;
   refreshToken: string;
+}
+
+export interface TaskResponse {
+  taskId: number;
+  uid: number;
+  userName: string;
+  email: string;
+  title: string;
+  description: string;
+  color: string;
+  location: string;
+  date: Date;
+  time: TaskTime;
+  privacy: string;
+  createdDt: Date;
 }

@@ -20,7 +20,6 @@ const Home = () => {
   return (
     <div id="article-upper">
       <TaskSumm></TaskSumm>
-      <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
     </div>
   );
 };

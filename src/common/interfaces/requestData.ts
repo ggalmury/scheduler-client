@@ -1,3 +1,5 @@
+import { TaskTime } from "./global";
+
 export interface LoginRequest {
   email: string;
   credential: string;
@@ -9,7 +11,7 @@ export interface RegisterRequest {
   credential: string;
 }
 
-export interface TaskRequest {
+export interface TaskCreateRequest {
   uid: number;
   userName: string;
   email: string;
@@ -18,6 +20,11 @@ export interface TaskRequest {
   color: string;
   location: string;
   date: Date;
-  time: { startAt: { hour: number; minute: number }; endAt: { hour: number; minute: number } };
+  time: TaskTime;
   privacy: string;
+}
+
+export interface TaskSearchRequest {
+  uid: number;
+  email: string;
 }

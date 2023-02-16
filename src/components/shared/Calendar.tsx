@@ -1,15 +1,21 @@
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { CalendarProp } from "../../common/interfaces/props";
 import { CalendarType } from "../../common/utils/enums";
+import { setDate } from "../../store/slices/dateSlice";
 
 const Calendar = ({ size }: CalendarProp) => {
+  const dispatch = useDispatch();
+
   const [getMoment, setMoment] = useState<moment.Moment>(moment());
   const calendarClass: CalendarType = size;
 
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf("month").week();
   const lastWeek: number = today.clone().endOf("month").week() === 1 ? 53 : today.clone().endOf("month").week();
+
+  useEffect(() => {}, [getMoment]);
 
   const prevMonth = () => {
     setMoment(getMoment.clone().subtract(1, "month"));
@@ -19,7 +25,10 @@ const Calendar = ({ size }: CalendarProp) => {
     setMoment(getMoment.clone().add(1, "month"));
   };
 
-  const returnToday = () => setMoment(moment());
+  const returnToday = () => {
+    setMoment(moment());
+    dispatch(setDate(moment()));
+  };
 
   const calendarArr = () => {
     let result: any[] = [];
@@ -36,7 +45,13 @@ const Calendar = ({ size }: CalendarProp) => {
               if (moment().format("YYYYMMDD") === days.format("YYYYMMDD")) {
                 // TODO: change background color (today or not this month case)
                 return (
-                  <td id={`${calendarClass}-today`} key={index}>
+                  <td
+                    id={`${calendarClass}-today`}
+                    key={index}
+                    onClick={() => {
+                      dispatch(setDate(days));
+                    }}
+                  >
                     <span>{days.format("D")}</span>
                   </td>
                 );
@@ -48,7 +63,12 @@ const Calendar = ({ size }: CalendarProp) => {
                 );
               } else {
                 return (
-                  <td key={index}>
+                  <td
+                    key={index}
+                    onClick={() => {
+                      dispatch(setDate(days));
+                    }}
+                  >
                     <span>{days.format("D")}</span>
                   </td>
                 );

@@ -17,8 +17,6 @@ customAxiosRequest.interceptors.request.use((req: InternalAxiosRequestConfig): I
 
 customAxiosRequest.interceptors.response.use(
   (res: AxiosResponse): AxiosResponse => {
-    console.log("success request first");
-
     return res;
   },
   async (err: any) => {
