@@ -10,8 +10,19 @@
   display: flex;
 }
 
+#title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-indent: 60px;
+
+  &-name {
+    font-size: 1.2em;
+  }
+}
+
 #welcome-user {
-  width: 220px;
+  width: 260px;
   text-align: center;
   text-indent: 30px;
 
@@ -51,7 +62,7 @@
 
 #profile-summ {
   display: flex;
-  width: 260px;
+  width: 180px;
 
   &-img {
     display: flex;

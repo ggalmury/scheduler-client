@@ -1,12 +1,8 @@
-#main-content {
+.content {
   display: flex;
   flex: 1;
   flex-direction: column;
   background-color: whitesmoke;
-  border-radius: 30px;
-  margin-top: 15px;
-  margin-right: 15px;
-  margin-bottom: 15px;
 }
 
 #article {

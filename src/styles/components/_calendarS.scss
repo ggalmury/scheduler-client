@@ -1,34 +1,43 @@
-#small-cal {
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
+.small-cal {
+  margin: 30px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 25px;
 
   td {
     font-size: 0.7em;
+    min-width: 30px;
   }
 
   th {
-    font-size: 0.8em;
+    font-size: 0.7em;
   }
 
-  &-caption {
+  &__caption {
     height: 35px;
     font-size: 1.1em;
   }
 
-  &-tb {
-    width: 320px;
-    height: 230px;
+  &__btn-changeMonth {
+    width: 20px;
+    height: 20px;
+    background-color: inherit;
+    font-size: 1.2em;
+    margin-left: 30px;
+    margin-right: 30px;
+    border: none;
   }
 
-  &-today {
-    width: 32px;
-    height: 32px;
-    background-color: rgba(251, 73, 73, 0.729);
+  &__table {
+    width: 270px;
+    height: 210px;
+  }
+
+  &__today {
+    background-color: rgba(255, 132, 132, 0.729);
     border-radius: 100%;
   }
 
-  .small-cal-except {
+  &__except {
     color: rgb(163, 163, 163);
   }
 }

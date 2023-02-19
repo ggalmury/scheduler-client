@@ -7,10 +7,4 @@ export interface CalendarProp {
 
 export interface TaskChartProp {
   idx: number;
-  pos: number;
-}
-
-export interface CreateTaskToggleProp {
-  createTaskModal: boolean;
-  setCreateTaskModal: React.Dispatch<React.SetStateAction<boolean>>;
 }

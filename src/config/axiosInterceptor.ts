@@ -27,11 +27,16 @@ customAxiosRequest.interceptors.response.use(
 
         if (url && data) {
           const test = await store.dispatch(fetchToken() as any);
-          if (test.error.message === AxiosErrorMessage.UNAUTHORIZED) {
+          console.log(test);
+
+          if (fetchToken.rejected.match(test)) {
+            console.log("session expired");
             throw new Error(CustomErrorMessage.SESSION_EXPIRED);
           }
-          const result: AxiosResponse = await customAxiosRequest.post(url, data);
 
+          console.log("재요청 전");
+          const result: AxiosResponse = await customAxiosRequest.post(url, data);
+          console.log("재요청 후");
           return Promise.resolve(result);
         }
       }

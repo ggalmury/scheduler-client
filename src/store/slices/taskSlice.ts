@@ -16,7 +16,13 @@ const taskSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder.addCase(fetchTaskCreate.fulfilled, (state, action) => {
-      console.log(action.payload);
+      const newTaskDate: number = new Date(action.payload.date).getDate();
+      const taskArray = state.tasks.get(newTaskDate);
+      if (taskArray) {
+        taskArray.push(action.payload);
+      } else {
+        state.tasks.set(newTaskDate, [action.payload]);
+      }
     });
     builder.addCase(fetchTaskCreate.rejected, (state, action) => {
       if (action.error.message === CustomErrorMessage.SESSION_EXPIRED) {
@@ -43,6 +49,18 @@ const taskSlice = createSlice({
       }
 
       state.tasks = taskByDate;
+    });
+    builder.addCase(fetchTaskList.rejected, (state, action) => {
+      console.log(action.error);
+      if (action.error.message === CustomErrorMessage.SESSION_EXPIRED) {
+        Swal.fire({ icon: "error", title: "Oops!", text: "Session expired. Please log in", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
+          window.location.href = "/";
+        });
+
+        return;
+      }
+
+      Swal.fire({ icon: "error", title: "Oops!", text: "Something went wrong. Please try again", showCancelButton: false, confirmButtonText: "confirm" });
     });
   },
 });

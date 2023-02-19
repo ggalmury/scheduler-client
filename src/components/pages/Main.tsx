@@ -8,7 +8,7 @@ const Main = () => {
   return (
     <Fragment>
       <Nav></Nav>
-      <div id="main-content">
+      <div className="content">
         <Header></Header>
         <div id="article">
           <Outlet />

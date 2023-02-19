@@ -46,7 +46,7 @@ const Calendar = ({ size }: CalendarProp) => {
                 // TODO: change background color (today or not this month case)
                 return (
                   <td
-                    id={`${calendarClass}-today`}
+                    className={`${calendarClass}__today`}
                     key={index}
                     onClick={() => {
                       dispatch(setDate(days));
@@ -57,7 +57,7 @@ const Calendar = ({ size }: CalendarProp) => {
                 );
               } else if (days.format("MM") !== today.format("MM")) {
                 return (
-                  <td className={`${calendarClass}-except`} key={index}>
+                  <td className={`${calendarClass}__except`} key={index}>
                     <span>{days.format("D")}</span>
                   </td>
                 );
@@ -82,17 +82,17 @@ const Calendar = ({ size }: CalendarProp) => {
   };
 
   return (
-    <div id={`${calendarClass}`}>
-      <div id={`${calendarClass}-caption`}>
-        <button className={`${calendarClass}-btn`} onClick={prevMonth}>
+    <div className={`${calendarClass}`}>
+      <div className={`${calendarClass}__caption`}>
+        <button className={`${calendarClass}__btn-changeMonth`} onClick={prevMonth}>
           &lt;
         </button>
         <span onClick={returnToday}>{today.format("MMM, YYYY")}</span>
-        <button className={`${calendarClass}-btn`} onClick={nextMonth}>
+        <button className={`${calendarClass}__btn-changeMonth`} onClick={nextMonth}>
           &gt;
         </button>
       </div>
-      <table id={`${calendarClass}-tb`}>
+      <table className={`${calendarClass}__table`}>
         <thead>
           <tr>
             <th>Sun</th>

@@ -1,48 +1,72 @@
-#task-content {
+.task-content {
   display: flex;
   flex: 1;
   position: relative;
-  height: 700px;
 }
 
-#task-detail {
+.task-option {
   display: flex;
   flex-direction: column;
-  width: 840px;
+  align-items: center;
+  width: 320px;
+  border-right: $inner-border;
+}
+
+.task-timestamp {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   border-right: $inner-border;
 
-  &-header {
+  &__header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     text-align: left;
     height: 80px;
+    justify-content: space-between;
     border-bottom: $inner-border;
+  }
 
-    &-left {
-      width: 270px;
-      text-indent: 40px;
+  &__counter-box {
+    display: flex;
+    width: 240px;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  &__counter {
+    width: 80px;
+    height: 70px;
+    border-radius: 10px;
+    line-height: 35px;
+    color: white;
+    font-size: 0.9em;
+    text-align: center;
+
+    &--main {
+      background-color: $main-task-color;
     }
 
-    &-right {
-      width: 160px;
-    }
-
-    #task {
-      &-month {
-        font-size: 1.3em;
-        line-height: 50px;
-      }
-
-      &-today {
-        font-size: 0.7em;
-
-        color: gray;
-      }
+    &--sub {
+      background-color: $sub-task-color;
     }
   }
 
-  &-body {
+  &__date {
+    width: 270px;
+    text-indent: 30px;
+
+    &--month {
+      font-size: 1.4em;
+      line-height: 55px;
+    }
+
+    &--today {
+      font-size: 0.7em;
+      color: gray;
+    }
+  }
+
+  &__body {
     flex: 1;
     overflow: scroll;
 
@@ -52,38 +76,62 @@
     &::-webkit-scrollbar {
       display: none;
     }
-
-    .task-box {
-      display: flex;
-      height: 100px;
-      border-top: $inner-border;
-
-      &-timestamp {
-        width: 120px;
-        line-height: 40px;
-        text-indent: 30px;
-        font-size: 0.7em;
-        color: gray;
-        border-right: $inner-border;
-      }
-
-      &-data {
-        display: flex;
-        flex: 1;
-
-        &-chart {
-          display: flex;
-          justify-content: center;
-          flex: 1;
-        }
-      }
-    }
   }
 }
 
-#task-stat {
+.task-box {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   flex: 1;
+  height: 90px;
+  border-top: $inner-border;
+
+  &__time {
+    width: 120px;
+    line-height: 40px;
+    text-indent: 30px;
+    font-size: 0.7em;
+    color: gray;
+    border-right: $inner-border;
+  }
+
+  &__main-task {
+    display: flex;
+    flex: 1;
+  }
+
+  &__chart {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+
+  &__sub-task {
+    flex: 1;
+    border-left: $inner-border;
+  }
+
+  &__modal {
+    position: relative;
+    min-height: 30px;
+    width: 150px;
+    border-radius: 10px;
+    z-index: 1;
+    color: white;
+    text-align: left;
+    text-indent: 15px;
+  }
+
+  &__duration {
+    font-size: 0.6em;
+  }
+
+  &__title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.task-stat {
+  width: 340px;
 }

@@ -1,7 +1,4 @@
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100vw;
   height: 100vh;
   margin: 0;
@@ -12,8 +9,6 @@ body {
 
 #root {
   display: flex;
-  width: 1440px;
-  height: 796px;
-  border: 4px solid whitesmoke;
-  border-radius: 10px;
+  width: 100vw;
+  height: 100vh;
 }

@@ -34,27 +34,20 @@ const Nav = () => {
 
   return (
     <div id="nav">
-      <div id="title">
-        <div id="title-name">Schedy</div>
-      </div>
-      <hr className="menu-hr"></hr>
       <div id="menu">
         <div className={`category ${activeButton === RouteName.HOME ? "whiter" : "grayer"}`} onClick={goToHome}>
           <div className="category-content">
             <HomeSvg></HomeSvg>
-            <div>Home</div>
           </div>
         </div>
         <div className={`category ${activeButton === RouteName.CALENDAR ? "whiter" : "grayer"}`} onClick={goToCalendar}>
           <div className="category-content">
             <CalendarSvg></CalendarSvg>
-            <div>Calendar</div>
           </div>
         </div>
         <div className={`category ${activeButton === RouteName.TASKS ? "whiter" : "grayer"}`} onClick={goToTasks}>
           <div className="category-content">
             <TaskSvg></TaskSvg>
-            <div>Tasks</div>
           </div>
         </div>
       </div>
