@@ -2,28 +2,37 @@ import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../..";
 import { TaskType } from "../../../common/enums/task";
-import { TaskSearchRequest } from "../../../common/interfaces/requestData";
+import { TaskSearchRequest, TaskDeleteRequest } from "../../../common/interfaces/requestData";
 import { TaskResponse } from "../../../common/interfaces/responseData";
 import { Account } from "../../../common/interfaces/store";
+import ClockSvg from "../../../common/svgs/ClockSvg";
+import LocationSvg from "../../../common/svgs/LocationSvg";
+import ScopeSvg from "../../../common/svgs/ScopeSvg";
+import { addPad } from "../../../common/utils/dateUtil";
 import { CalendarType, DateFormat } from "../../../common/utils/enums";
-import { fetchTaskList } from "../../../store/axios/taskRequest";
+import { fetchTaskDelete, fetchTaskList } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 import Calendar from "../../shared/Calendar";
-import TaskCreateModal from "../modal/TaskCreateModal";
+import TaskCreate from "./TaskCreate";
 
 const TaskList = () => {
   const dispatch = useDispatch();
   const userAccount: Account = useSelector((state: RootState) => state.login.account);
-  const userTask = useSelector((state: RootState) => state.task.tasks);
+  const userTask: Map<number, TaskResponse[]> = useSelector((state: RootState) => state.task.tasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const [hourCount, setHourCount] = useState<number[]>(new Array(24).fill(0));
   const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
-  const [todayTasks, setTodayTasks] = useState<{ main: TaskResponse[]; sub: TaskResponse[] }>({ main: [], sub: [] });
+  const [todayTasks, setTodayTasks] = useState<{ official: TaskResponse[]; personal: TaskResponse[] }>({ official: [], personal: [] });
+  const [selectedTask, setSelectedTask] = useState<TaskResponse | null>(null);
 
   useEffect(() => {
     fetchData();
   }, [date, userTask]);
+
+  useEffect(() => {
+    console.log("todayTask render");
+  }, [todayTasks]);
 
   const fetchData = async () => {
     // TODO: visualize task charts differently from day to day
@@ -34,7 +43,7 @@ const TaskList = () => {
       setIsDataFetched(true);
     }
 
-    setTodayTasks({ main: [], sub: [] });
+    setTodayTasks({ official: [], personal: [] });
 
     const state = store.getState() as RootState;
     const tasks: Map<number, TaskResponse[]> = state.task.tasks;
@@ -42,34 +51,58 @@ const TaskList = () => {
     const taskArr: TaskResponse[] | undefined = tasks.get(parseInt(date.date));
     console.log(taskArr);
 
-    const main: TaskResponse[] = [];
-    const sub: TaskResponse[] = [];
+    const official: TaskResponse[] = [];
+    const personal: TaskResponse[] = [];
 
     if (taskArr) {
       taskArr.forEach((task) => {
         switch (task.type) {
-          case TaskType.MAIN_TASK:
-            main.push(task);
+          case TaskType.OFFICIAL_TASK:
+            official.push(task);
             break;
-          case TaskType.SUB_TASK:
-            sub.push(task);
+          case TaskType.PERSONAL_TASK:
+            personal.push(task);
             break;
         }
       });
 
-      setTodayTasks({ main, sub });
+      setTodayTasks({ official, personal });
     }
+  };
+
+  const deleteTask = () => {
+    if (selectedTask) {
+      const taskDeleteRequest: TaskDeleteRequest = { email: userAccount.email, taskId: selectedTask.taskId };
+      dispatch(fetchTaskDelete(taskDeleteRequest) as any);
+
+      switch (selectedTask.type) {
+        case TaskType.OFFICIAL_TASK:
+          const newOfficialArr = todayTasks.official.filter((task) => task.taskId !== taskDeleteRequest.taskId);
+          setTodayTasks({ official: newOfficialArr, personal: todayTasks.personal });
+          break;
+        case TaskType.PERSONAL_TASK:
+          const newPersonalArr = todayTasks.personal.filter((task) => task.taskId !== taskDeleteRequest.taskId);
+          setTodayTasks({ official: todayTasks.official, personal: newPersonalArr });
+          break;
+      }
+
+      setSelectedTask(null);
+    }
+  };
+
+  const confirmTask = () => {
+    setSelectedTask(null);
   };
 
   const taskGraph = (index: number, defaultType: TaskType) => {
     let tasks: TaskResponse[] = [];
 
     switch (defaultType) {
-      case TaskType.MAIN_TASK:
-        tasks = todayTasks.main;
+      case TaskType.OFFICIAL_TASK:
+        tasks = todayTasks.official;
         break;
-      case TaskType.SUB_TASK:
-        tasks = todayTasks.sub;
+      case TaskType.PERSONAL_TASK:
+        tasks = todayTasks.personal;
         break;
     }
 
@@ -83,8 +116,12 @@ const TaskList = () => {
       const endTotal = endHour * 60 + endMinute;
       const type: TaskType = task.type;
 
+      const taskClick = () => {
+        setSelectedTask(task);
+      };
+
       const duration = () => {
-        return startHour + ":" + startMinute + " ~ " + endHour + ":" + endMinute;
+        return addPad(startHour) + ":" + addPad(startHour) + " ~ " + addPad(startHour) + ":" + addPad(startHour);
       };
 
       const modalStyle = {
@@ -100,7 +137,7 @@ const TaskList = () => {
 
       if (startHour === index && type === defaultType) {
         return (
-          <div key={idx} className="task-box__modal" style={modalStyle}>
+          <div key={idx} className="task-box__modal" style={modalStyle} onClick={taskClick}>
             <div className="task-box__duration">{duration()}</div>
             <div className="task-box__title" style={titleStyle}>
               {task.title}
@@ -121,8 +158,8 @@ const TaskList = () => {
             <div className="task-box__time">
               {idx} : 00 {idx < 12 ? "AM" : "PM"}
             </div>
-            <div className="task-box__main-task">{isDataFetched ? <div className="task-box__chart">{taskGraph(idx, TaskType.MAIN_TASK)}</div> : null}</div>
-            <div className="task-box__sub-task">{isDataFetched ? <div className="task-box__chart">{taskGraph(idx, TaskType.SUB_TASK)}</div> : null}</div>
+            <div className="task-box__main-task">{isDataFetched ? <div className="task-box__chart">{taskGraph(idx, TaskType.OFFICIAL_TASK)}</div> : null}</div>
+            <div className="task-box__sub-task">{isDataFetched ? <div className="task-box__chart">{taskGraph(idx, TaskType.PERSONAL_TASK)}</div> : null}</div>
           </div>
         </div>
       );
@@ -134,7 +171,7 @@ const TaskList = () => {
       <div className="task-content">
         <div className="task-option">
           <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
-          <TaskCreateModal></TaskCreateModal>
+          <TaskCreate></TaskCreate>
         </div>
         <div className="task-timestamp">
           <div className="task-timestamp__header">
@@ -144,20 +181,57 @@ const TaskList = () => {
             </div>
             <div className="task-timestamp__counter-box">
               <div className="task-timestamp__counter task-timestamp__counter--main">
-                Main
+                Official
                 <br />
-                {todayTasks.main.length}
+                {todayTasks.official.length}
               </div>
               <div className="task-timestamp__counter task-timestamp__counter--sub">
-                Sub
+                Personal
                 <br />
-                {todayTasks.sub.length}
+                {todayTasks.personal.length}
               </div>
             </div>
           </div>
           <div className="task-timestamp__body">{taskBox()}</div>
         </div>
-        <div className="task-stat"></div>
+        <div className="task-stat">
+          {selectedTask ? (
+            <Fragment>
+              <div className="task-describe">
+                <div className="task-describe__title">{selectedTask.title}</div>
+                <div className="task-describe__duration">
+                  <ClockSvg></ClockSvg>
+                  from {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp;to &nbsp;{addPad(selectedTask.time.endAt.hour)} :{" "}
+                  {addPad(selectedTask.time.endAt.minute)}
+                </div>
+                <div className="task-describe__location">
+                  <LocationSvg></LocationSvg>
+                  {selectedTask.location}
+                </div>
+                <div className="task-describe__privacy">
+                  <ScopeSvg></ScopeSvg>
+                  {selectedTask.privacy}
+                </div>
+                <hr />
+                <div className="task-describe__description">
+                  Description
+                  <div className="task-describe__description--text">{selectedTask.description}</div>
+                </div>
+              </div>
+              <div className="task-describe__todolist">sadf</div>
+              <div className="task-describe__button">
+                <button className="task-describe__button--confirm" onClick={confirmTask}>
+                  confirm
+                </button>
+                <button className="task-describe__button--delete" onClick={deleteTask}>
+                  delete
+                </button>
+              </div>
+            </Fragment>
+          ) : (
+            <div></div>
+          )}
+        </div>
       </div>
     </Fragment>
   );

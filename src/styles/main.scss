@@ -13,12 +13,10 @@
 @import "layout/header";
 @import "layout/nav";
 
-//modal
-@import "modal/taskcreate";
-
 // pages
 @import "pages/index";
 @import "pages/auth";
 @import "pages/home";
+@import "pages/taskcreate";
 @import "pages/tasklist";
 @import "pages/tasksumm";

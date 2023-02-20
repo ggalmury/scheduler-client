@@ -5,11 +5,11 @@ export enum TaskPrivacy {
 }
 
 export enum TaskColor {
-  MAIN_TASK = "#9799cd",
-  SUB_TASK = "#eab3b6",
+  OFFICIAL_TASK = "#9799cd",
+  PERSONAL_TASK = "#eab3b6",
 }
 
 export enum TaskType {
-  MAIN_TASK = "main",
-  SUB_TASK = "sub",
+  OFFICIAL_TASK = "main",
+  PERSONAL_TASK = "sub",
 }

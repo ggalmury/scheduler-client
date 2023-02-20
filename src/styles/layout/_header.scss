@@ -1,92 +1,87 @@
-#header {
+.header {
   display: flex;
   justify-content: space-between;
   min-height: 80px;
   align-items: center;
   border-bottom: $inner-border;
-}
 
-.header-content {
-  display: flex;
-}
-
-#title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-indent: 60px;
-
-  &-name {
-    font-size: 1.2em;
-  }
-}
-
-#welcome-user {
-  width: 260px;
-  text-align: center;
-  text-indent: 30px;
-
-  &-1 {
-    line-height: 40px;
-    font-size: 1.2em;
-  }
-
-  &-2 {
-    font-size: 0.7em;
-  }
-}
-
-#search-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 400px;
-
-  & > input {
-    width: 320px;
-    height: 40px;
-    border-radius: 10px;
-    border: none;
-    text-indent: 35px;
-
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill-rule='evenodd'%3E%3Cpath d='M 10.5 1 C 8.019531 1 6 3.019531 6 5.5 C 6 6.558594 6.382813 7.523438 7 8.292969 L 2.023438 13.269531 L 2.726563 13.980469 L 7.707031 9 C 8.476563 9.617188 9.441406 10 10.5 10 C 12.980469 10 15 7.980469 15 5.5 C 15 3.019531 12.980469 1 10.5 1 Z M 10.5 2 C 12.4375 2 14 3.5625 14 5.5 C 14 7.4375 12.4375 9 10.5 9 C 8.5625 9 7 7.4375 7 5.5 C 7 3.5625 8.5625 2 10.5 2 Z'%3E%3C/path%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: 15px;
-    background-size: 17px;
-
-    &:focus {
-      outline: none;
-    }
-  }
-}
-
-#profile-summ {
-  display: flex;
-  width: 180px;
-
-  &-img {
+  &__content {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 60px;
+  }
 
-    img {
-      width: 40px;
+  &__title {
+    text-indent: 60px;
+
+    &--name {
+      font-size: 1.2em;
+      line-height: 54px;
     }
   }
 
-  &-info {
+  &__greeting {
+    width: 260px;
+    text-align: center;
+    text-indent: 30px;
+
+    &--hello {
+      line-height: 40px;
+      font-size: 1.2em;
+    }
+
+    &--how {
+      font-size: 0.7em;
+    }
+  }
+
+  &__search {
+    width: 400px;
+    margin: auto;
+
+    & > input {
+      width: 350px;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      text-indent: 35px;
+
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill-rule='evenodd'%3E%3Cpath d='M 10.5 1 C 8.019531 1 6 3.019531 6 5.5 C 6 6.558594 6.382813 7.523438 7 8.292969 L 2.023438 13.269531 L 2.726563 13.980469 L 7.707031 9 C 8.476563 9.617188 9.441406 10 10.5 10 C 12.980469 10 15 7.980469 15 5.5 C 15 3.019531 12.980469 1 10.5 1 Z M 10.5 2 C 12.4375 2 14 3.5625 14 5.5 C 14 7.4375 12.4375 9 10.5 9 C 8.5625 9 7 7.4375 7 5.5 C 7 3.5625 8.5625 2 10.5 2 Z'%3E%3C/path%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 15px;
+      background-size: 17px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  &__profile {
+    display: flex;
+    width: 180px;
+
+    &--img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+
+      img {
+        width: 40px;
+      }
+    }
+  }
+
+  &__user-detail {
     display: flex;
     flex-direction: column;
-    flex: 1;
     justify-content: center;
 
-    &-username {
+    &--username {
       font-size: 0.8em;
       line-height: 30px;
     }
 
-    &-role {
+    &--role {
       font-size: 0.7em;
       line-height: 20px;
     }

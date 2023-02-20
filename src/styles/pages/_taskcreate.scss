@@ -72,10 +72,6 @@
     }
   }
 
-  &__radio-box {
-    margin: 5px;
-  }
-
   &__select-box {
     margin: 10px;
   }
@@ -84,7 +80,7 @@
     width: 80px;
     height: 30px;
     margin-top: 10px;
-    background-color: rgb(78, 77, 162);
+    background-color: $btn-submit-color;
     color: white;
     border: none;
     border-radius: 8px;

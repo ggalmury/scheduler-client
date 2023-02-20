@@ -133,5 +133,96 @@
 }
 
 .task-stat {
+  display: flex;
+  flex-direction: column;
   width: 340px;
+}
+
+.task-describe {
+  display: flex;
+  flex-direction: column;
+  height: 400px;
+  text-align: left;
+  text-indent: 20px;
+  font-size: 0.8em;
+
+  &__title {
+    line-height: 60px;
+    text-indent: 20px;
+    font-size: 1.2em;
+    margin-top: 10px;
+  }
+
+  &__duration {
+    line-height: 25px;
+    font-size: 0.8em;
+
+    & > svg {
+      transform: translate(-30%, 40%);
+      transform-origin: 50% 50%;
+    }
+  }
+
+  &__location {
+    line-height: 30px;
+
+    & > svg {
+      transform: translate(-30%, 35%);
+      transform-origin: 50% 50%;
+    }
+  }
+
+  &__privacy {
+    line-height: 30px;
+    font-size: 0.8em;
+    margin-bottom: 20px;
+
+    & > svg {
+      transform: translate(-30%, 40%);
+      transform-origin: 50% 50%;
+    }
+  }
+
+  &__description {
+    flex: 1;
+    font-size: 1.1em;
+    margin-top: 20px;
+
+    &--text {
+      height: 180px;
+      margin-top: 10px;
+    }
+  }
+
+  &__todolist {
+    height: 270px;
+  }
+
+  &__button {
+    flex: 1;
+
+    & > button {
+      width: 70px;
+      height: 26px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    &--confirm {
+      background-color: $btn-submit-color;
+      color: white;
+    }
+
+    &--delete {
+      background-color: rgb(231, 231, 231);
+      color: red;
+    }
+  }
+
+  & > hr {
+    width: 300px;
+    border: 1px solid gray;
+  }
 }

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Swal from "sweetalert2";
 import { TaskColor, TaskPrivacy, TaskType } from "../../../common/enums/task";
 import { TaskTimeDetail } from "../../../common/interfaces/global";
 import { TaskCreateRequest } from "../../../common/interfaces/requestData";
@@ -8,7 +7,7 @@ import { Account } from "../../../common/interfaces/store";
 import { fetchTaskCreate } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
-const TaskCreateModal = () => {
+const TaskCreate = () => {
   const dispatch = useDispatch();
   const userAccount: Account = useSelector((state: RootState) => state.login.account);
   const date = useSelector((state: RootState) => state.date.selectedDate);
@@ -18,9 +17,9 @@ const TaskCreateModal = () => {
   const [location, setLocation] = useState<string>("");
   const [startTime, setStartTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
   const [endTime, setEndTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
-  const [color, setColor] = useState<TaskColor>(TaskColor.MAIN_TASK);
+  const [color, setColor] = useState<TaskColor>(TaskColor.OFFICIAL_TASK);
   const [privacy, setPrivacy] = useState<TaskPrivacy>(TaskPrivacy.PUBLIC);
-  const [type, setType] = useState<TaskType>(TaskType.MAIN_TASK);
+  const [type, setType] = useState<TaskType>(TaskType.OFFICIAL_TASK);
 
   const getTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -50,13 +49,13 @@ const TaskCreateModal = () => {
     setEndTime(newEndTime);
   };
 
-  const getType = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === TaskType.MAIN_TASK) {
-      setType(TaskType.MAIN_TASK);
-      setColor(TaskColor.MAIN_TASK);
+  const getType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.value === TaskType.OFFICIAL_TASK) {
+      setType(TaskType.OFFICIAL_TASK);
+      setColor(TaskColor.OFFICIAL_TASK);
     } else {
-      setType(TaskType.SUB_TASK);
-      setColor(TaskColor.SUB_TASK);
+      setType(TaskType.PERSONAL_TASK);
+      setColor(TaskColor.PERSONAL_TASK);
     }
   };
 
@@ -85,8 +84,6 @@ const TaskCreateModal = () => {
     };
 
     dispatch(fetchTaskCreate(taskRequest) as any);
-
-    Swal.fire({ icon: "success", text: "Task successfully created", showCancelButton: false, confirmButtonText: "confirm" });
   };
 
   return (
@@ -100,12 +97,10 @@ const TaskCreateModal = () => {
       </div>
       <input className="task-create__input task-create__input--location" placeholder="Loaction" onChange={getLocation}></input>
       <div className="task-create__select">
-        <div className="task-create__radio-box">
-          <input type="radio" name="task-type" value="main" checked={color === TaskColor.MAIN_TASK} onChange={getType}></input>Main
-        </div>
-        <div className="task-create__radio-box">
-          <input type="radio" name="task-type" value="sub" checked={color === TaskColor.SUB_TASK} onChange={getType}></input>Sub
-        </div>
+        <select className="task-create__select-box" name="type" onChange={getType}>
+          <option value={TaskType.OFFICIAL_TASK}>{TaskType.OFFICIAL_TASK}</option>
+          <option value={TaskType.PERSONAL_TASK}>{TaskType.PERSONAL_TASK}</option>
+        </select>
         <select className="task-create__select-box" name="privacy" onChange={getPrivacy}>
           <option value={TaskPrivacy.PUBLIC}>{TaskPrivacy.PUBLIC}</option>
           <option value={TaskPrivacy.PRIVATE}>{TaskPrivacy.PRIVATE}</option>
@@ -119,4 +114,4 @@ const TaskCreateModal = () => {
   );
 };
 
-export default TaskCreateModal;
+export default TaskCreate;

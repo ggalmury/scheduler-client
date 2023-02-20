@@ -6,27 +6,27 @@ const Header = () => {
   const userAccount = useSelector((state: RootState) => state.login.account);
 
   return (
-    <div id="header">
-      <div className="header-content">
-        <div id="title">
-          <div id="title-name">Schedy</div>
+    <div className="header">
+      <div className="header__content">
+        <div className="header__title">
+          <div className="header__title--name">Schedy</div>
         </div>
-        <div id="welcome-user">
-          <div id="welcome-user-1">Hello, {userAccount.userName}!</div>
-          <div id="welcome-user-2">How's everything going?</div>
+        <div className="header__greeting">
+          <div className="header__greeting--hello">Hello, {userAccount.userName}!</div>
+          <div className="header__greeting--how">How's everything going?</div>
         </div>
       </div>
-      <div className="header-content">
-        <div id="search-content">
+      <div className="header__content">
+        <div className="header__search">
           <input placeholder="Search your tasks"></input>
         </div>
-        <div id="profile-summ">
-          <div id="profile-summ-img">
+        <div className="header__profile">
+          <div className="header__profile--img">
             <img src={aatrox}></img>
           </div>
-          <div id="profile-summ-info">
-            <div id="profile-summ-info-username">{userAccount.userName}</div>
-            <div id="profile-summ-info-role">role</div>
+          <div className="header__user-detail">
+            <div className="header__user-detail--username">{userAccount.userName}</div>
+            <div className="header__user-detail--role">role</div>
           </div>
         </div>
       </div>

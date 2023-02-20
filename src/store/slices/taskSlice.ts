@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import { CustomErrorMessage } from "../../common/enums/errorCode";
 import { TaskResponse } from "../../common/interfaces/responseData";
 import { TaskInitialState } from "../../common/interfaces/store";
-import { fetchTaskCreate, fetchTaskList } from "../axios/taskRequest";
+import { fetchTaskCreate, fetchTaskDelete, fetchTaskList } from "../axios/taskRequest";
 import { enableMapSet } from "immer";
 
 const initialState: TaskInitialState = {
@@ -23,6 +23,8 @@ const taskSlice = createSlice({
       } else {
         state.tasks.set(newTaskDate, [action.payload]);
       }
+
+      Swal.fire({ icon: "success", text: "Task successfully created", showCancelButton: false, confirmButtonText: "confirm" });
     });
     builder.addCase(fetchTaskCreate.rejected, (state, action) => {
       if (action.error.message === CustomErrorMessage.SESSION_EXPIRED) {
@@ -51,6 +53,29 @@ const taskSlice = createSlice({
       state.tasks = taskByDate;
     });
     builder.addCase(fetchTaskList.rejected, (state, action) => {
+      console.log(action.error);
+      if (action.error.message === CustomErrorMessage.SESSION_EXPIRED) {
+        Swal.fire({ icon: "error", title: "Oops!", text: "Session expired. Please log in", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
+          window.location.href = "/";
+        });
+
+        return;
+      }
+
+      Swal.fire({ icon: "error", title: "Oops!", text: "Something went wrong. Please try again", showCancelButton: false, confirmButtonText: "confirm" });
+    });
+    builder.addCase(fetchTaskDelete.fulfilled, (state, action) => {
+      const newTaskDate: number = new Date(action.payload.date).getDate();
+      const taskArray = state.tasks.get(newTaskDate);
+      if (taskArray) {
+        taskArray.filter((task) => task.taskId !== action.payload.taskId);
+      } else {
+        Swal.fire({ icon: "error", title: "Oops!", text: "Task not exist", showCancelButton: false, confirmButtonText: "confirm" });
+      }
+
+      Swal.fire({ icon: "success", text: "Task successfully deleted", showCancelButton: false, confirmButtonText: "confirm" });
+    });
+    builder.addCase(fetchTaskDelete.rejected, (state, action) => {
       console.log(action.error);
       if (action.error.message === CustomErrorMessage.SESSION_EXPIRED) {
         Swal.fire({ icon: "error", title: "Oops!", text: "Session expired. Please log in", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {

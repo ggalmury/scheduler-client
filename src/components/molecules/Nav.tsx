@@ -33,25 +33,25 @@ const Nav = () => {
   };
 
   return (
-    <div id="nav">
-      <div id="menu">
-        <div className={`category ${activeButton === RouteName.HOME ? "whiter" : "grayer"}`} onClick={goToHome}>
-          <div className="category-content">
+    <div className="nav">
+      <div className="nav__menu">
+        <div className={`nav__category nav__category--${activeButton === RouteName.HOME ? "click" : "hover"}`} onClick={goToHome}>
+          <div className="nav__content">
             <HomeSvg></HomeSvg>
           </div>
         </div>
-        <div className={`category ${activeButton === RouteName.CALENDAR ? "whiter" : "grayer"}`} onClick={goToCalendar}>
-          <div className="category-content">
+        <div className={`nav__category nav__category--${activeButton === RouteName.CALENDAR ? "click" : "hover"}`} onClick={goToCalendar}>
+          <div className="nav__content">
             <CalendarSvg></CalendarSvg>
           </div>
         </div>
-        <div className={`category ${activeButton === RouteName.TASKS ? "whiter" : "grayer"}`} onClick={goToTasks}>
-          <div className="category-content">
+        <div className={`nav__category nav__category--${activeButton === RouteName.TASKS ? "click" : "hover"}`} onClick={goToTasks}>
+          <div className="nav__content">
             <TaskSvg></TaskSvg>
           </div>
         </div>
       </div>
-      <hr className="menu-hr"></hr>
+      <hr />
     </div>
   );
 };

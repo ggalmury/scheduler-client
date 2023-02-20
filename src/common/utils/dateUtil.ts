@@ -6,3 +6,7 @@ export const getMoment = moment();
 export const getDate = (format: DateFormat | string): string | number => {
   return getMoment.format(format);
 };
+
+export const addPad = (time: number): string => {
+  return time.toString().padStart(2, "0");
+};

@@ -30,3 +30,8 @@ export interface TaskSearchRequest {
   uid: number;
   email: string;
 }
+
+export interface TaskDeleteRequest {
+  taskId: number;
+  email: string;
+}

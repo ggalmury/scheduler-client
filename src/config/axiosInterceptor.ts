@@ -34,9 +34,7 @@ customAxiosRequest.interceptors.response.use(
             throw new Error(CustomErrorMessage.SESSION_EXPIRED);
           }
 
-          console.log("재요청 전");
           const result: AxiosResponse = await customAxiosRequest.post(url, data);
-          console.log("재요청 후");
           return Promise.resolve(result);
         }
       }
