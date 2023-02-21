@@ -1,5 +1,5 @@
-import moment from "moment";
 import { CalendarType } from "../utils/enums";
+import { TaskResponse } from "./responseData";
 
 export interface CalendarProp {
   size: CalendarType;
@@ -7,4 +7,8 @@ export interface CalendarProp {
 
 export interface TaskChartProp {
   idx: number;
+}
+
+export interface TodayTasksProp {
+  todayTasks: { official: TaskResponse[]; personal: TaskResponse[] };
 }

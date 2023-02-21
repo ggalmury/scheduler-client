@@ -2,12 +2,15 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskColor, TaskPrivacy, TaskType } from "../../../common/enums/task";
 import { TaskTimeDetail } from "../../../common/interfaces/global";
+import { TodayTasksProp } from "../../../common/interfaces/props";
 import { TaskCreateRequest } from "../../../common/interfaces/requestData";
+import { TaskResponse } from "../../../common/interfaces/responseData";
 import { Account } from "../../../common/interfaces/store";
+import { normalFail } from "../../../common/utils/alert";
 import { fetchTaskCreate } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
-const TaskCreate = () => {
+const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
   const dispatch = useDispatch();
   const userAccount: Account = useSelector((state: RootState) => state.login.account);
   const date = useSelector((state: RootState) => state.date.selectedDate);
@@ -65,7 +68,45 @@ const TaskCreate = () => {
 
   const submitTask = (event: React.MouseEvent<HTMLElement>) => {
     if (startTime.hour > endTime.hour || (startTime.hour === endTime.hour && startTime.minute > endTime.minute)) {
-      alert("Start time cannot be greater then end time");
+      normalFail(undefined, "Start time cannot be greater then end time");
+      return;
+    }
+
+    if (startTime.hour === endTime.hour && endTime.minute - startTime.minute < 20) {
+      normalFail(undefined, "Minumum task duration is 20 minutes");
+      return;
+    }
+
+    let taskTypeArr: TaskResponse[] = [];
+    let checker: boolean = false;
+
+    switch (type) {
+      case TaskType.OFFICIAL_TASK:
+        taskTypeArr = todayTasks.official;
+        break;
+      case TaskType.PERSONAL_TASK:
+        taskTypeArr = todayTasks.personal;
+        break;
+    }
+
+    taskTypeArr.forEach((task) => {
+      const startAlready: number = task.time.startAt.hour * 60 + task.time.startAt.minute;
+      const endAlready: number = task.time.endAt.hour * 60 + task.time.endAt.minute;
+      const startNew: number = startTime.hour * 60 + startTime.minute;
+      const endNew: number = endTime.hour * 60 + endTime.minute;
+
+      if (
+        (startNew >= startAlready && startNew <= endAlready) ||
+        (endNew >= startAlready && endNew <= endAlready) ||
+        (startNew >= startAlready && endNew <= endAlready) ||
+        (startNew <= startAlready && endNew >= endAlready)
+      ) {
+        checker = true;
+      }
+    });
+
+    if (checker) {
+      normalFail(undefined, "Task already exist");
       return;
     }
 
@@ -107,7 +148,7 @@ const TaskCreate = () => {
           <option value={TaskPrivacy.GROUP}>{TaskPrivacy.GROUP}</option>
         </select>
       </div>
-      <button className="task-create__btn-submit " onClick={submitTask}>
+      <button className="btn-submit-small" onClick={submitTask}>
         submit
       </button>
     </div>

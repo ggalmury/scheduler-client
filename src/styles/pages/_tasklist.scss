@@ -84,6 +84,7 @@
   flex: 1;
   height: 90px;
   border-top: $inner-border;
+  box-sizing: border-box;
 
   &__time {
     width: 120px;
@@ -95,7 +96,6 @@
   }
 
   &__main-task {
-    display: flex;
     flex: 1;
   }
 
@@ -113,11 +113,11 @@
   &__modal {
     position: relative;
     min-height: 30px;
-    width: 150px;
+    width: 140px;
     border-radius: 10px;
-    z-index: 1;
     color: white;
     text-align: left;
+    box-sizing: border-box;
     text-indent: 15px;
   }
 
@@ -129,6 +129,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    font-size: 0.9em;
   }
 }
 
@@ -141,7 +142,7 @@
 .task-describe {
   display: flex;
   flex-direction: column;
-  height: 400px;
+  height: 350px;
   text-align: left;
   text-indent: 20px;
   font-size: 0.8em;
@@ -185,38 +186,53 @@
 
   &__description {
     flex: 1;
-    font-size: 1.1em;
-    margin-top: 20px;
+    font-size: 1.2em;
 
     &--text {
-      height: 180px;
-      margin-top: 10px;
+      line-height: 40px;
+    }
+
+    &--content {
+      font-size: 0.8em;
     }
   }
 
   &__todolist {
-    height: 270px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    text-align: left;
   }
 
-  &__button {
-    flex: 1;
+  &__todo-header {
+    display: flex;
+    height: 35px;
+    text-indent: 20px;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    & > button {
-      width: 70px;
-      height: 26px;
-      margin: 0 10px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+  &__todo-body {
+    flex: 1;
+    background-color: forestgreen;
+  }
+
+  &__footer {
+    height: 50px;
+  }
+
+  &__btn {
+    &--modify {
+      margin-right: 24px;
     }
 
     &--confirm {
-      background-color: $btn-submit-color;
-      color: white;
+      margin-right: 10px;
     }
 
     &--delete {
-      background-color: rgb(231, 231, 231);
+      margin-left: 10px;
+      background-color: rgb(222, 222, 222);
       color: red;
     }
   }

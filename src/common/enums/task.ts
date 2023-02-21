@@ -10,6 +10,6 @@ export enum TaskColor {
 }
 
 export enum TaskType {
-  OFFICIAL_TASK = "main",
-  PERSONAL_TASK = "sub",
+  OFFICIAL_TASK = "official",
+  PERSONAL_TASK = "personal",
 }

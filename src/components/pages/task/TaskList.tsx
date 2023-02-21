@@ -31,11 +31,10 @@ const TaskList = () => {
   }, [date, userTask]);
 
   useEffect(() => {
-    console.log("todayTask render");
-  }, [todayTasks]);
+    console.log(userTask);
+  }, []);
 
   const fetchData = async () => {
-    // TODO: visualize task charts differently from day to day
     if (!isDataFetched) {
       console.log("fetch task data");
       const taskSearchRequest: TaskSearchRequest = { uid: userAccount.uid, email: userAccount.email };
@@ -49,7 +48,6 @@ const TaskList = () => {
     const tasks: Map<number, TaskResponse[]> = state.task.tasks;
 
     const taskArr: TaskResponse[] | undefined = tasks.get(parseInt(date.date));
-    console.log(taskArr);
 
     const official: TaskResponse[] = [];
     const personal: TaskResponse[] = [];
@@ -70,21 +68,10 @@ const TaskList = () => {
     }
   };
 
-  const deleteTask = () => {
+  const deleteTask = async () => {
     if (selectedTask) {
       const taskDeleteRequest: TaskDeleteRequest = { email: userAccount.email, taskId: selectedTask.taskId };
-      dispatch(fetchTaskDelete(taskDeleteRequest) as any);
-
-      switch (selectedTask.type) {
-        case TaskType.OFFICIAL_TASK:
-          const newOfficialArr = todayTasks.official.filter((task) => task.taskId !== taskDeleteRequest.taskId);
-          setTodayTasks({ official: newOfficialArr, personal: todayTasks.personal });
-          break;
-        case TaskType.PERSONAL_TASK:
-          const newPersonalArr = todayTasks.personal.filter((task) => task.taskId !== taskDeleteRequest.taskId);
-          setTodayTasks({ official: todayTasks.official, personal: newPersonalArr });
-          break;
-      }
+      await dispatch(fetchTaskDelete(taskDeleteRequest) as any);
 
       setSelectedTask(null);
     }
@@ -121,14 +108,15 @@ const TaskList = () => {
       };
 
       const duration = () => {
-        return addPad(startHour) + ":" + addPad(startHour) + " ~ " + addPad(startHour) + ":" + addPad(startHour);
+        return addPad(startHour) + ":" + addPad(startMinute) + " ~ " + addPad(endHour) + ":" + addPad(endMinute);
       };
 
       const modalStyle = {
         height: `${(endTotal - startTotal) * 1.5}px`,
-        marginTop: `${startMinute * 1.5}px`,
+        top: `${startMinute * 1.5}px`,
         background: `${task.color}`,
         border: `2px solid ${task.color}`,
+        zIndex: `${idx}`,
       };
 
       const titleStyle = {
@@ -171,7 +159,7 @@ const TaskList = () => {
       <div className="task-content">
         <div className="task-option">
           <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
-          <TaskCreate></TaskCreate>
+          <TaskCreate todayTasks={todayTasks}></TaskCreate>
         </div>
         <div className="task-timestamp">
           <div className="task-timestamp__header">
@@ -214,16 +202,22 @@ const TaskList = () => {
                 </div>
                 <hr />
                 <div className="task-describe__description">
-                  Description
-                  <div className="task-describe__description--text">{selectedTask.description}</div>
+                  <div className="task-describe__description--text">Description</div>
+                  <div className="task-describe__description--content">{selectedTask.description}</div>
                 </div>
               </div>
-              <div className="task-describe__todolist">sadf</div>
-              <div className="task-describe__button">
-                <button className="task-describe__button--confirm" onClick={confirmTask}>
+              <div className="task-describe__todolist">
+                <div className="task-describe__todo-header">
+                  Todolist
+                  <button className="btn-submit-small task-describe__btn--modify">modify</button>
+                </div>
+                <div className="task-describe__todo-body"></div>
+              </div>
+              <div className="task-describe__footer">
+                <button className="btn-submit-small task-describe__btn--confirm" onClick={confirmTask}>
                   confirm
                 </button>
-                <button className="task-describe__button--delete" onClick={deleteTask}>
+                <button className="btn-submit-small task-describe__btn--delete" onClick={deleteTask}>
                   delete
                 </button>
               </div>
