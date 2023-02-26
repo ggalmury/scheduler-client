@@ -5,11 +5,11 @@
   border: none;
   border-bottom: 1px solid gray;
   font-size: 1em;
-  text-indent: 17px;
+  text-indent: 15px;
   margin-top: $margin-top;
 
   &:hover {
-    border-bottom: 2px solid $main-mint;
+    border-bottom: 2px solid $main-color;
   }
 
   &:focus {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/rootReducer";
@@ -10,12 +10,9 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userAccount = useSelector((state: RootState) => state.login.account);
-  const userAuth = useSelector((state: RootState) => state.login.auth);
-  const userStatus = useSelector((state: RootState) => state.login.status);
+
   const [email, setEmail] = useState<string>("");
   const [credential, setCredential] = useState<string>("");
-
-  useEffect(() => {});
 
   const attemptLogin = async (): Promise<void> => {
     const loginRequest: LoginRequest = { email, credential };
@@ -38,6 +35,7 @@ const Login = () => {
   };
 
   const logouttest = (): void => {
+    // TODO: move logout to nav
     dispatch(logout(null));
   };
 

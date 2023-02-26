@@ -23,6 +23,12 @@ export interface TokenResponse {
   refreshToken: string;
 }
 
+export interface TodoData {
+  todoId: number;
+  uid: number;
+  description: string;
+}
+
 export interface TaskResponse {
   taskId: number;
   uid: number;
@@ -37,4 +43,5 @@ export interface TaskResponse {
   privacy: TaskPrivacy;
   type: TaskType;
   createdDt: Date;
+  createdTodo: TodoData[];
 }

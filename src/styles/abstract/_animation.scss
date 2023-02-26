@@ -1,0 +1,56 @@
+.slide-in {
+  animation-name: slide-in;
+  animation-duration: 0.5s;
+}
+
+.slide-out {
+  animation-name: slide-out;
+  animation-duration: 0.5s;
+}
+
+.slide-up {
+  top: -70px;
+  animation-name: slide-up;
+  animation-duration: 0.5s;
+}
+
+.slide-down {
+  animation-name: slide-down;
+  animation-duration: 0.5s;
+}
+
+@keyframes slide-in {
+  from {
+    left: 340px;
+  }
+  to {
+    left: 0;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    left: 0;
+  }
+  to {
+    left: 340px;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    top: 0;
+  }
+  to {
+    top: -70px;
+  }
+}
+
+@keyframes slide-down {
+  from {
+    top: -70px;
+  }
+  to {
+    top: 0;
+  }
+}

@@ -1,9 +1,10 @@
 .btn-submit {
   width: 200px;
   height: 40px;
-  background-color: $main-mint;
+  background-color: $main-color;
   border: none;
   border-radius: 20px;
+  color: white;
   cursor: pointer;
 }
 
@@ -28,4 +29,10 @@
   color: white;
   border: none;
   border-radius: 8px;
+  transition: scale 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    scale: 120%;
+  }
 }

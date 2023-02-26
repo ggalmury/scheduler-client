@@ -5,7 +5,9 @@ import { TaskType } from "../../../common/enums/task";
 import { TaskSearchRequest, TaskDeleteRequest } from "../../../common/interfaces/requestData";
 import { TaskResponse } from "../../../common/interfaces/responseData";
 import { Account } from "../../../common/interfaces/store";
+import CheckSvg from "../../../common/svgs/CheckSvg";
 import ClockSvg from "../../../common/svgs/ClockSvg";
+import ForwardSvg from "../../../common/svgs/ForwardSvg";
 import LocationSvg from "../../../common/svgs/LocationSvg";
 import ScopeSvg from "../../../common/svgs/ScopeSvg";
 import { addPad } from "../../../common/utils/dateUtil";
@@ -25,14 +27,21 @@ const TaskList = () => {
   const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
   const [todayTasks, setTodayTasks] = useState<{ official: TaskResponse[]; personal: TaskResponse[] }>({ official: [], personal: [] });
   const [selectedTask, setSelectedTask] = useState<TaskResponse | null>(null);
+  const [createTodo, setCreateTodo] = useState<boolean>(false);
+  const [statOn, setStatOn] = useState<boolean>(false);
+  const [newTodo, setNewTodo] = useState<string>("");
 
   useEffect(() => {
+    setTodayTasks({ official: [], personal: [] });
+    setStatOn(false);
+    setSelectedTask(null);
     fetchData();
   }, [date, userTask]);
 
   useEffect(() => {
-    console.log(userTask);
-  }, []);
+    setCreateTodo(false);
+    setNewTodo("");
+  }, [selectedTask]);
 
   const fetchData = async () => {
     if (!isDataFetched) {
@@ -42,10 +51,10 @@ const TaskList = () => {
       setIsDataFetched(true);
     }
 
-    setTodayTasks({ official: [], personal: [] });
-
     const state = store.getState() as RootState;
     const tasks: Map<number, TaskResponse[]> = state.task.tasks;
+
+    console.log(tasks);
 
     const taskArr: TaskResponse[] | undefined = tasks.get(parseInt(date.date));
 
@@ -73,12 +82,20 @@ const TaskList = () => {
       const taskDeleteRequest: TaskDeleteRequest = { email: userAccount.email, taskId: selectedTask.taskId };
       await dispatch(fetchTaskDelete(taskDeleteRequest) as any);
 
+      setStatOn(false);
       setSelectedTask(null);
     }
   };
 
   const confirmTask = () => {
-    setSelectedTask(null);
+    setStatOn(false);
+    setTimeout(() => {
+      setSelectedTask(null);
+    }, 500);
+  };
+
+  const setTodoCreateMode = (event: React.MouseEvent<HTMLElement>) => {
+    setCreateTodo(!createTodo);
   };
 
   const taskGraph = (index: number, defaultType: TaskType) => {
@@ -105,6 +122,7 @@ const TaskList = () => {
 
       const taskClick = () => {
         setSelectedTask(task);
+        setStatOn(true);
       };
 
       const duration = () => {
@@ -154,6 +172,20 @@ const TaskList = () => {
     });
   };
 
+  const todoBox = () => {
+    return selectedTask?.createdTodo.map((task) => {
+      return (
+        <div className="todo-list">
+          <div className="todo-list__description">{task.description}</div>
+        </div>
+      );
+    });
+  };
+
+  const getNewTodo = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewTodo(event.target.value);
+  };
+
   return (
     <Fragment>
       <div className="task-content">
@@ -182,14 +214,19 @@ const TaskList = () => {
           </div>
           <div className="task-timestamp__body">{taskBox()}</div>
         </div>
-        <div className="task-stat">
+        <div className={"task-stat"}>
           {selectedTask ? (
-            <Fragment>
+            <div className={`task-detail ${statOn ? "slide-in" : "slide-out"} ${selectedTask ? (selectedTask.type === TaskType.OFFICIAL_TASK ? "task-stat--official" : "task-stat--personal") : ""}`}>
               <div className="task-describe">
-                <div className="task-describe__title">{selectedTask.title}</div>
+                <div className="task-describe__header">
+                  <div className="task-describe__header--title">{selectedTask.title}</div>
+                  <div className="task-describe__header--svg" onClick={confirmTask}>
+                    <ForwardSvg></ForwardSvg>
+                  </div>
+                </div>
                 <div className="task-describe__duration">
                   <ClockSvg></ClockSvg>
-                  from {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp;to &nbsp;{addPad(selectedTask.time.endAt.hour)} :{" "}
+                  from {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp;to &nbsp;{addPad(selectedTask.time.endAt.hour)} :
                   {addPad(selectedTask.time.endAt.minute)}
                 </div>
                 <div className="task-describe__location">
@@ -209,21 +246,31 @@ const TaskList = () => {
               <div className="task-describe__todolist">
                 <div className="task-describe__todo-header">
                   Todolist
-                  <button className="btn-submit-small task-describe__btn--modify">modify</button>
+                  <button className="btn-submit-small task-describe__btn--create" onClick={setTodoCreateMode}>
+                    {createTodo ? "cancle" : "create"}
+                  </button>
                 </div>
-                <div className="task-describe__todo-body"></div>
+                <div className="task-describe__todo-body">
+                  <div className={`task-describe__new-todo ${createTodo ? "slide-down" : "slide-up"}`}>
+                    <textarea className="task-describe__todo-input" onChange={getNewTodo}></textarea>
+                    <div className="task-describe__submit-svg">
+                      <CheckSvg></CheckSvg>
+                    </div>
+                  </div>
+                  <div>{todoBox()}</div>
+                </div>
               </div>
               <div className="task-describe__footer">
-                <button className="btn-submit-small task-describe__btn--confirm" onClick={confirmTask}>
-                  confirm
+                <button className="btn-submit-small task-describe__btn--modify" onClick={confirmTask}>
+                  modify
                 </button>
                 <button className="btn-submit-small task-describe__btn--delete" onClick={deleteTask}>
                   delete
                 </button>
               </div>
-            </Fragment>
+            </div>
           ) : (
-            <div></div>
+            <div>asdf</div>
           )}
         </div>
       </div>

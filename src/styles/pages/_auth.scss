@@ -22,7 +22,7 @@
   justify-content: center;
   align-items: center;
   font-size: 2em;
-  color: $main-mint;
+  color: $main-color;
 }
 
 .auth-form {
@@ -70,7 +70,7 @@
     flex: 1;
     text-align: right;
     font-size: 0.8em;
-    color: $main-mint;
+    color: $main-color;
 
     cursor: pointer;
   }
@@ -92,7 +92,7 @@
 
   .signup-or-signin {
     text-indent: 10px;
-    color: $main-mint;
+    color: $main-color;
     cursor: pointer;
   }
 }

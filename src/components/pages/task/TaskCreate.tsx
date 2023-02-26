@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskColor, TaskPrivacy, TaskType } from "../../../common/enums/task";
 import { TaskTimeDetail } from "../../../common/interfaces/global";
@@ -24,15 +24,15 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
   const [privacy, setPrivacy] = useState<TaskPrivacy>(TaskPrivacy.PUBLIC);
   const [type, setType] = useState<TaskType>(TaskType.OFFICIAL_TASK);
 
-  const getTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
   };
 
-  const getDescription = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const getDescription = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(event.target.value);
   };
 
-  const getLocation = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const getLocation = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLocation(event.target.value);
   };
 
@@ -129,28 +129,32 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
 
   return (
     <div className="task-create">
-      <div className="task-create__intro">Create new task</div>
-      <input className="task-create__input task-create__input--title" placeholder="Title" onChange={getTitle}></input>
-      <input className="task-create__input task-create__input--description" placeholder="Description" onChange={getDescription}></input>
-      <div className="task-create__time-box">
-        <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
-        <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input>
+      <div className="task-create__content">
+        <div className="task-create__intro">Create new task</div>
+        <textarea className="task-create__input task-create__input--title input-task" placeholder="Title" onChange={getTitle}></textarea>
+        <textarea className="task-create__input task-create__input--description input-task" placeholder="Description" onChange={getDescription}></textarea>
+        <div className="task-create__time-box">
+          <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
+          <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input>
+        </div>
+        <textarea className="task-create__input task-create__input--location input-task" placeholder="Loaction" onChange={getLocation}></textarea>
+        <div className="task-create__select">
+          <select className="task-create__select-box" name="type" onChange={getType}>
+            <option value={TaskType.OFFICIAL_TASK}>{TaskType.OFFICIAL_TASK}</option>
+            <option value={TaskType.PERSONAL_TASK}>{TaskType.PERSONAL_TASK}</option>
+          </select>
+          <select className="task-create__select-box" name="privacy" onChange={getPrivacy}>
+            <option value={TaskPrivacy.PUBLIC}>{TaskPrivacy.PUBLIC}</option>
+            <option value={TaskPrivacy.PRIVATE}>{TaskPrivacy.PRIVATE}</option>
+            <option value={TaskPrivacy.GROUP}>{TaskPrivacy.GROUP}</option>
+          </select>
+        </div>
+        <div className="task-create__submit task-create__btn-submit">
+          <button className="btn-submit-small" onClick={submitTask}>
+            submit
+          </button>
+        </div>
       </div>
-      <input className="task-create__input task-create__input--location" placeholder="Loaction" onChange={getLocation}></input>
-      <div className="task-create__select">
-        <select className="task-create__select-box" name="type" onChange={getType}>
-          <option value={TaskType.OFFICIAL_TASK}>{TaskType.OFFICIAL_TASK}</option>
-          <option value={TaskType.PERSONAL_TASK}>{TaskType.PERSONAL_TASK}</option>
-        </select>
-        <select className="task-create__select-box" name="privacy" onChange={getPrivacy}>
-          <option value={TaskPrivacy.PUBLIC}>{TaskPrivacy.PUBLIC}</option>
-          <option value={TaskPrivacy.PRIVATE}>{TaskPrivacy.PRIVATE}</option>
-          <option value={TaskPrivacy.GROUP}>{TaskPrivacy.GROUP}</option>
-        </select>
-      </div>
-      <button className="btn-submit-small" onClick={submitTask}>
-        submit
-      </button>
     </div>
   );
 };
