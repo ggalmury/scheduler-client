@@ -1,10 +1,9 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../..";
 import { TaskType } from "../../../common/enums/task";
-import { TaskSearchRequest, TaskDeleteRequest } from "../../../common/interfaces/requestData";
-import { TaskResponse } from "../../../common/interfaces/responseData";
-import { Account } from "../../../common/interfaces/store";
+import { TaskDeleteOrDoneRequest, TodoCreateRequest, TodoDeleteRequest } from "../../../common/interfaces/requestData";
+import { TaskResponse, TodoData } from "../../../common/interfaces/responseData";
 import CheckSvg from "../../../common/svgs/CheckSvg";
 import ClockSvg from "../../../common/svgs/ClockSvg";
 import ForwardSvg from "../../../common/svgs/ForwardSvg";
@@ -12,49 +11,44 @@ import LocationSvg from "../../../common/svgs/LocationSvg";
 import ScopeSvg from "../../../common/svgs/ScopeSvg";
 import { addPad } from "../../../common/utils/dateUtil";
 import { CalendarType, DateFormat } from "../../../common/utils/enums";
-import { fetchTaskDelete, fetchTaskList } from "../../../store/axios/taskRequest";
+import { fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 import Calendar from "../../shared/Calendar";
 import TaskCreate from "./TaskCreate";
 
 const TaskList = () => {
   const dispatch = useDispatch();
-  const userAccount: Account = useSelector((state: RootState) => state.login.account);
+
   const userTask: Map<number, TaskResponse[]> = useSelector((state: RootState) => state.task.tasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const [hourCount, setHourCount] = useState<number[]>(new Array(24).fill(0));
   const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
   const [todayTasks, setTodayTasks] = useState<{ official: TaskResponse[]; personal: TaskResponse[] }>({ official: [], personal: [] });
-  const [selectedTask, setSelectedTask] = useState<TaskResponse | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [createTodo, setCreateTodo] = useState<boolean>(false);
   const [statOn, setStatOn] = useState<boolean>(false);
   const [newTodo, setNewTodo] = useState<string>("");
 
-  useEffect(() => {
-    setTodayTasks({ official: [], personal: [] });
-    setStatOn(false);
-    setSelectedTask(null);
-    fetchData();
-  }, [date, userTask]);
+  const selectedTask = useMemo((): TaskResponse | null => {
+    return selectedTaskId != null ? userTask.get(parseInt(date.date))?.filter((e) => e.taskId === selectedTaskId)?.[0] ?? null : null;
+  }, [selectedTaskId, date.date, userTask]);
 
   useEffect(() => {
-    setCreateTodo(false);
-    setNewTodo("");
-  }, [selectedTask]);
-
-  const fetchData = async () => {
     if (!isDataFetched) {
       console.log("fetch task data");
-      const taskSearchRequest: TaskSearchRequest = { uid: userAccount.uid, email: userAccount.email };
-      await dispatch(fetchTaskList(taskSearchRequest) as any);
+
+      dispatch(fetchTaskList() as any);
       setIsDataFetched(true);
     }
+  }, [isDataFetched]);
+
+  useEffect(() => {
+    console.log("render1");
+    setTodayTasks({ official: [], personal: [] });
 
     const state = store.getState() as RootState;
     const tasks: Map<number, TaskResponse[]> = state.task.tasks;
-
-    console.log(tasks);
 
     const taskArr: TaskResponse[] | undefined = tasks.get(parseInt(date.date));
 
@@ -75,23 +69,42 @@ const TaskList = () => {
 
       setTodayTasks({ official, personal });
     }
-  };
+  }, [date, userTask]);
 
-  const deleteTask = async () => {
-    if (selectedTask) {
-      const taskDeleteRequest: TaskDeleteRequest = { email: userAccount.email, taskId: selectedTask.taskId };
-      await dispatch(fetchTaskDelete(taskDeleteRequest) as any);
-
-      setStatOn(false);
-      setSelectedTask(null);
-    }
-  };
+  useEffect(() => {
+    console.log("render2");
+    console.log(selectedTask);
+    setCreateTodo(false);
+    setNewTodo("");
+  }, [selectedTask]);
 
   const confirmTask = () => {
     setStatOn(false);
     setTimeout(() => {
-      setSelectedTask(null);
+      setSelectedTaskId(null);
     }, 500);
+  };
+
+  const deleteTask = async () => {
+    if (selectedTask) {
+      const taskDeleteRequest: TaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
+
+      await dispatch(fetchTaskDelete(taskDeleteRequest) as any);
+
+      setStatOn(false);
+      setSelectedTaskId(null);
+    }
+  };
+
+  const doneTask = async () => {
+    if (selectedTask) {
+      const taskDoneRequest: TaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
+
+      await dispatch(fetchTaskDone(taskDoneRequest) as any);
+
+      setStatOn(false);
+      setSelectedTaskId(null);
+    }
   };
 
   const setTodoCreateMode = (event: React.MouseEvent<HTMLElement>) => {
@@ -121,7 +134,7 @@ const TaskList = () => {
       const type: TaskType = task.type;
 
       const taskClick = () => {
-        setSelectedTask(task);
+        setSelectedTaskId(task.taskId);
         setStatOn(true);
       };
 
@@ -173,10 +186,11 @@ const TaskList = () => {
   };
 
   const todoBox = () => {
-    return selectedTask?.createdTodo.map((task) => {
+    return selectedTask?.createdTodo.map((task, idx) => {
       return (
-        <div className="todo-list">
+        <div className="todo-list" key={idx}>
           <div className="todo-list__description">{task.description}</div>
+          <button onClick={(event) => deleteTodo(event, task)}>delete</button>
         </div>
       );
     });
@@ -184,6 +198,30 @@ const TaskList = () => {
 
   const getNewTodo = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewTodo(event.target.value);
+  };
+
+  const submitTodo = (event: React.MouseEvent<HTMLElement>) => {
+    if (selectedTask && newTodo !== "") {
+      const todoRequest: TodoCreateRequest = {
+        taskId: selectedTask.taskId,
+        description: newTodo,
+        date: selectedTask.date,
+      };
+
+      dispatch(fetchTodoCreate(todoRequest) as any);
+    }
+
+    setNewTodo("");
+  };
+
+  const deleteTodo = (event: React.MouseEvent<HTMLElement>, todoData: TodoData) => {
+    if (selectedTask) {
+      const todoRequest: TodoDeleteRequest = {
+        todoId: todoData.todoId,
+      };
+
+      dispatch(fetchTodoDelete(todoRequest) as any);
+    }
   };
 
   return (
@@ -252,8 +290,8 @@ const TaskList = () => {
                 </div>
                 <div className="task-describe__todo-body">
                   <div className={`task-describe__new-todo ${createTodo ? "slide-down" : "slide-up"}`}>
-                    <textarea className="task-describe__todo-input" onChange={getNewTodo}></textarea>
-                    <div className="task-describe__submit-svg">
+                    <textarea value={newTodo} className="task-describe__todo-input" onChange={getNewTodo}></textarea>
+                    <div className="task-describe__submit-svg" onClick={submitTodo}>
                       <CheckSvg></CheckSvg>
                     </div>
                   </div>
@@ -261,8 +299,8 @@ const TaskList = () => {
                 </div>
               </div>
               <div className="task-describe__footer">
-                <button className="btn-submit-small task-describe__btn--modify" onClick={confirmTask}>
-                  modify
+                <button className="btn-submit-small task-describe__btn--modify" onClick={doneTask}>
+                  done!
                 </button>
                 <button className="btn-submit-small task-describe__btn--delete" onClick={deleteTask}>
                   delete

@@ -13,9 +13,6 @@ export interface RegisterRequest {
 }
 
 export interface TaskCreateRequest {
-  uid: number;
-  userName: string;
-  email: string;
   title: string;
   description: string;
   color: TaskColor;
@@ -26,12 +23,16 @@ export interface TaskCreateRequest {
   type: TaskType;
 }
 
-export interface TaskSearchRequest {
-  uid: number;
-  email: string;
+export interface TaskDeleteOrDoneRequest {
+  taskId: number;
 }
 
-export interface TaskDeleteRequest {
+export interface TodoCreateRequest {
   taskId: number;
-  email: string;
+  description: string;
+  date: Date;
+}
+
+export interface TodoDeleteRequest {
+  todoId: number;
 }

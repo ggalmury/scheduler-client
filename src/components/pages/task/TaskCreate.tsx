@@ -1,23 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskColor, TaskPrivacy, TaskType } from "../../../common/enums/task";
 import { TaskTimeDetail } from "../../../common/interfaces/global";
 import { TodayTasksProp } from "../../../common/interfaces/props";
 import { TaskCreateRequest } from "../../../common/interfaces/requestData";
 import { TaskResponse } from "../../../common/interfaces/responseData";
-import { Account } from "../../../common/interfaces/store";
 import { normalFail } from "../../../common/utils/alert";
 import { fetchTaskCreate } from "../../../store/axios/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
 const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
   const dispatch = useDispatch();
-  const userAccount: Account = useSelector((state: RootState) => state.login.account);
+
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
+  const [title, setTitle] = useState<string>("-");
+  const [description, setDescription] = useState<string>("-");
+  const [location, setLocation] = useState<string>("-");
   const [startTime, setStartTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
   const [endTime, setEndTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
   const [color, setColor] = useState<TaskColor>(TaskColor.OFFICIAL_TASK);
@@ -111,9 +110,6 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
     }
 
     const taskRequest: TaskCreateRequest = {
-      uid: userAccount.uid,
-      userName: userAccount.userName,
-      email: userAccount.email,
       title,
       description,
       color,
@@ -123,7 +119,8 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
       privacy,
       type,
     };
-
+    console.log(date);
+    console.log(date.moment.toDate());
     dispatch(fetchTaskCreate(taskRequest) as any);
   };
 

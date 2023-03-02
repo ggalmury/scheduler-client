@@ -7,6 +7,8 @@ export enum TaskPrivacy {
 export enum TaskColor {
   OFFICIAL_TASK = "#9799cd",
   PERSONAL_TASK = "#eab3b6",
+  OFFICIAL_TASK_FINISH = "#9799cd76",
+  PERSONAL_TASK_FINISH = "#eab3b689",
 }
 
 export enum TaskType {

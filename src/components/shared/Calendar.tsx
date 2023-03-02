@@ -1,12 +1,15 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { CalendarProp } from "../../common/interfaces/props";
 import { CalendarType } from "../../common/utils/enums";
+import { RootState } from "../../store/rootReducer";
 import { setDate } from "../../store/slices/dateSlice";
 
 const Calendar = ({ size }: CalendarProp) => {
   const dispatch = useDispatch();
+
+  const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const [getMoment, setMoment] = useState<moment.Moment>(moment());
   const calendarClass: CalendarType = size;
@@ -65,6 +68,7 @@ const Calendar = ({ size }: CalendarProp) => {
                 return (
                   <td
                     key={index}
+                    className={date.date === days.format("D") ? `${calendarClass}__selected` : ""}
                     onClick={() => {
                       dispatch(setDate(days));
                     }}

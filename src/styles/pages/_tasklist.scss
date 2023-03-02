@@ -190,6 +190,7 @@
 
   &__location {
     line-height: 30px;
+    font-size: 0.8em;
 
     & > svg {
       transform: translate(-32%, 40%);
@@ -218,8 +219,6 @@
     }
 
     &--content {
-      width: 300px;
-      margin-left: 20px;
       font-size: 0.8em;
     }
   }
@@ -303,14 +302,15 @@
 }
 
 .todo-list {
-  height: 50px;
+  height: 40px;
   text-indent: 14px;
   margin: 10px 0;
+  font-size: 0.85em;
 
   &__description {
     display: inline-block;
     width: 200px;
-    line-height: 50px;
+    line-height: 40px;
     border-radius: 10px;
     background-color: whitesmoke;
   }

@@ -23,9 +23,9 @@ customAxiosRequest.interceptors.response.use(
     if (err instanceof AxiosError) {
       if (err.message === AxiosErrorMessage.UNAUTHORIZED) {
         const url: string | undefined = err.config?.url;
-        const data: string | undefined = JSON.parse(err.config?.data);
+        const data: string | undefined = err.config?.data ? JSON.parse(err.config?.data) : undefined;
 
-        if (url && data) {
+        if (url) {
           const test = await store.dispatch(fetchToken() as any);
           console.log(test);
 
