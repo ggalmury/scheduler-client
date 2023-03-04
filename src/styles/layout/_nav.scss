@@ -1,12 +1,8 @@
 .nav {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 80px;
-
-  & > hr {
-    width: 50px;
-    border: 1px solid whitesmoke;
-  }
 
   &__memu {
     display: flex;
@@ -40,5 +36,17 @@
       transform: translate(-5%, 20%);
       transform-origin: 50% 50%;
     }
+  }
+
+  &__logout {
+    & > svg {
+      transform: translate(-5%, 20%);
+      transform-origin: 50% 50%;
+    }
+  }
+
+  &__hr {
+    width: 50px;
+    border: 1px solid whitesmoke;
   }
 }

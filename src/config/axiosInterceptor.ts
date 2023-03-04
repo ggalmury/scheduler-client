@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { store } from "..";
-import { fetchToken } from "../store/axios/authRequest";
+import { fetchToken } from "../store/apis/authRequest";
 import { RootState } from "../store/rootReducer";
 import { setServerEnv } from "./envConfig";
-import { AxiosErrorMessage, CustomErrorMessage } from "../common/enums/errorCode";
+import { AxiosErrorMessage, CustomErrorMessage } from "../common/types/enums/errorCode";
 
 export const customAxiosRequest = axios.create({ baseURL: `${setServerEnv()}` });
 

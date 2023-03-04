@@ -10,6 +10,12 @@
     font-size: 2em;
   }
 
+  &__textarea {
+    width: 230px;
+    height: 17px;
+    background: none;
+  }
+
   &__content {
     display: flex;
     flex-direction: column;
@@ -21,6 +27,9 @@
   }
 
   &__input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-indent: 10px;
     font-size: 0.8em;
     margin-top: 20px;
@@ -51,6 +60,7 @@
     font-size: 0.8em;
     background-color: $task-create-box-back;
     border-radius: 7px;
+    color: #555555;
   }
 
   &__select {
@@ -73,6 +83,7 @@
 
   &__select-box {
     margin-top: 20px;
+    color: #555555;
   }
 
   &__submit {

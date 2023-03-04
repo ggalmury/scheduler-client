@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/rootReducer";
-import { LoginRequest } from "../../../common/interfaces/requestData";
-import { fetchLogin } from "../../../store/axios/authRequest";
+import { LoginRequest } from "../../../common/types/interfaces/requestData";
+import { fetchLogin } from "../../../store/apis/authRequest";
 import { logout } from "../../../store/slices/loginSlice";
 
 const Login = () => {
@@ -34,45 +34,40 @@ const Login = () => {
     console.log(userAccount);
   };
 
-  const logouttest = (): void => {
-    // TODO: move logout to nav
-    dispatch(logout(null));
-  };
-
   const goTosignUp = (event: React.MouseEvent<HTMLElement>): void => {
     event.preventDefault();
     navigate(`/signup`);
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-box">
-        <div className="auth-header">HELLO!</div>
-        <div className="auth-content">
-          <div className="auth-form">
-            <input className="login-email" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
-            <input className="login-credential" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
+    <div className="auth">
+      <div className="auth__box">
+        <div className="auth__header">HELLO!</div>
+        <div className="auth__content">
+          <div className="auth__form">
+            <input className="auth__input auth__input--email" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
+            <input className="auth__input auth__input--credential" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
           </div>
-          <div id="login-option">
-            <div id="user-save">
-              <input id="user-save-check" type="checkbox" onClick={logouttest}></input>
-              <label id="user-save-label" htmlFor="user-save-check">
+          <div className="auth__login-option">
+            <div className="auth__save">
+              <input className="user-save-check" type="checkbox"></input>
+              <label className="auth__save-label" htmlFor="user-save-check">
                 Remember Me!
               </label>
             </div>
-            <div id="find-pw" onClick={resetPassword}>
+            <div className="auth__findpw" onClick={resetPassword}>
               Forgot password?
             </div>
           </div>
-          <div className="signin-box">
+          <div className="auth__signin">
             <button className="btn-submit" onClick={attemptLogin}>
               LOG IN
             </button>
           </div>
         </div>
-        <div className="auth-footer">
+        <div className="auth__footer">
           <div>Don't have an account?</div>
-          <div className="signup-or-signin" onClick={goTosignUp}>
+          <div className="auth__route" onClick={goTosignUp}>
             Sign Up
           </div>
         </div>

@@ -1,7 +1,7 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { CalendarProp } from "../../common/interfaces/props";
+import { CalendarProp } from "../../common/types/interfaces/props";
 import { CalendarType } from "../../common/utils/enums";
 import { RootState } from "../../store/rootReducer";
 import { setDate } from "../../store/slices/dateSlice";

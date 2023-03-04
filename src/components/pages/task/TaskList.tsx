@@ -1,9 +1,9 @@
 import { Fragment, useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { store } from "../../..";
-import { TaskType } from "../../../common/enums/task";
-import { TaskDeleteOrDoneRequest, TodoCreateRequest, TodoDeleteRequest } from "../../../common/interfaces/requestData";
-import { TaskResponse, TodoData } from "../../../common/interfaces/responseData";
+import { TaskType } from "../../../common/types/enums/task";
+import { TaskDeleteOrDoneRequest, TodoCreateRequest, TodoDeleteRequest } from "../../../common/types/interfaces/requestData";
+import { TaskResponse, TodoData } from "../../../common/types/interfaces/responseData";
 import CheckSvg from "../../../common/svgs/CheckSvg";
 import ClockSvg from "../../../common/svgs/ClockSvg";
 import ForwardSvg from "../../../common/svgs/ForwardSvg";
@@ -11,10 +11,12 @@ import LocationSvg from "../../../common/svgs/LocationSvg";
 import ScopeSvg from "../../../common/svgs/ScopeSvg";
 import { addPad } from "../../../common/utils/dateUtil";
 import { CalendarType, DateFormat } from "../../../common/utils/enums";
-import { fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../../../store/axios/taskRequest";
+import { fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 import Calendar from "../../shared/Calendar";
 import TaskCreate from "./TaskCreate";
+import PlusSvg from "../../../common/svgs/PlusSvg";
+import TrashSvg from "../../../common/svgs/TrashSvg";
 
 const TaskList = () => {
   const dispatch = useDispatch();
@@ -22,13 +24,14 @@ const TaskList = () => {
   const userTask: Map<number, TaskResponse[]> = useSelector((state: RootState) => state.task.tasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
-  const [hourCount, setHourCount] = useState<number[]>(new Array(24).fill(0));
   const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
   const [todayTasks, setTodayTasks] = useState<{ official: TaskResponse[]; personal: TaskResponse[] }>({ official: [], personal: [] });
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
   const [createTodo, setCreateTodo] = useState<boolean>(false);
   const [statOn, setStatOn] = useState<boolean>(false);
   const [newTodo, setNewTodo] = useState<string>("");
+
+  const hourCount: number[] = new Array(24).fill(0);
 
   const selectedTask = useMemo((): TaskResponse | null => {
     return selectedTaskId != null ? userTask.get(parseInt(date.date))?.filter((e) => e.taskId === selectedTaskId)?.[0] ?? null : null;
@@ -124,7 +127,6 @@ const TaskList = () => {
     }
 
     const graph = tasks.map((task, idx) => {
-      const today = new Date(task.date).getDate();
       const startHour: number = task.time.startAt.hour;
       const startMinute: number = task.time.startAt.minute;
       const startTotal = startHour * 60 + startMinute;
@@ -132,14 +134,11 @@ const TaskList = () => {
       const endMinute: number = task.time.endAt.minute;
       const endTotal = endHour * 60 + endMinute;
       const type: TaskType = task.type;
+      const duration: string = addPad(startHour) + ":" + addPad(startMinute) + " ~ " + addPad(endHour) + ":" + addPad(endMinute);
 
       const taskClick = () => {
         setSelectedTaskId(task.taskId);
         setStatOn(true);
-      };
-
-      const duration = () => {
-        return addPad(startHour) + ":" + addPad(startMinute) + " ~ " + addPad(endHour) + ":" + addPad(endMinute);
       };
 
       const modalStyle = {
@@ -157,7 +156,7 @@ const TaskList = () => {
       if (startHour === index && type === defaultType) {
         return (
           <div key={idx} className="task-box__modal" style={modalStyle} onClick={taskClick}>
-            <div className="task-box__duration">{duration()}</div>
+            <div className="task-box__duration">{duration}</div>
             <div className="task-box__title" style={titleStyle}>
               {task.title}
             </div>
@@ -190,7 +189,9 @@ const TaskList = () => {
       return (
         <div className="todo-list" key={idx}>
           <div className="todo-list__description">{task.description}</div>
-          <button onClick={(event) => deleteTodo(event, task)}>delete</button>
+          <div className="todo-list__trash" onClick={(event) => deleteTodo(event, task)}>
+            <TrashSvg></TrashSvg>
+          </div>
         </div>
       );
     });
@@ -285,7 +286,7 @@ const TaskList = () => {
                 <div className="task-describe__todo-header">
                   Todolist
                   <button className="btn-submit-small task-describe__btn--create" onClick={setTodoCreateMode}>
-                    {createTodo ? "cancle" : "create"}
+                    {createTodo ? "done" : "create"}
                   </button>
                 </div>
                 <div className="task-describe__todo-body">
@@ -299,9 +300,11 @@ const TaskList = () => {
                 </div>
               </div>
               <div className="task-describe__footer">
-                <button className="btn-submit-small task-describe__btn--modify" onClick={doneTask}>
-                  done!
-                </button>
+                {selectedTask.state ? null : (
+                  <button className="btn-submit-small task-describe__btn--modify" onClick={doneTask}>
+                    done!
+                  </button>
+                )}
                 <button className="btn-submit-small task-describe__btn--delete" onClick={deleteTask}>
                   delete
                 </button>

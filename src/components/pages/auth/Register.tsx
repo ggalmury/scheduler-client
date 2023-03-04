@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RegisterRequest } from "../../../common/interfaces/requestData";
+import { RegisterRequest } from "../../../common/types/interfaces/requestData";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchRegister } from "../../../store/axios/authRequest";
+import { fetchRegister } from "../../../store/apis/authRequest";
 import { RootState } from "../../../store/rootReducer";
 
 const Register = () => {
@@ -40,24 +40,24 @@ const Register = () => {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-box">
-        <div className="auth-header">BE OUR MEMBER!</div>
-        <div className="auth-content">
-          <div className="auth-form signup-form">
-            <input className="register-input" placeholder="user name" value={userName} onChange={inputUserName}></input>
-            <input className="register-input" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
-            <input className="register-input" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
+    <div className="auth">
+      <div className="auth__box">
+        <div className="auth__header">BE OUR MEMBER!</div>
+        <div className="auth__content">
+          <div className="auth__form signup-form">
+            <input className="auth__input auth__input--register" placeholder="user name" value={userName} onChange={inputUserName}></input>
+            <input className="auth__input auth__input--register" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
+            <input className="auth__input auth__input--register" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
           </div>
-          <div className="signin-box">
+          <div className="auth__signin">
             <button className="btn-submit" onClick={attemptRegister}>
               JOIN
             </button>
           </div>
         </div>
-        <div className="auth-footer">
+        <div className="auth__footer">
           <div>Already have an account?</div>
-          <div className="signup-or-signin" onClick={goTosignIn}>
+          <div className="auth__route" onClick={goTosignIn}>
             Sign In
           </div>
         </div>

@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchRegister } from "../axios/authRequest";
+import { fetchRegister } from "../apis/authRequest";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
 
+// TODO: remove slice
 const registerSlice = createSlice({
   name: "register",
   initialState: [],

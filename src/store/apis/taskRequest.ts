@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { TaskCreateRequest, TaskDeleteOrDoneRequest, TodoCreateRequest, TodoDeleteRequest } from "../../common/interfaces/requestData";
-import { TaskResponse, TodoResponse } from "../../common/interfaces/responseData";
+import { TaskCreateRequest, TaskDeleteOrDoneRequest, TodoCreateRequest, TodoDeleteRequest } from "../../common/types/interfaces/requestData";
+import { TaskResponse, TodoResponse } from "../../common/types/interfaces/responseData";
 import { customAxiosRequest } from "../../config/axiosInterceptor";
 import { setServerEnv } from "../../config/envConfig";
 

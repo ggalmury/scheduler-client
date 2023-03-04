@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TaskColor, TaskPrivacy, TaskType } from "../../../common/enums/task";
-import { TaskTimeDetail } from "../../../common/interfaces/global";
-import { TodayTasksProp } from "../../../common/interfaces/props";
-import { TaskCreateRequest } from "../../../common/interfaces/requestData";
-import { TaskResponse } from "../../../common/interfaces/responseData";
+import { TaskColor, TaskPrivacy, TaskType } from "../../../common/types/enums/task";
+import { TaskTimeDetail } from "../../../common/types/interfaces/global";
+import { TodayTasksProp } from "../../../common/types/interfaces/props";
+import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
+import { TaskResponse } from "../../../common/types/interfaces/responseData";
 import { normalFail } from "../../../common/utils/alert";
-import { fetchTaskCreate } from "../../../store/axios/taskRequest";
+import { fetchTaskCreate } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
 const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
@@ -128,13 +128,19 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
     <div className="task-create">
       <div className="task-create__content">
         <div className="task-create__intro">Create new task</div>
-        <textarea className="task-create__input task-create__input--title input-task" placeholder="Title" onChange={getTitle}></textarea>
-        <textarea className="task-create__input task-create__input--description input-task" placeholder="Description" onChange={getDescription}></textarea>
+        <div className="task-create__input task-create__input--title input-task">
+          <textarea className="task-create__textarea" placeholder="Title" onChange={getTitle}></textarea>
+        </div>
+        <div className="task-create__input task-create__input--description input-task">
+          <textarea className="task-create__textarea" placeholder="Description" onChange={getDescription}></textarea>
+        </div>
         <div className="task-create__time-box">
           <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
           <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input>
         </div>
-        <textarea className="task-create__input task-create__input--location input-task" placeholder="Loaction" onChange={getLocation}></textarea>
+        <div className="task-create__input task-create__input--location input-task">
+          <textarea className="task-create__textarea" placeholder="Loaction" onChange={getLocation}></textarea>
+        </div>
         <div className="task-create__select">
           <select className="task-create__select-box" name="type" onChange={getType}>
             <option value={TaskType.OFFICIAL_TASK}>{TaskType.OFFICIAL_TASK}</option>

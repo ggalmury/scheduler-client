@@ -6,6 +6,11 @@
   border-radius: 20px;
   color: white;
   cursor: pointer;
+
+  &:hover {
+    transition: 0.3s;
+    scale: 110%;
+  }
 }
 
 .btn-create {
@@ -29,10 +34,10 @@
   color: white;
   border: none;
   border-radius: 8px;
-  transition: scale 0.2s;
   cursor: pointer;
 
   &:hover {
+    transition: 0.2s;
     scale: 120%;
   }
 }

@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Account, AccountStatus, Auth } from "../../common/interfaces/store";
-import { fetchLogin, fetchToken } from "../axios/authRequest";
+import { Account, AccountStatus, Auth } from "../../common/types/interfaces/store";
+import { fetchLogin, fetchToken } from "../apis/authRequest";
 import Swal from "sweetalert2";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
 

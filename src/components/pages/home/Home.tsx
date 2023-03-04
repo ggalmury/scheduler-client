@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { AccountStatus } from "../../../common/interfaces/store";
+import { AccountStatus } from "../../../common/types/interfaces/store";
 import { RootState } from "../../../store/rootReducer";
 import TaskSumm from "./TaskSumm";
 

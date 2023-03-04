@@ -1,72 +1,90 @@
-.auth-wrapper {
+.auth {
   display: flex;
   width: 100vw;
   height: 100vh;
   align-items: center;
   justify-content: center;
   background: $main-background;
-}
 
-.auth-box {
-  display: flex;
-  flex-direction: column;
-  width: 480px;
-  height: 550px;
-  background-color: white;
-  overflow: hidden;
-}
-
-.auth-header {
-  display: flex;
-  height: 100px;
-  justify-content: center;
-  align-items: center;
-  font-size: 2em;
-  color: $main-color;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  height: 200px;
-  align-items: center;
-
-  .login-email {
-    @include defaultLoginForm(60px);
-  }
-
-  .login-credential {
-    @include defaultLoginForm(40px);
-  }
-
-  .register-input {
-    @include defaultLoginForm(30px);
-  }
-}
-
-.signup-form {
-  height: 240px;
-}
-
-#login-option {
-  display: flex;
-  height: 40px;
-  margin-left: 35px;
-  margin-right: 40px;
-  align-items: center;
-
-  #user-save {
+  &__box {
     display: flex;
-    width: 150px;
-    align-items: center;
+    flex-direction: column;
+    width: 480px;
+    height: 550px;
+    background-color: rgb(245, 245, 245);
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+  }
 
-    &-label {
-      font-size: 0.8em;
-      cursor: pointer;
+  &__header {
+    display: flex;
+    height: 130px;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    color: $main-color;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    align-items: center;
+  }
+
+  &__input {
+    width: 350px;
+    height: 40px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid gray;
+    font-size: 1em;
+    text-indent: 15px;
+
+    &:hover {
+      border-bottom: 2px solid $main-color;
+    }
+
+    &:focus {
+      width: 400px;
+      outline: none;
+      transition: 0.3s;
+      border-bottom: 2px solid $main-color;
+    }
+
+    &--email {
+      margin-top: 40px;
+    }
+
+    &--credential {
+      margin-top: 40px;
+    }
+
+    &--register {
+      margin-top: 30px;
     }
   }
 
-  #find-pw {
+  &__login-option {
+    display: flex;
+    height: 40px;
+    margin-left: 35px;
+    margin-right: 40px;
+    align-items: center;
+  }
+
+  &__save {
+    display: flex;
+    width: 150px;
+    align-items: center;
+  }
+
+  &__save-label {
+    font-size: 0.8em;
+    cursor: pointer;
+  }
+
+  &__findpw {
     flex: 1;
     text-align: right;
     font-size: 0.8em;
@@ -74,25 +92,34 @@
 
     cursor: pointer;
   }
-}
 
-.signin-box {
-  display: flex;
-  height: 150px;
-  align-items: center;
-  justify-content: center;
-}
+  &__signin {
+    display: flex;
+    height: 120px;
+    align-items: center;
+    justify-content: center;
+  }
 
-.auth-footer {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8em;
+  &__footer {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+  }
 
-  .signup-or-signin {
+  &__route {
     text-indent: 10px;
     color: $main-color;
     cursor: pointer;
+
+    &:hover {
+      transition: 0.3s;
+      scale: 120%;
+    }
   }
+}
+
+.signup-form {
+  height: 240px;
 }

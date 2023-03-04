@@ -1,9 +1,9 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import { store } from "../..";
-import { LoginRequest, RegisterRequest } from "../../common/interfaces/requestData";
-import { LoginResponse, RegisterResponse, TokenResponse } from "../../common/interfaces/responseData";
-import { Account, Auth } from "../../common/interfaces/store";
+import { LoginRequest, RegisterRequest } from "../../common/types/interfaces/requestData";
+import { LoginResponse, RegisterResponse, TokenResponse } from "../../common/types/interfaces/responseData";
+import { Account, Auth } from "../../common/types/interfaces/store";
 import { setServerEnv } from "../../config/envConfig";
 import { RootState } from "../rootReducer";
 

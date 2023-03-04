@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CustomErrorMessage } from "../../common/enums/errorCode";
-import { TaskResponse, TodoData } from "../../common/interfaces/responseData";
-import { TaskInitialState } from "../../common/interfaces/store";
-import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../axios/taskRequest";
+import { CustomErrorMessage } from "../../common/types/enums/errorCode";
+import { TaskResponse, TodoData } from "../../common/types/interfaces/responseData";
+import { TaskInitialState } from "../../common/types/interfaces/store";
+import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../apis/taskRequest";
 import { enableMapSet } from "immer";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
 

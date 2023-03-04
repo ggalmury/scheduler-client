@@ -302,16 +302,26 @@
 }
 
 .todo-list {
+  display: flex;
   height: 40px;
   text-indent: 14px;
   margin: 10px 0;
   font-size: 0.85em;
+  justify-content: center;
 
   &__description {
     display: inline-block;
-    width: 200px;
+    width: 250px;
     line-height: 40px;
     border-radius: 10px;
     background-color: whitesmoke;
+  }
+
+  &__trash {
+    width: 60px;
+
+    & > svg {
+      transform: translate(30%, 30%);
+    }
   }
 }

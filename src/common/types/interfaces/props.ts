@@ -1,4 +1,4 @@
-import { CalendarType } from "../utils/enums";
+import { CalendarType } from "../../utils/enums";
 import { TaskResponse } from "./responseData";
 
 export interface CalendarProp {
