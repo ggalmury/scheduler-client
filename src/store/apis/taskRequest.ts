@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { TaskCreateRequest, TaskDeleteOrDoneRequest, TodoCreateRequest, TodoDeleteRequest } from "../../common/types/interfaces/requestData";
+import { TaskCreateRequest, TaskDeleteOrDoneRequest, TaskListRequest, TodoCreateRequest, TodoDeleteRequest } from "../../common/types/interfaces/requestData";
 import { TaskResponse, TodoResponse } from "../../common/types/interfaces/responseData";
 import { customAxiosRequest } from "../../config/axiosInterceptor";
 import { setServerEnv } from "../../config/envConfig";
@@ -12,8 +12,8 @@ export const fetchTaskCreate = createAsyncThunk("task/create", async (taskCreate
   return data;
 });
 
-export const fetchTaskList = createAsyncThunk("task/list", async () => {
-  const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/list`);
+export const fetchTaskList = createAsyncThunk("task/list", async (taskListRequest: TaskListRequest) => {
+  const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/list`, taskListRequest);
   const data: TaskResponse[] = response.data;
 
   return data;

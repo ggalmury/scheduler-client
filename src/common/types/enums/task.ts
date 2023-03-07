@@ -1,17 +1,19 @@
 export enum TaskPrivacy {
   PUBLIC = "public",
   PRIVATE = "private",
-  GROUP = "group",
+  RELEVANT = "relevant",
 }
 
 export enum TaskColor {
-  OFFICIAL_TASK = "#9799cd",
-  PERSONAL_TASK = "#eab3b6",
-  OFFICIAL_TASK_FINISH = "#9799cd76",
-  PERSONAL_TASK_FINISH = "#eab3b689",
+  BASIC = "#f1d39d",
+  WORK = "#9799cd",
+  MEETING = "#eab3b6",
+  PERSONAL = "#ff9cadc1",
 }
 
 export enum TaskType {
-  OFFICIAL_TASK = "official",
-  PERSONAL_TASK = "personal",
+  BASIC = "basic",
+  WORK = "work",
+  MEETING = "meeting",
+  PERSONAL = "personal",
 }

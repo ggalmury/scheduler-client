@@ -50,6 +50,7 @@ export interface TodoResponse {
 }
 
 export interface TodoData {
+  taskId: number;
   todoId: number;
   uid: number;
   description: string;

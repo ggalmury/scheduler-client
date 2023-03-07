@@ -1,9 +1,10 @@
 .small-cal {
-  margin: 20px;
+  height: 230px;
+  margin: 15px;
 
   td {
-    font-size: 0.7em;
-    min-width: 30px;
+    font-size: 0.6em;
+    min-width: 32px;
   }
 
   th {
@@ -26,14 +27,11 @@
   }
 
   &__table {
-    width: 270px;
-    height: 210px;
+    height: 200px;
   }
 
   &__today {
-    background-color: rgba(255, 132, 132, 0.729);
-    color: white;
-    border-radius: 100%;
+    color: rgba(255, 0, 0, 0.729);
   }
 
   &__except {
@@ -41,8 +39,6 @@
   }
 
   &__selected {
-    background-color: rgba(192, 140, 255, 0.504);
-    color: white;
-    border-radius: 100%;
+    color: rgb(0, 17, 255);
   }
 }

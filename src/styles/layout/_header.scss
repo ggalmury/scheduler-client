@@ -9,19 +9,9 @@
     display: flex;
   }
 
-  &__title {
-    text-indent: 60px;
-
-    &--name {
-      font-size: 1.2em;
-      line-height: 54px;
-    }
-  }
-
   &__greeting {
     width: 260px;
     text-align: center;
-    text-indent: 30px;
 
     &--hello {
       line-height: 40px;

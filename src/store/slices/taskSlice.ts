@@ -1,13 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current, TaskResolved } from "@reduxjs/toolkit";
 import { CustomErrorMessage } from "../../common/types/enums/errorCode";
 import { TaskResponse, TodoData } from "../../common/types/interfaces/responseData";
 import { TaskInitialState } from "../../common/types/interfaces/store";
 import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../apis/taskRequest";
-import { enableMapSet } from "immer";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
 
 const initialState: TaskInitialState = {
-  tasks: new Map(),
+  tasks: [],
 };
 
 const commonReject = (action: any) => {
@@ -29,14 +28,7 @@ const taskSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchTaskCreate.fulfilled, (state, action) => {
-        const newTaskDate: number = new Date(action.payload.date).getDate();
-        const taskArray: TaskResponse[] | undefined = state.tasks.get(newTaskDate);
-
-        if (taskArray) {
-          taskArray.push(action.payload);
-        } else {
-          state.tasks.set(newTaskDate, [action.payload]);
-        }
+        state.tasks.push(action.payload);
 
         normalSuccess(undefined, "Task successfully created");
       })
@@ -44,35 +36,13 @@ const taskSlice = createSlice({
         commonReject(action);
       })
       .addCase(fetchTaskList.fulfilled, (state, action) => {
-        enableMapSet();
-        const tasks: TaskResponse[] = action.payload;
-        const taskByDate: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
-
-        for (let i = 0; i < 31; i++) {
-          const result: TaskResponse[] = tasks.filter((task) => new Date(task.date).getDate() === i);
-
-          if (result.length !== 0) {
-            taskByDate.set(i, result);
-          }
-        }
-
-        state.tasks = taskByDate;
+        state.tasks = action.payload;
       })
       .addCase(fetchTaskList.rejected, (state, action) => {
         commonReject(action);
       })
       .addCase(fetchTaskDelete.fulfilled, (state, action) => {
-        const newTaskDate: number = new Date(action.payload.date).getDate();
-        const taskArray: TaskResponse[] | undefined = state.tasks.get(newTaskDate);
-
-        if (taskArray) {
-          const newArr: TaskResponse[] = taskArray.filter((task) => task.taskId !== action.payload.taskId);
-
-          state.tasks.set(newTaskDate, newArr);
-        } else {
-          normalFail("Oops!", "Task not exist");
-          return;
-        }
+        state.tasks = state.tasks.filter((task) => task.taskId !== action.payload.taskId);
 
         normalSuccess(undefined, "Task successfully deleted");
       })
@@ -80,20 +50,12 @@ const taskSlice = createSlice({
         commonReject(action);
       })
       .addCase(fetchTaskDone.fulfilled, (state, action) => {
-        const newTaskDate: number = new Date(action.payload.date).getDate();
-        const taskArray: TaskResponse[] | undefined = state.tasks.get(newTaskDate);
-
-        if (taskArray) {
-          taskArray.forEach((task) => {
-            if (task.taskId === action.payload.taskId) {
-              task.state = action.payload.state;
-              task.color = action.payload.color;
-            }
-          });
-        } else {
-          normalFail("Oops!", "Task not exist");
-          return;
-        }
+        state.tasks.forEach((task) => {
+          if (task.taskId === action.payload.taskId) {
+            task.state = action.payload.state;
+            task.color = action.payload.color;
+          }
+        });
 
         normalSuccess(undefined, "Task clear!");
       })
@@ -104,32 +66,29 @@ const taskSlice = createSlice({
         const taskId: number = action.payload.createdTask.taskId;
 
         const todoData: TodoData = {
+          taskId,
           todoId: action.payload.todoId,
           uid: action.payload.uid,
           description: action.payload.description,
         };
 
         state.tasks.forEach((task) => {
-          task.forEach((t) => {
-            if (t.taskId === taskId) {
-              t.createdTodo.push(todoData);
-            }
-          });
+          if (task.taskId === taskId) {
+            task.createdTodo.push(todoData);
+          }
         });
       })
       .addCase(fetchTodoCreate.rejected, (state, action) => {
         commonReject(action);
       })
       .addCase(fetchTodoDelete.fulfilled, (state, action) => {
-        const newTodoDate: number = new Date(action.payload.date).getDate();
+        const taskId: number = action.payload.createdTask.taskId;
         const todoId: number = action.payload.todoId;
 
-        const tasks: TaskResponse[] | undefined = state.tasks.get(newTodoDate);
+        const currentTask: TaskResponse[] = state.tasks.filter((task) => task.taskId === taskId);
 
-        if (tasks) {
-          tasks.forEach((task) => {
-            task.createdTodo = task.createdTodo.filter((elem) => elem.todoId !== todoId);
-          });
+        if (currentTask) {
+          currentTask[0].createdTodo = currentTask[0].createdTodo.filter((todo) => todo.todoId !== todoId);
         }
       })
       .addCase(fetchTodoDelete.rejected, (state, action) => {

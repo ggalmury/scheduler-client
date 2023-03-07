@@ -1,5 +1,5 @@
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CalendarProp } from "../../common/types/interfaces/props";
 import { CalendarType } from "../../common/utils/enums";
@@ -17,8 +17,6 @@ const Calendar = ({ size }: CalendarProp) => {
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf("month").week();
   const lastWeek: number = today.clone().endOf("month").week() === 1 ? 53 : today.clone().endOf("month").week();
-
-  useEffect(() => {}, [getMoment]);
 
   const prevMonth = () => {
     setMoment(getMoment.clone().subtract(1, "month"));
@@ -42,15 +40,15 @@ const Calendar = ({ size }: CalendarProp) => {
         <tr key={week}>
           {Array(7)
             .fill(0)
-            .map((data, index) => {
-              const days: moment.Moment = today.clone().week(week).startOf("week").add(index, "day");
+            .map((value, idx) => {
+              const days: moment.Moment = today.clone().week(week).startOf("week").add(idx, "day");
 
               if (moment().format("YYYYMMDD") === days.format("YYYYMMDD")) {
                 // TODO: change background color (today or not this month case)
                 return (
                   <td
                     className={`${calendarClass}__today`}
-                    key={index}
+                    key={idx}
                     onClick={() => {
                       dispatch(setDate(days));
                     }}
@@ -60,14 +58,14 @@ const Calendar = ({ size }: CalendarProp) => {
                 );
               } else if (days.format("MM") !== today.format("MM")) {
                 return (
-                  <td className={`${calendarClass}__except`} key={index}>
+                  <td className={`${calendarClass}__except`} key={idx}>
                     <span>{days.format("D")}</span>
                   </td>
                 );
               } else {
                 return (
                   <td
-                    key={index}
+                    key={idx}
                     className={date.date === days.format("D") ? `${calendarClass}__selected` : ""}
                     onClick={() => {
                       dispatch(setDate(days));

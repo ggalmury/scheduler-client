@@ -19,5 +19,5 @@ export interface AccountStatus {
 }
 
 export interface TaskInitialState {
-  tasks: Map<number, TaskResponse[]>;
+  tasks: TaskResponse[];
 }

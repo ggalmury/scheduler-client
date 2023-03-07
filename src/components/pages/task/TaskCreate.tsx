@@ -2,14 +2,13 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TaskColor, TaskPrivacy, TaskType } from "../../../common/types/enums/task";
 import { TaskTimeDetail } from "../../../common/types/interfaces/global";
-import { TodayTasksProp } from "../../../common/types/interfaces/props";
 import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
 import { TaskResponse } from "../../../common/types/interfaces/responseData";
 import { normalFail } from "../../../common/utils/alert";
 import { fetchTaskCreate } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
-const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
+const TaskCreate = () => {
   const dispatch = useDispatch();
 
   const date = useSelector((state: RootState) => state.date.selectedDate);
@@ -19,9 +18,9 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
   const [location, setLocation] = useState<string>("-");
   const [startTime, setStartTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
   const [endTime, setEndTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
-  const [color, setColor] = useState<TaskColor>(TaskColor.OFFICIAL_TASK);
+  const [color, setColor] = useState<TaskColor>(TaskColor.BASIC);
   const [privacy, setPrivacy] = useState<TaskPrivacy>(TaskPrivacy.PUBLIC);
-  const [type, setType] = useState<TaskType>(TaskType.OFFICIAL_TASK);
+  const [type, setType] = useState<TaskType>(TaskType.BASIC);
 
   const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
@@ -52,12 +51,25 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
   };
 
   const getType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    if (event.target.value === TaskType.OFFICIAL_TASK) {
-      setType(TaskType.OFFICIAL_TASK);
-      setColor(TaskColor.OFFICIAL_TASK);
-    } else {
-      setType(TaskType.PERSONAL_TASK);
-      setColor(TaskColor.PERSONAL_TASK);
+    const type: string = event.target.value;
+
+    switch (type) {
+      case TaskType.BASIC:
+        setType(TaskType.BASIC);
+        setColor(TaskColor.BASIC);
+        break;
+      case TaskType.WORK:
+        setType(TaskType.WORK);
+        setColor(TaskColor.WORK);
+        break;
+      case TaskType.MEETING:
+        setType(TaskType.MEETING);
+        setColor(TaskColor.MEETING);
+        break;
+      case TaskType.PERSONAL:
+        setType(TaskType.PERSONAL);
+        setColor(TaskColor.PERSONAL);
+        break;
     }
   };
 
@@ -79,14 +91,20 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
     let taskTypeArr: TaskResponse[] = [];
     let checker: boolean = false;
 
-    switch (type) {
-      case TaskType.OFFICIAL_TASK:
-        taskTypeArr = todayTasks.official;
-        break;
-      case TaskType.PERSONAL_TASK:
-        taskTypeArr = todayTasks.personal;
-        break;
-    }
+    // switch (type) {
+    //   case TaskType.BASIC:
+    //     taskTypeArr = todayTasks.basic;
+    //     break;
+    //   case TaskType.WORK:
+    //     taskTypeArr = todayTasks.work;
+    //     break;
+    //   case TaskType.MEETING:
+    //     taskTypeArr = todayTasks.meeting;
+    //     break;
+    //   case TaskType.PERSONAL:
+    //     taskTypeArr = todayTasks.personal;
+    //     break;
+    // }
 
     taskTypeArr.forEach((task) => {
       const startAlready: number = task.time.startAt.hour * 60 + task.time.startAt.minute;
@@ -126,37 +144,37 @@ const TaskCreate = ({ todayTasks }: TodayTasksProp) => {
 
   return (
     <div className="task-create">
-      <div className="task-create__content">
-        <div className="task-create__intro">Create new task</div>
-        <div className="task-create__input task-create__input--title input-task">
-          <textarea className="task-create__textarea" placeholder="Title" onChange={getTitle}></textarea>
-        </div>
-        <div className="task-create__input task-create__input--description input-task">
-          <textarea className="task-create__textarea" placeholder="Description" onChange={getDescription}></textarea>
-        </div>
-        <div className="task-create__time-box">
-          <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
-          <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input>
-        </div>
-        <div className="task-create__input task-create__input--location input-task">
-          <textarea className="task-create__textarea" placeholder="Loaction" onChange={getLocation}></textarea>
-        </div>
-        <div className="task-create__select">
-          <select className="task-create__select-box" name="type" onChange={getType}>
-            <option value={TaskType.OFFICIAL_TASK}>{TaskType.OFFICIAL_TASK}</option>
-            <option value={TaskType.PERSONAL_TASK}>{TaskType.PERSONAL_TASK}</option>
-          </select>
-          <select className="task-create__select-box" name="privacy" onChange={getPrivacy}>
-            <option value={TaskPrivacy.PUBLIC}>{TaskPrivacy.PUBLIC}</option>
-            <option value={TaskPrivacy.PRIVATE}>{TaskPrivacy.PRIVATE}</option>
-            <option value={TaskPrivacy.GROUP}>{TaskPrivacy.GROUP}</option>
-          </select>
-        </div>
-        <div className="task-create__submit task-create__btn-submit">
-          <button className="btn-submit-small" onClick={submitTask}>
-            submit
-          </button>
-        </div>
+      <div className="task-create__intro">Create new task</div>
+      <div className="task-create__input task-create__input--title input-task">
+        <textarea className="task-create__textarea" placeholder="Title" onChange={getTitle}></textarea>
+      </div>
+      <div className="task-create__input task-create__input--description input-task">
+        <textarea className="task-create__textarea" placeholder="Description" onChange={getDescription}></textarea>
+      </div>
+      <div className="task-create__time-box">
+        <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
+        <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input>
+      </div>
+      <div className="task-create__input task-create__input--location input-task">
+        <textarea className="task-create__textarea" placeholder="Loaction" onChange={getLocation}></textarea>
+      </div>
+      <div className="task-create__select">
+        <select className="task-create__select-box" name="type" onChange={getType}>
+          <option value={TaskType.BASIC}>{TaskType.BASIC}</option>
+          <option value={TaskType.WORK}>{TaskType.WORK}</option>
+          <option value={TaskType.MEETING}>{TaskType.MEETING}</option>
+          <option value={TaskType.PERSONAL}>{TaskType.PERSONAL}</option>
+        </select>
+        <select className="task-create__select-box" name="privacy" onChange={getPrivacy}>
+          <option value={TaskPrivacy.PUBLIC}>{TaskPrivacy.PUBLIC}</option>
+          <option value={TaskPrivacy.PRIVATE}>{TaskPrivacy.PRIVATE}</option>
+          <option value={TaskPrivacy.RELEVANT}>{TaskPrivacy.RELEVANT}</option>
+        </select>
+      </div>
+      <div className="task-create__submit task-create__btn-submit">
+        <button className="btn-submit-small" onClick={submitTask}>
+          submit
+        </button>
       </div>
     </div>
   );

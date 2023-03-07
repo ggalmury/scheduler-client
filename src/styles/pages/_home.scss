@@ -2,13 +2,12 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  background-color: whitesmoke;
+  background-color: $content-background;
 }
 
 #article {
   display: flex;
   text-align: center;
-  flex: 1;
   overflow: hidden;
 
   &-upper {

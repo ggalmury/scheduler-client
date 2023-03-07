@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import CalendarSvg from "../../common/svgs/CalendarSvg";
-import HomeSvg from "../../common/svgs/HomeSvg";
-import LogoutSvg from "../../common/svgs/LogoutSvg";
-import TaskSvg from "../../common/svgs/TaskSvg";
+import { CalendarSvg, HomeSvg, LogoutSvg } from "../../common/svg";
 import { RouteName } from "../../common/utils/enums";
 import { setClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/loginSlice";
@@ -28,13 +25,17 @@ const Nav = () => {
     navigate("home");
   };
 
-  const goToCalendar = () => {
-    setActiveButton(RouteName.CALENDAR);
-  };
-
   const goToTasks = () => {
     setActiveButton(RouteName.TASKS);
     navigate("task");
+  };
+
+  const goToGroup = () => {
+    setActiveButton(RouteName.GROUP);
+  };
+
+  const goToMessage = () => {
+    setActiveButton(RouteName.MESSAGE);
   };
 
   const logOut = () => {
@@ -44,19 +45,31 @@ const Nav = () => {
   return (
     <div className="nav">
       <div className="nav__menu">
-        <div className={`nav__category nav__category--${activeButton === RouteName.HOME ? "click" : "hover"}`} onClick={goToHome}>
-          <div className="nav__content">
+        <div className="nav__title">
+          <div className="nav__title--name">Schedy</div>
+        </div>
+        <div className="nav__category" onClick={goToHome}>
+          <div className={`nav__content nav__content--${activeButton === RouteName.HOME ? "click" : "hover"}`}>
             <HomeSvg></HomeSvg>
+            <span>Home</span>
           </div>
         </div>
-        <div className={`nav__category nav__category--${activeButton === RouteName.CALENDAR ? "click" : "hover"}`} onClick={goToCalendar}>
-          <div className="nav__content">
+        <div className="nav__category" onClick={goToTasks}>
+          <div className={`nav__content nav__content--${activeButton === RouteName.TASKS ? "click" : "hover"}`}>
             <CalendarSvg></CalendarSvg>
+            <span>Tasks</span>
           </div>
         </div>
-        <div className={`nav__category nav__category--${activeButton === RouteName.TASKS ? "click" : "hover"}`} onClick={goToTasks}>
-          <div className="nav__content">
-            <TaskSvg></TaskSvg>
+        <div className="nav__category" onClick={goToGroup}>
+          <div className={`nav__content nav__content--${activeButton === RouteName.GROUP ? "click" : "hover"}`}>
+            <CalendarSvg></CalendarSvg>
+            <span>Group</span>
+          </div>
+        </div>
+        <div className="nav__category" onClick={goToMessage}>
+          <div className={`nav__content nav__content--${activeButton === RouteName.MESSAGE ? "click" : "hover"}`}>
+            <CalendarSvg></CalendarSvg>
+            <span>Message</span>
           </div>
         </div>
         <hr className="nav__hr" />

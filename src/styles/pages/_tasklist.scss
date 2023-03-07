@@ -8,8 +8,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 320px;
-  border-right: $inner-border;
+  width: 280px;
+  height: 100%;
 }
 
 .task-timestamp {
@@ -23,32 +23,6 @@
     text-align: left;
     height: 80px;
     justify-content: space-between;
-    border-bottom: $inner-border;
-  }
-
-  &__counter-box {
-    display: flex;
-    width: 240px;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-
-  &__counter {
-    width: 80px;
-    height: 70px;
-    border-radius: 10px;
-    line-height: 35px;
-    color: white;
-    font-size: 0.9em;
-    text-align: center;
-
-    &--main {
-      background-color: $main-task-color;
-    }
-
-    &--sub {
-      background-color: $sub-task-color;
-    }
   }
 
   &__date {
@@ -67,8 +41,17 @@
   }
 
   &__body {
+    display: flex;
+    justify-content: center;
     flex: 1;
     overflow: scroll;
+  }
+
+  &__content {
+    width: 95%;
+    border: $inner-border;
+    border-radius: 10px;
+    overflow: auto;
 
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -77,22 +60,38 @@
       display: none;
     }
   }
+
+  &__weekday {
+    display: flex;
+    justify-content: space-around;
+    width: 64%;
+    margin-left: 80px;
+    line-height: 80px;
+    position: fixed;
+    background-color: skyblue;
+    border-radius: 30px;
+    z-index: 9999;
+  }
+
+  &__graph {
+    margin-top: 80px;
+  }
 }
 
 .task-box {
   display: flex;
   flex: 1;
   height: 90px;
-  border-top: $inner-border;
+  border-bottom: $inner-border;
   box-sizing: border-box;
 
   &__time {
-    width: 120px;
-    line-height: 40px;
+    position: relative;
+    width: 80px;
+    line-height: 25px;
     text-indent: 30px;
-    font-size: 0.7em;
+    font-size: 0.6em;
     color: gray;
-    border-right: $inner-border;
   }
 
   &__main-task {
@@ -113,7 +112,7 @@
   &__modal {
     position: relative;
     min-height: 30px;
-    width: 140px;
+    width: 80%;
     border-radius: 10px;
     color: white;
     text-align: left;
@@ -133,24 +132,21 @@
   }
 }
 
-.task-stat {
-  width: 340px;
-
-  &--official {
-    background-color: #9799cd30;
-  }
-
-  &--personal {
-    background-color: #eab3b634;
-  }
-}
-
 .task-detail {
   display: flex;
   flex-direction: column;
-  position: relative;
-  width: 340px;
+  position: absolute;
+  width: 350px;
   height: 100%;
+  right: 0;
+
+  &--official {
+    background-color: #bdc0ff;
+  }
+
+  &--personal {
+    background-color: #fedcde;
+  }
 }
 
 .task-describe {

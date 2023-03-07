@@ -1,7 +1,8 @@
 export enum RouteName {
   HOME = "home",
-  CALENDAR = "calendar",
   TASKS = "tasks",
+  GROUP = "group",
+  MESSAGE = "message",
 }
 
 export enum CalendarType {

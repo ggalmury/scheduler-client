@@ -23,6 +23,11 @@ export interface TaskCreateRequest {
   type: TaskType;
 }
 
+export interface TaskListRequest {
+  startOfWeek: Date;
+  endOfWeek: Date;
+}
+
 export interface TaskDeleteOrDoneRequest {
   taskId: number;
 }

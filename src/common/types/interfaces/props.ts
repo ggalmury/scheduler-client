@@ -1,4 +1,5 @@
 import { CalendarType } from "../../utils/enums";
+import { TodayTask } from "./global";
 import { TaskResponse } from "./responseData";
 
 export interface CalendarProp {
@@ -10,5 +11,5 @@ export interface TaskChartProp {
 }
 
 export interface TodayTasksProp {
-  todayTasks: { official: TaskResponse[]; personal: TaskResponse[] };
+  todayTasks: TodayTask;
 }
