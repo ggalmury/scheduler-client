@@ -1,0 +1,32 @@
+.timepicker {
+  display: flex;
+  position: absolute;
+  justify-content: space-evenly;
+  width: 150px;
+  height: 200px;
+  overflow: hidden;
+  background-color: white;
+  border: $inner-border;
+  border-radius: 10px;
+
+  &__selector {
+    width: 40px;
+    font-size: 0.7em;
+    overflow: scroll;
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  &__options {
+    $height: 45px;
+
+    background-color: rgb(226, 226, 226);
+    height: $height;
+    line-height: $height;
+  }
+}

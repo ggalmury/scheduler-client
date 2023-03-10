@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import TimePicker from "../../../common/modals/TimePicker";
 import { TaskColor, TaskPrivacy, TaskType } from "../../../common/types/enums/task";
 import { TaskTimeDetail } from "../../../common/types/interfaces/global";
 import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
@@ -13,6 +14,9 @@ const TaskCreate = () => {
 
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
+  const startTimePicker = useRef<HTMLDivElement>(null);
+  const endTimePicker = useRef<HTMLDivElement>(null);
+
   const [title, setTitle] = useState<string>("-");
   const [description, setDescription] = useState<string>("-");
   const [location, setLocation] = useState<string>("-");
@@ -21,6 +25,20 @@ const TaskCreate = () => {
   const [color, setColor] = useState<TaskColor>(TaskColor.BASIC);
   const [privacy, setPrivacy] = useState<TaskPrivacy>(TaskPrivacy.PUBLIC);
   const [type, setType] = useState<TaskType>(TaskType.BASIC);
+  const [startTimePickerOn, setStartTimePickerOn] = useState<boolean>(false);
+  const [endTimePickerOn, setEndTimePickerOn] = useState<boolean>(false);
+
+  useEffect(() => {
+    console.log("2");
+    if (startTimePicker.current && endTimePicker.current) {
+      startTimePicker.current.style.display = startTimePickerOn ? "flex" : "none";
+      endTimePicker.current.style.display = endTimePickerOn ? "flex" : "none";
+    }
+  }, [startTimePickerOn, endTimePickerOn]);
+
+  useEffect(() => {
+    console.log(startTime);
+  }, [startTime]);
 
   const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTitle(event.target.value);
@@ -32,22 +50,6 @@ const TaskCreate = () => {
 
   const getLocation = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLocation(event.target.value);
-  };
-
-  const getStartTime = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const time: string = event.target.value;
-    const timeArray: string[] = time.split(":");
-    const newStartTime = { hour: parseInt(timeArray[0]), minute: parseInt(timeArray[1]) };
-
-    setStartTime(newStartTime);
-  };
-
-  const getEndTime = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const time: string = event.target.value;
-    const timeArray: string[] = time.split(":");
-    const newEndTime = { hour: parseInt(timeArray[0]), minute: parseInt(timeArray[1]) };
-
-    setEndTime(newEndTime);
   };
 
   const getType = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -91,21 +93,6 @@ const TaskCreate = () => {
     let taskTypeArr: TaskResponse[] = [];
     let checker: boolean = false;
 
-    // switch (type) {
-    //   case TaskType.BASIC:
-    //     taskTypeArr = todayTasks.basic;
-    //     break;
-    //   case TaskType.WORK:
-    //     taskTypeArr = todayTasks.work;
-    //     break;
-    //   case TaskType.MEETING:
-    //     taskTypeArr = todayTasks.meeting;
-    //     break;
-    //   case TaskType.PERSONAL:
-    //     taskTypeArr = todayTasks.personal;
-    //     break;
-    // }
-
     taskTypeArr.forEach((task) => {
       const startAlready: number = task.time.startAt.hour * 60 + task.time.startAt.minute;
       const endAlready: number = task.time.endAt.hour * 60 + task.time.endAt.minute;
@@ -132,13 +119,12 @@ const TaskCreate = () => {
       description,
       color,
       location,
-      date: date.moment.toDate(),
+      date: new Date(date.moment.format("YYYY-MM-DD")),
       time: { startAt: startTime, endAt: endTime },
       privacy,
       type,
     };
-    console.log(date);
-    console.log(date.moment.toDate());
+
     dispatch(fetchTaskCreate(taskRequest) as any);
   };
 
@@ -152,8 +138,30 @@ const TaskCreate = () => {
         <textarea className="task-create__textarea" placeholder="Description" onChange={getDescription}></textarea>
       </div>
       <div className="task-create__time-box">
-        <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
-        <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input>
+        <div
+          className="task-create__time"
+          onClick={() => {
+            setStartTimePickerOn(!startTimePickerOn);
+          }}
+        >
+          <span>start</span>
+          <div className="timepicker" ref={startTimePicker}>
+            <TimePicker setTime={setStartTime}></TimePicker>
+          </div>
+        </div>
+        <div
+          className="task-create__time"
+          onClick={() => {
+            setEndTimePickerOn(!endTimePickerOn);
+          }}
+        >
+          <span>end</span>
+          <div className="timepicker" ref={endTimePicker}>
+            <TimePicker setTime={setEndTime}></TimePicker>
+          </div>
+        </div>
+        {/* <input className="task-create__time" type="time" placeholder="Start time" onChange={getStartTime}></input>
+        <input className="task-create__time" type="time" placeholder="End time" onChange={getEndTime}></input> */}
       </div>
       <div className="task-create__input task-create__input--location input-task">
         <textarea className="task-create__textarea" placeholder="Loaction" onChange={getLocation}></textarea>

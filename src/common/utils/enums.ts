@@ -19,6 +19,7 @@ export enum DateFormat {
   MONTH_2 = "MM",
   MONTH_1 = "M",
 
+  DAY_4 = "dddd",
   DAY_2 = "DD",
   DAY_1 = "D",
 }

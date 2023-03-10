@@ -10,3 +10,7 @@ export const getDate = (format: DateFormat | string): string | number => {
 export const addPad = (time: number): string => {
   return time.toString().padStart(2, "0");
 };
+
+export const toISOAndSlice = (date: Date): string => {
+  return date.toString().slice(0, 10);
+};

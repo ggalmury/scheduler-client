@@ -17,3 +17,8 @@ export enum TaskType {
   MEETING = "meeting",
   PERSONAL = "personal",
 }
+
+export enum Meridiem {
+  AM = "am",
+  PM = "pm",
+}

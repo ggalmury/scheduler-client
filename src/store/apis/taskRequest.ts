@@ -8,14 +8,15 @@ import { setServerEnv } from "../../config/envConfig";
 export const fetchTaskCreate = createAsyncThunk("task/create", async (taskCreateRequest: TaskCreateRequest, thunkApi): Promise<any> => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/create`, taskCreateRequest);
   const data: TaskResponse = response.data;
-
+  console.log(taskCreateRequest);
+  console.log(data);
   return data;
 });
 
 export const fetchTaskList = createAsyncThunk("task/list", async (taskListRequest: TaskListRequest) => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/list`, taskListRequest);
   const data: TaskResponse[] = response.data;
-
+  console.log(data);
   return data;
 });
 

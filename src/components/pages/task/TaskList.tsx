@@ -106,8 +106,8 @@ const TaskList = () => {
     setCreateTodo(!createTodo);
   };
 
-  const taskGraph = (time: number, index: number) => {
-    const taskArr: TaskResponse[] | undefined = weeklyTask.get(index);
+  const taskGraph = (time: number, date: number) => {
+    const taskArr: TaskResponse[] | undefined = weeklyTask.get(date);
 
     if (taskArr) {
       return taskArr.map((task, idx) => {
@@ -138,9 +138,9 @@ const TaskList = () => {
 
         if (startHour === time) {
           return (
-            <div key={idx} className="task-box__modal" style={modalStyle} onClick={taskClick}>
-              <div className="task-box__duration">{duration}</div>
-              <div className="task-box__title" style={titleStyle}>
+            <div key={idx} className="task-modal" style={modalStyle} onClick={taskClick}>
+              <div className="task-modal__duration">{duration}</div>
+              <div className="task-modal__title" style={titleStyle}>
                 {task.title}
               </div>
             </div>
@@ -151,31 +151,46 @@ const TaskList = () => {
   };
 
   const taskBox = () => {
+    const firstDay: moment.Moment = date.moment.clone().startOf("week");
+    const today: string = date.moment.clone().format(DateFormat.DAY_4);
+
+    const dateArr = [];
+
+    for (let i = 0; i < 7; i++) {
+      const newMoment: moment.Moment = firstDay.clone().add(i, "day");
+      const newDay: string = newMoment.format(DateFormat.DAY_4);
+      const newDate: string = newMoment.format("MM-DD");
+
+      dateArr.push([newDay, newDate]);
+    }
+
     return (
-      <div className="task-timestamp__content">
-        <div className="task-timestamp__weekday">
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div>Sat</div>
-          <div>Sun</div>
+      <div className="task-table">
+        <div className="task-table__header">
+          <div className="task-table__time"></div>
+          {dateArr.map((date, idx) => {
+            return (
+              <div key={idx} className="task-table__date">
+                <div className={`task-table__date--day ${today === date[0] ? "task-table__current-day" : ""}`}>{date[0]}</div>
+                <div className="task-table__date--date">{date[1]}</div>
+              </div>
+            );
+          })}
         </div>
-        <div className="task-timestamp__graph">
+        <div className="task-table__body">
           {hourCount.map((value, hour) => {
             return (
               <div key={hour}>
-                <div className="task-box">
-                  <div className="task-box__time">
+                <div className="task-table__row">
+                  <div className="task-table__time">
                     {hour} {hour < 12 ? "AM" : "PM"}
                   </div>
                   {Array(7)
                     .fill(0)
                     .map((value, date) => {
                       return (
-                        <div key={date} className="task-box__sub-task">
-                          {isDataFetched ? <div className="task-box__chart">{taskGraph(hour, date)}</div> : null}
+                        <div key={date} className="task-table__elem">
+                          {isDataFetched ? <div className="task-table__chart">{taskGraph(hour, date)}</div> : null}
                         </div>
                       );
                     })}
