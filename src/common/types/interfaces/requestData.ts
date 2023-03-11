@@ -1,4 +1,4 @@
-import { TaskColor, TaskPrivacy, TaskType } from "../enums/task";
+import { TaskPrivacy, TaskType, Types } from "../types";
 import { TaskTime } from "./global";
 
 export interface LoginRequest {
@@ -15,12 +15,11 @@ export interface RegisterRequest {
 export interface TaskCreateRequest {
   title: string;
   description: string;
-  color: TaskColor;
   location: string;
   date: Date;
   time: TaskTime;
-  privacy: TaskPrivacy;
-  type: TaskType;
+  privacy: Types<typeof TaskPrivacy>;
+  type: Types<typeof TaskType>;
 }
 
 export interface TaskListRequest {

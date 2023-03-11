@@ -1,23 +1,26 @@
-import { Fragment, useEffect, useState } from "react";
-import { Meridiem } from "../types/enums/task";
+import { Fragment, useState } from "react";
 import { TimePickerProp } from "../types/interfaces/props";
 
 const TimePicker = ({ setTime }: TimePickerProp) => {
-  const [meridiem, setMeridiem] = useState<Meridiem>(Meridiem.AM);
+  const [isAm, setIsAm] = useState<boolean>(true);
 
-  const getMeridiem = (meridiem: Meridiem) => {
-    setMeridiem(meridiem);
+  const setAm = (): void => {
+    setIsAm(true);
   };
 
-  const getHour = (hour: number) => {
-    const newHour: number = meridiem === Meridiem.AM ? hour : hour + 12;
+  const setPm = (): void => {
+    setIsAm(false);
+  };
+
+  const getHour = (hour: number): void => {
+    const newHour: number = isAm ? hour : hour + 12;
 
     setTime((prevStartTime) => {
       return { ...prevStartTime, hour: newHour };
     });
   };
 
-  const getMinute = (minute: number) => {
+  const getMinute = (minute: number): void => {
     setTime((prevStartTime) => {
       return { ...prevStartTime, minute };
     });
@@ -26,14 +29,17 @@ const TimePicker = ({ setTime }: TimePickerProp) => {
   return (
     <Fragment>
       <div className="timepicker__selector">
-        <div className="timepicker__options" onClick={() => getMeridiem(Meridiem.AM)}>
-          {Meridiem.AM}
+        <div className="timepicker__options"></div>
+        <div className="timepicker__options" onClick={setAm}>
+          AM
         </div>
-        <div className="timepicker__options" onClick={() => getMeridiem(Meridiem.PM)}>
-          {Meridiem.PM}
+        <div className="timepicker__options" onClick={setPm}>
+          PM
         </div>
+        <div className="timepicker__options"></div>
       </div>
       <div className="timepicker__selector">
+        <div className="timepicker__options"></div>
         {Array(12)
           .fill(0)
           .map((value, idx) => {
@@ -43,8 +49,10 @@ const TimePicker = ({ setTime }: TimePickerProp) => {
               </div>
             );
           })}
+        <div className="timepicker__options"></div>
       </div>
       <div className="timepicker__selector">
+        <div className="timepicker__options"></div>
         {Array(4)
           .fill(0)
           .map((value, idx) => {
@@ -55,6 +63,7 @@ const TimePicker = ({ setTime }: TimePickerProp) => {
               </div>
             );
           })}
+        <div className="timepicker__options"></div>
       </div>
     </Fragment>
   );

@@ -113,3 +113,41 @@ export const TrashSvg = () => {
     </svg>
   );
 };
+
+export const NextSvg = () => {
+  return (
+    <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+      <title />
+      <path d="M69.8437,43.3876,33.8422,13.3863a6.0035,6.0035,0,0,0-7.6878,9.223l30.47,25.39-30.47,25.39a6.0035,6.0035,0,0,0,7.6878,9.2231L69.8437,52.6106a6.0091,6.0091,0,0,0,0-9.223Z" />
+    </svg>
+  );
+};
+
+export const PrevSvg = () => {
+  return (
+    <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
+      <title />
+      <path d="M39.3756,48.0022l30.47-25.39a6.0035,6.0035,0,0,0-7.6878-9.223L26.1563,43.3906a6.0092,6.0092,0,0,0,0,9.2231L62.1578,82.615a6.0035,6.0035,0,0,0,7.6878-9.2231Z" />
+    </svg>
+  );
+};
+
+export const XSvg = () => {
+  return (
+    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+      <line x1="18" x2="6" y1="6" y2="18" />
+      <line x1="6" x2="18" y1="6" y2="18" />
+    </svg>
+  );
+};
+
+export const DescriptionSvg = () => {
+  return (
+    <svg width="20" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M25.71,9.29l-6-6a.93.93,0,0,0-.33-.21A1,1,0,0,0,19,3H7A1,1,0,0,0,6,4V28a1,1,0,0,0,1,1H25a1,1,0,0,0,1-1V10A1,1,0,0,0,25.71,9.29ZM20,6.41,23.59,10H20ZM8,27V5H18v6a1,1,0,0,0,1,1h5V27Z" />
+      <path d="M21,14H11a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z" />
+      <path d="M21,18H11a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z" />
+      <path d="M21,22H11a1,1,0,0,0,0,2H21a1,1,0,0,0,0-2Z" />
+    </svg>
+  );
+};

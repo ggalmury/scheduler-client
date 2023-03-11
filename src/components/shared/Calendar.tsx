@@ -1,6 +1,7 @@
 import moment from "moment";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NextSvg, PrevSvg } from "../../common/svg";
 import { CalendarProp } from "../../common/types/interfaces/props";
 import { CalendarType } from "../../common/utils/enums";
 import { RootState } from "../../store/rootReducer";
@@ -86,13 +87,15 @@ const Calendar = ({ size }: CalendarProp) => {
   return (
     <div className={`${calendarClass}`}>
       <div className={`${calendarClass}__caption`}>
-        <button className={`${calendarClass}__btn-changeMonth`} onClick={prevMonth}>
-          &lt;
-        </button>
         <span onClick={returnToday}>{today.format("MMM, YYYY")}</span>
-        <button className={`${calendarClass}__btn-changeMonth`} onClick={nextMonth}>
-          &gt;
-        </button>
+        <div className={`${calendarClass}__month-select`}>
+          <div className={`${calendarClass}__svg`} onClick={prevMonth}>
+            <PrevSvg></PrevSvg>
+          </div>
+          <div className={`${calendarClass}__svg`} onClick={nextMonth}>
+            <NextSvg></NextSvg>
+          </div>
+        </div>
       </div>
       <table className={`${calendarClass}__table`}>
         <thead>

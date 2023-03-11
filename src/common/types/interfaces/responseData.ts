@@ -1,4 +1,4 @@
-import { TaskColor, TaskPrivacy, TaskType } from "../enums/task";
+import { TaskPrivacy, TaskType, Types } from "../types";
 import { TaskTime } from "./global";
 
 export interface LoginResponse {
@@ -30,12 +30,12 @@ export interface TaskResponse {
   email: string;
   title: string;
   description: string;
-  color: TaskColor;
   location: string;
   date: Date;
   time: TaskTime;
-  privacy: TaskPrivacy;
-  type: TaskType;
+  color: string;
+  privacy: Types<typeof TaskPrivacy>;
+  type: Types<typeof TaskType>;
   createdDt: Date;
   state: boolean;
   createdTodo: TodoData[];

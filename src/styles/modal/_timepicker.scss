@@ -1,15 +1,20 @@
+$box-height: 45px;
+
 .timepicker {
   display: flex;
   position: absolute;
   justify-content: space-evenly;
   width: 150px;
-  height: 200px;
+  height: $box-height * 3;
   overflow: hidden;
   background-color: white;
   border: $inner-border;
   border-radius: 10px;
+  right: 0px;
+  z-index: 99;
 
   &__selector {
+    position: relative;
     width: 40px;
     font-size: 0.7em;
     overflow: scroll;
@@ -23,10 +28,8 @@
   }
 
   &__options {
-    $height: 45px;
-
-    background-color: rgb(226, 226, 226);
-    height: $height;
-    line-height: $height;
+    height: $box-height;
+    line-height: $box-height;
+    cursor: pointer;
   }
 }

@@ -1,4 +1,4 @@
-import { createSlice, current, TaskResolved } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import { CustomErrorMessage } from "../../common/types/enums/errorCode";
 import { TaskResponse, TodoData } from "../../common/types/interfaces/responseData";
 import { TaskInitialState } from "../../common/types/interfaces/store";
@@ -53,7 +53,7 @@ const taskSlice = createSlice({
         state.tasks.forEach((task) => {
           if (task.taskId === action.payload.taskId) {
             task.state = action.payload.state;
-            task.color = action.payload.color;
+            task.type.color = action.payload.type.color;
           }
         });
 

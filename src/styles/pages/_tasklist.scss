@@ -100,7 +100,6 @@
   &__row {
     display: flex;
     flex: 1;
-    height: 90px;
     border-bottom: $table-inner-border;
     box-sizing: border-box;
   }
@@ -108,6 +107,7 @@
   &__time {
     position: relative;
     width: 80px;
+    height: 90px;
     line-height: 25px;
     text-indent: 30px;
     font-size: 0.6em;
@@ -123,11 +123,12 @@
     display: flex;
     flex: 1;
     justify-content: center;
+    position: relative;
   }
 }
 
 .task-modal {
-  position: relative;
+  position: absolute;
   min-height: 30px;
   width: 80%;
   border-radius: 10px;
@@ -188,7 +189,6 @@
 
     &--svg {
       transform: translate(-35%, 20%);
-      transform-origin: 50% 50%;
     }
   }
 
