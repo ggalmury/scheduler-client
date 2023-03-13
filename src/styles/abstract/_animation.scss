@@ -1,11 +1,13 @@
 .slide-in {
   animation-name: slide-in;
   animation-duration: 0.6s;
+  animation-timing-function: ease;
 }
 
 .slide-out {
   animation-name: slide-out;
   animation-duration: 0.6s;
+  animation-timing-function: ease;
 }
 
 .slide-up {
@@ -16,6 +18,12 @@
 
 .slide-down {
   animation-name: slide-down;
+  animation-duration: 0.5s;
+}
+
+.btn-large {
+  animation-name: btn-large;
+  animation-fill-mode: forwards;
   animation-duration: 0.5s;
 }
 
@@ -52,5 +60,15 @@
   }
   to {
     top: 0;
+  }
+}
+
+@keyframes btn-large {
+  0% {
+    scale: 100%;
+  }
+
+  100% {
+    scale: 120%;
   }
 }

@@ -1,4 +1,4 @@
-import { TaskPrivacy, TaskType, Types } from "../types";
+import { DateMatrix, TaskPrivacy, TaskType, Types } from "../types";
 import { TaskTime } from "./global";
 
 export interface LoginResponse {
@@ -38,6 +38,7 @@ export interface TaskResponse {
   type: Types<typeof TaskType>;
   createdDt: Date;
   state: boolean;
+  dateMatrix: DateMatrix;
   createdTodo: TodoData[];
 }
 

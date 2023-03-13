@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { CheckSvg, ClockSvg, ForwardSvg, LocationSvg, ScopeSvg, TrashSvg } from "../../../common/svg";
 import { TaskDeleteOrDoneRequest, TaskListRequest, TodoCreateRequest, TodoDeleteRequest } from "../../../common/types/interfaces/requestData";
 import { TaskResponse, TodoData } from "../../../common/types/interfaces/responseData";
+import { StoredTasks } from "../../../common/types/types";
 import { addPad } from "../../../common/utils/dateUtil";
 import { CalendarType, DateFormat } from "../../../common/utils/enums";
 import { fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../../../store/apis/taskRequest";
@@ -13,25 +14,51 @@ import TaskCreate from "./TaskCreate";
 const TaskList = () => {
   const dispatch = useDispatch();
 
-  const userTask: TaskResponse[] = useSelector((state: RootState) => state.task.tasks);
+  const userTask: StoredTasks = useSelector((state: RootState) => state.task.dailyTasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
-  const [isDataFetched, setIsDataFetched] = useState<boolean>(false);
-  const [weeklyTask, setWeelkyTask] = useState<Map<number, TaskResponse[]>>(new Map<number, TaskResponse[]>());
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(null);
-  const [createTodo, setCreateTodo] = useState<boolean>(false);
-  const [statOn, setStatOn] = useState<boolean>(false);
-  const [newTodo, setNewTodo] = useState<string>("");
+  const initialState = {
+    isDataFetched: false as boolean,
+    weeklyTask: new Map<number, TaskResponse[]>() as Map<number, TaskResponse[]>,
+    selectedTaskId: null as number | null,
+    createTodo: false as boolean,
+    statOn: false as boolean,
+    newTodo: "" as string,
+  };
+
+  const [isDataFetched, setIsDataFetched] = useState<boolean>(initialState.isDataFetched);
+  const [weeklyTask, setWeelkyTask] = useState<Map<number, TaskResponse[]>>(initialState.weeklyTask);
+  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(initialState.selectedTaskId);
+  const [createTodo, setCreateTodo] = useState<boolean>(initialState.createTodo);
+  const [statOn, setStatOn] = useState<boolean>(initialState.statOn);
+  const [newTodo, setNewTodo] = useState<string>(initialState.newTodo);
 
   const hourCount: number[] = new Array(24).fill(0);
 
   const selectedTask = useMemo((): TaskResponse | null => {
-    return selectedTaskId != null ? userTask.filter((e) => e.taskId === selectedTaskId)?.[0] ?? null : null;
+    let result: TaskResponse | null = null;
+
+    userTask.forEach((taskY) => {
+      taskY.forEach((taskX) => {
+        taskX.filter((task) => {
+          if (task.taskId === selectedTaskId) {
+            result = task;
+          }
+        });
+      });
+    });
+
+    return selectedTaskId != null ? result ?? null : null;
   }, [selectedTaskId, date.date, userTask]);
 
   useEffect(() => {
+    console.log("trigger fetch data per month");
+    setIsDataFetched(false);
+  }, [date.month]);
+
+  useEffect(() => {
     if (!isDataFetched) {
-      console.log("fetch task data");
+      console.log("fetch data");
       const startWeek: number = date.moment.clone().startOf("month").week();
       const endWeek: number = date.moment.clone().endOf("month").week();
 
@@ -46,32 +73,14 @@ const TaskList = () => {
   }, [isDataFetched]);
 
   useEffect(() => {
-    console.log("render1");
+    console.log("set weekly tasks");
 
-    const selectedWeekFirstDay: moment.Moment = date.moment.clone().startOf("week");
-    const taskMap: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
+    const taskMap: Map<number, TaskResponse[]> | undefined = userTask.get(date.dateMatrix.y);
 
-    for (let i = 0; i < 7; i++) {
-      const currentDate: string = selectedWeekFirstDay
-        .clone()
-        .add(i + 1, "day")
-        .toDate()
-        .toISOString()
-        .slice(0, 10);
-
-      const eachTasks: TaskResponse[] = userTask.filter((task) => task.date.toString().slice(0, 10) === currentDate) ?? [];
-
-      taskMap.set(i, eachTasks);
+    if (taskMap) {
+      setWeelkyTask(taskMap);
     }
-
-    setWeelkyTask(taskMap);
   }, [date, userTask]);
-
-  useEffect(() => {
-    console.log("render2");
-    setCreateTodo(false);
-    setNewTodo("");
-  }, [selectedTask]);
 
   const confirmTask = () => {
     setStatOn(false);
@@ -170,8 +179,8 @@ const TaskList = () => {
           <div className="task-table__time"></div>
           {dateArr.map((date, idx) => {
             return (
-              <div key={idx} className="task-table__date">
-                <div className={`task-table__date--day ${today === date[0] ? "task-table__current-day" : ""}`}>{date[0]}</div>
+              <div key={idx} className={`task-table__date ${today === date[0] ? "task-table__current-day" : ""}`}>
+                <div className="task-table__date--day">{date[0]}</div>
                 <div className="task-table__date--date">{date[1]}</div>
               </div>
             );
@@ -208,7 +217,7 @@ const TaskList = () => {
       return (
         <div className="todo-list" key={idx}>
           <div className="todo-list__description">{task.description}</div>
-          <div className="todo-list__trash" onClick={(event) => deleteTodo(event, task)}>
+          <div className="todo-list__svg" onClick={(event) => deleteTodo(event, task)}>
             <TrashSvg></TrashSvg>
           </div>
         </div>
@@ -258,11 +267,10 @@ const TaskList = () => {
         </div>
         <div className="task-option">
           <Calendar size={CalendarType.SMALL_CALENDAR}></Calendar>
-          <TaskCreate></TaskCreate>
+          <TaskCreate weeklyTask={weeklyTask}></TaskCreate>
         </div>
         {selectedTask ? (
-          // <div className={`task-detail ${statOn ? "slide-in" : "slide-out"} ${selectedTask ? (selectedTask.type === TaskType.OFFICIAL_TASK ? "task-detail--official" : "task-detail--personal") : ""}`}>
-          <div className={`task-detail ${statOn ? "slide-in" : "slide-out"} task-detail--official`}>
+          <div className={`task-detail ${statOn ? "slide-in" : "slide-out"} task-detail--${selectedTask.type}`}>
             <div className="task-describe">
               <div className="task-describe__header">
                 <div className="task-describe__header--title">{selectedTask.title}</div>
@@ -297,9 +305,11 @@ const TaskList = () => {
                 </button>
               </div>
               <div className="task-describe__todo-body">
-                <div className={`task-describe__new-todo ${createTodo ? "slide-down" : "slide-up"}`}>
-                  <textarea value={newTodo} className="task-describe__todo-input" onChange={getNewTodo}></textarea>
-                  <div className="task-describe__submit-svg" onClick={submitTodo}>
+                <div className={`todo-list ${createTodo ? "slide-down" : "slide-up"}`}>
+                  <div className="todo-list__description">
+                    <textarea value={newTodo} className="todo-list__textarea" onChange={getNewTodo}></textarea>
+                  </div>
+                  <div className="todo-list__svg" onClick={submitTodo}>
                     <CheckSvg></CheckSvg>
                   </div>
                 </div>

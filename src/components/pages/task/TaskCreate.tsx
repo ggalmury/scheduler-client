@@ -4,15 +4,16 @@ import TimePicker from "../../../common/modals/TimePicker";
 import { ClockSvg, DescriptionSvg, LocationSvg } from "../../../common/svg";
 import { TaskTimeDetail } from "../../../common/types/interfaces/global";
 import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
-import { TaskResponse } from "../../../common/types/interfaces/responseData";
 import { TaskPrivacy, Types } from "../../../common/types/types";
 import { normalFail } from "../../../common/utils/alert";
 import { addPad } from "../../../common/utils/dateUtil";
 import { fetchTaskCreate } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 import { TaskType } from "../../../common/types/types";
+import { WeelkyTaskProp } from "../../../common/types/interfaces/props";
+import { TaskResponse } from "../../../common/types/interfaces/responseData";
 
-const TaskCreate = () => {
+const TaskCreate = ({ weeklyTask }: WeelkyTaskProp) => {
   const dispatch = useDispatch();
 
   const date = useSelector((state: RootState) => state.date.selectedDate);
@@ -20,15 +21,29 @@ const TaskCreate = () => {
   const startTimePicker = useRef<HTMLDivElement>(null);
   const endTimePicker = useRef<HTMLDivElement>(null);
 
-  const [title, setTitle] = useState<string>("-");
-  const [description, setDescription] = useState<string>("-");
-  const [location, setLocation] = useState<string>("-");
-  const [startTime, setStartTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
-  const [endTime, setEndTime] = useState<TaskTimeDetail>({ hour: 0, minute: 0 });
-  const [privacy, setPrivacy] = useState<Types<typeof TaskPrivacy>>(TaskPrivacy.public);
-  const [type, setType] = useState<Types<typeof TaskType>>(TaskType.basic);
-  const [startTimePickerOn, setStartTimePickerOn] = useState<boolean>(false);
-  const [endTimePickerOn, setEndTimePickerOn] = useState<boolean>(false);
+  const initialState = {
+    title: "" as string,
+    description: "" as string,
+    location: "" as string,
+    startTime: { hour: 0, minute: 0 } as TaskTimeDetail,
+    endTime: { hour: 0, minute: 0 } as TaskTimeDetail,
+    privacy: TaskPrivacy.public as Types<typeof TaskPrivacy>,
+    type: TaskType.basic as Types<typeof TaskType>,
+    startTimePickerOn: false as boolean,
+    endTimePickerOn: false as boolean,
+    typeSelectBtn: null as string | null,
+  };
+
+  const [title, setTitle] = useState<string>(initialState.title);
+  const [description, setDescription] = useState<string>(initialState.description);
+  const [location, setLocation] = useState<string>(initialState.location);
+  const [startTime, setStartTime] = useState<TaskTimeDetail>(initialState.startTime);
+  const [endTime, setEndTime] = useState<TaskTimeDetail>(initialState.endTime);
+  const [privacy, setPrivacy] = useState<Types<typeof TaskPrivacy>>(initialState.privacy);
+  const [type, setType] = useState<Types<typeof TaskType>>(initialState.type);
+  const [startTimePickerOn, setStartTimePickerOn] = useState<boolean>(initialState.startTimePickerOn);
+  const [endTimePickerOn, setEndTimePickerOn] = useState<boolean>(initialState.endTimePickerOn);
+  const [typeSelectBtn, setTypeSelectBtn] = useState<string | null>(initialState.typeSelectBtn);
 
   useEffect(() => {
     if (startTimePicker.current && endTimePicker.current) {
@@ -36,6 +51,19 @@ const TaskCreate = () => {
       endTimePicker.current.style.display = endTimePickerOn ? "flex" : "none";
     }
   }, [startTimePickerOn, endTimePickerOn]);
+
+  const setInitialState = () => {
+    setTitle(initialState.title);
+    setDescription(initialState.description);
+    setLocation(initialState.location);
+    setStartTime(initialState.startTime);
+    setEndTime(initialState.endTime);
+    setPrivacy(initialState.privacy);
+    setType(initialState.type);
+    setStartTimePickerOn(initialState.startTimePickerOn);
+    setEndTimePickerOn(initialState.endTimePickerOn);
+    setTypeSelectBtn(initialState.typeSelectBtn);
+  };
 
   const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setTitle(event.target.value);
@@ -50,6 +78,7 @@ const TaskCreate = () => {
   };
 
   const getType = (type: Types<typeof TaskType>): void => {
+    setTypeSelectBtn(type.type);
     setType(type);
   };
 
@@ -57,39 +86,43 @@ const TaskCreate = () => {
     setPrivacy(event.target.value as Types<typeof TaskPrivacy>);
   };
 
-  const submitTask = (event: React.MouseEvent<HTMLElement>): void => {
+  const submitTask = (): void => {
     if (startTime.hour > endTime.hour || (startTime.hour === endTime.hour && startTime.minute > endTime.minute)) {
       normalFail(undefined, "Start time cannot be greater then end time");
       return;
     }
 
-    if (startTime.hour === endTime.hour && endTime.minute - startTime.minute < 20) {
-      normalFail(undefined, "Minumum task duration is 20 minutes");
+    if (startTime.hour === endTime.hour && endTime.minute - startTime.minute < 15) {
+      normalFail(undefined, "Minumum task duration is 15 minutes");
       return;
     }
 
-    let taskTypeArr: TaskResponse[] = [];
+    const thisDay: number = date.moment.day();
+    const taskTypeArr: TaskResponse[] | undefined = weeklyTask.get(thisDay);
+
     let checker: boolean = false;
 
-    taskTypeArr.forEach((task) => {
-      const startAlready: number = task.time.startAt.hour * 60 + task.time.startAt.minute;
-      const endAlready: number = task.time.endAt.hour * 60 + task.time.endAt.minute;
-      const startNew: number = startTime.hour * 60 + startTime.minute;
-      const endNew: number = endTime.hour * 60 + endTime.minute;
+    if (taskTypeArr) {
+      taskTypeArr.forEach((task) => {
+        const startAlready: number = task.time.startAt.hour * 60 + task.time.startAt.minute;
+        const endAlready: number = task.time.endAt.hour * 60 + task.time.endAt.minute;
+        const startNew: number = startTime.hour * 60 + startTime.minute;
+        const endNew: number = endTime.hour * 60 + endTime.minute;
 
-      if (
-        (startNew >= startAlready && startNew <= endAlready) ||
-        (endNew >= startAlready && endNew <= endAlready) ||
-        (startNew >= startAlready && endNew <= endAlready) ||
-        (startNew <= startAlready && endNew >= endAlready)
-      ) {
-        checker = true;
+        if (
+          (startNew >= startAlready && startNew <= endAlready) ||
+          (endNew >= startAlready && endNew <= endAlready) ||
+          (startNew >= startAlready && endNew <= endAlready) ||
+          (startNew <= startAlready && endNew >= endAlready)
+        ) {
+          checker = true;
+        }
+      });
+
+      if (checker) {
+        normalFail(undefined, "Task already exist");
+        return;
       }
-    });
-
-    if (checker) {
-      normalFail(undefined, "Task already exist");
-      return;
     }
 
     const taskRequest: TaskCreateRequest = {
@@ -100,8 +133,10 @@ const TaskCreate = () => {
       time: { startAt: startTime, endAt: endTime },
       privacy,
       type,
+      dateMatrix: date.dateMatrix,
     };
 
+    setInitialState();
     dispatch(fetchTaskCreate(taskRequest) as any);
   };
 
@@ -121,47 +156,23 @@ const TaskCreate = () => {
     <div className="task-create">
       <div className="task-create__intro">Create new task</div>
       <div className="task-create__input task-create__input--title">
-        <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" onChange={getTitle}></textarea>
+        <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" value={title} onChange={getTitle}></textarea>
       </div>
       <div className="task-create__type">
         <div className="task-create__type-header">Task Type</div>
         <div className="task-create__type-content">
-          <div
-            className="task-create__type-elem"
-            style={{ backgroundColor: TaskType.basic.color }}
-            onClick={() => {
-              getType(TaskType.basic);
-            }}
-          >
-            {TaskType.basic.type}
-          </div>
-          <div
-            className="task-create__type-elem"
-            style={{ backgroundColor: TaskType.meeting.color }}
-            onClick={() => {
-              getType(TaskType.meeting);
-            }}
-          >
-            {TaskType.meeting.type}
-          </div>
-          <div
-            className="task-create__type-elem"
-            style={{ backgroundColor: TaskType.personal.color }}
-            onClick={() => {
-              getType(TaskType.personal);
-            }}
-          >
-            {TaskType.personal.type}
-          </div>
-          <div
-            className="task-create__type-elem"
-            style={{ backgroundColor: TaskType.work.color }}
-            onClick={() => {
-              getType(TaskType.work);
-            }}
-          >
-            {TaskType.work.type}
-          </div>
+          {Object.entries(TaskType).map(([key, task]) => (
+            <div
+              key={key}
+              className={`task-create__type-elem ${typeSelectBtn === task.type ? "btn-large" : ""}`}
+              style={{ backgroundColor: task.color }}
+              onClick={() => {
+                getType(task);
+              }}
+            >
+              {task.type}
+            </div>
+          ))}
         </div>
       </div>
       <div className="task-create__input task-create__input--extra">
@@ -181,26 +192,20 @@ const TaskCreate = () => {
           </div>
         </div>
       </div>
-      {/* <select className="task-create__select-box" name="privacy" onChange={getPrivacy}>
-          <option value={TaskPrivacy.PUBLIC}>{TaskPrivacy.PUBLIC}</option>
-          <option value={TaskPrivacy.PRIVATE}>{TaskPrivacy.PRIVATE}</option>
-          <option value={TaskPrivacy.RELEVANT}>{TaskPrivacy.RELEVANT}</option>
-        </select>
-      </div> */}
       <div className="task-create__input task-create__input--extra">
         <div className="task-create__svg">
           <DescriptionSvg></DescriptionSvg>
         </div>
-        <textarea className="task-create__textarea task-create__textarea--extra" placeholder="Description" onChange={getDescription}></textarea>
+        <textarea className="task-create__textarea task-create__textarea--extra" value={description} placeholder="Description" onChange={getDescription}></textarea>
       </div>
       <div className="task-create__input task-create__input--extra">
         <div className="task-create__svg">
           <LocationSvg></LocationSvg>
         </div>
-        <textarea className="task-create__textarea task-create__textarea--extra" placeholder="Loaction" onChange={getLocation}></textarea>
+        <textarea className="task-create__textarea task-create__textarea--extra" value={location} placeholder="Loaction" onChange={getLocation}></textarea>
       </div>
-      <div className="task-create__submit task-create__btn-submit">
-        <button className="btn-submit-small" onClick={submitTask}>
+      <div className="task-create__submit">
+        <button className="btn-submit-big" onClick={submitTask}>
           submit
         </button>
       </div>

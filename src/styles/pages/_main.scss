@@ -1,0 +1,18 @@
+#content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background-color: $content-background;
+}
+
+#article {
+  display: flex;
+  flex: 1;
+  text-align: center;
+  overflow: hidden;
+
+  &-upper {
+    display: flex;
+    height: 380px;
+  }
+}

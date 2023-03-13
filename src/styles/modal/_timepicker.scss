@@ -1,17 +1,17 @@
 $box-height: 45px;
 
 .timepicker {
-  display: flex;
+  display: none;
   position: absolute;
   justify-content: space-evenly;
   width: 150px;
   height: $box-height * 3;
   overflow: hidden;
-  background-color: white;
+  background-color: rgb(235, 235, 235);
   border: $inner-border;
   border-radius: 10px;
   right: 0px;
-  z-index: 99;
+  z-index: 9;
 
   &__selector {
     position: relative;

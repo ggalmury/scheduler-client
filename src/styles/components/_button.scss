@@ -30,8 +30,8 @@
 .btn-submit-small {
   width: 80px;
   height: 30px;
-  background-color: $btn-submit-color;
-  color: white;
+  background-color: whitesmoke;
+  color: black;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -39,5 +39,21 @@
   &:hover {
     transition: 0.2s;
     scale: 120%;
+  }
+}
+
+.btn-submit-big {
+  width: 160px;
+  height: 45px;
+  background-color: $select-color-black;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+
+  &:hover {
+    transition: 0.2s;
+    scale: 110%;
   }
 }

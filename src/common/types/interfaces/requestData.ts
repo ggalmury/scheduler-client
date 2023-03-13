@@ -1,4 +1,4 @@
-import { TaskPrivacy, TaskType, Types } from "../types";
+import { DateMatrix, TaskPrivacy, TaskType, Types } from "../types";
 import { TaskTime } from "./global";
 
 export interface LoginRequest {
@@ -20,6 +20,7 @@ export interface TaskCreateRequest {
   time: TaskTime;
   privacy: Types<typeof TaskPrivacy>;
   type: Types<typeof TaskType>;
+  dateMatrix: DateMatrix;
 }
 
 export interface TaskListRequest {

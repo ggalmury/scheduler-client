@@ -1,17 +1,65 @@
-.content {
+.home-content {
   display: flex;
   flex: 1;
-  flex-direction: column;
-  background-color: $content-background;
+  position: relative;
+
+  &__left {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+  }
+
+  &__right {
+    flex: 1;
+    background-color: yellow;
+  }
 }
 
-#article {
+.task-counter {
   display: flex;
-  text-align: center;
-  overflow: hidden;
+  justify-content: center;
+  align-items: center;
+  height: 23%;
 
-  &-upper {
+  &__container {
     display: flex;
-    height: 380px;
+    flex-direction: column;
+    width: 90%;
+    height: 90%;
   }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 20%;
+    font-size: 0.8em;
+    font-weight: bold;
+  }
+
+  &__content {
+    flex: 1;
+    position: relative;
+    background-color: yellow;
+
+    &::before {
+      @include defaultHomeTaskCounterBtn;
+      left: -1.5%;
+    }
+
+    &::after {
+      @include defaultHomeTaskCounterBtn;
+      right: -1.5%;
+    }
+  }
+}
+
+.task-productivity {
+  height: 53%;
+  background-color: aqua;
+}
+
+.task-summary {
+  flex: 1;
+  background-color: gray;
 }

@@ -14,3 +14,7 @@ export const addPad = (time: number): string => {
 export const toISOAndSlice = (date: Date): string => {
   return date.toString().slice(0, 10);
 };
+
+export const weekOfMonth = (m: moment.Moment) => {
+  return m.week() - moment(m).startOf("month").week();
+};

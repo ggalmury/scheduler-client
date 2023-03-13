@@ -1,3 +1,4 @@
+import { StoredTasks } from "../types";
 import { TaskResponse } from "./responseData";
 
 export interface Account {
@@ -19,5 +20,5 @@ export interface AccountStatus {
 }
 
 export interface TaskInitialState {
-  tasks: TaskResponse[];
+  dailyTasks: StoredTasks;
 }

@@ -7,12 +7,11 @@ const Header = () => {
 
   return (
     <div className="header">
-      <div className="header__content">
-        <div className="header__greeting">
-          <div className="header__greeting--hello">Hello, {userAccount.userName}!</div>
-          <div className="header__greeting--how">How's everything going?</div>
-        </div>
+      <div className="header__greeting">
+        <div className="header__greeting--hello">Hello, {userAccount.userName}!</div>
+        <div className="header__greeting--how">How's everything going?</div>
       </div>
+
       <div className="header__content">
         <div className="header__search">
           <input placeholder="Search your tasks"></input>
