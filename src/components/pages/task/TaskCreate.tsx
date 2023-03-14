@@ -2,20 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TimePicker from "../../../common/modals/TimePicker";
 import { ClockSvg, DescriptionSvg, LocationSvg } from "../../../common/svg";
-import { TaskTimeDetail } from "../../../common/types/interfaces/global";
+import { TaskTimeDetail } from "../../../common/types/interfaces/common";
 import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
-import { TaskPrivacy, Types } from "../../../common/types/types";
+import { StoredTasks, Types } from "../../../common/types/types/common";
+import { TaskPrivacy, TaskType } from "../../../common/types/types/task";
 import { normalFail } from "../../../common/utils/alert";
 import { addPad } from "../../../common/utils/dateUtil";
 import { fetchTaskCreate } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
-import { TaskType } from "../../../common/types/types";
-import { WeelkyTaskProp } from "../../../common/types/interfaces/props";
 import { TaskResponse } from "../../../common/types/interfaces/responseData";
 
-const TaskCreate = ({ weeklyTask }: WeelkyTaskProp) => {
+const TaskCreate = () => {
   const dispatch = useDispatch();
 
+  const userTask: StoredTasks = useSelector((state: RootState) => state.task.dailyTasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const startTimePicker = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ const TaskCreate = ({ weeklyTask }: WeelkyTaskProp) => {
     startTimePickerOn: false as boolean,
     endTimePickerOn: false as boolean,
     typeSelectBtn: null as string | null,
-  };
+  } as any;
 
   const [title, setTitle] = useState<string>(initialState.title);
   const [description, setDescription] = useState<string>(initialState.description);
@@ -78,6 +78,12 @@ const TaskCreate = ({ weeklyTask }: WeelkyTaskProp) => {
   };
 
   const getType = (type: Types<typeof TaskType>): void => {
+    if (typeSelectBtn === type.type) {
+      setTypeSelectBtn(null);
+      setType(initialState.type);
+      return;
+    }
+
     setTypeSelectBtn(type.type);
     setType(type);
   };
@@ -97,8 +103,7 @@ const TaskCreate = ({ weeklyTask }: WeelkyTaskProp) => {
       return;
     }
 
-    const thisDay: number = date.moment.day();
-    const taskTypeArr: TaskResponse[] | undefined = weeklyTask.get(thisDay);
+    const taskTypeArr: TaskResponse[] | undefined = userTask.get(date.dateMatrix.y)?.get(date.dateMatrix.x);
 
     let checker: boolean = false;
 

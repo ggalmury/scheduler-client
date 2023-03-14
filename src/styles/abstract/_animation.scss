@@ -1,65 +1,101 @@
-.slide-in {
-  animation-name: slide-in;
-  animation-duration: 0.6s;
+.task-detail-appear {
+  animation-name: task-detail-appear;
+  animation-duration: 0.4s;
   animation-timing-function: ease;
+  animation-fill-mode: forwards;
 }
 
-.slide-out {
-  animation-name: slide-out;
-  animation-duration: 0.6s;
+.task-detail-disappear {
+  animation-name: task-detail-disappear;
+  animation-duration: 0.4s;
   animation-timing-function: ease;
+  animation-fill-mode: forwards;
 }
 
 .slide-up {
   top: -70px;
   animation-name: slide-up;
   animation-duration: 0.5s;
+  animation-fill-mode: forwards;
 }
 
 .slide-down {
   animation-name: slide-down;
   animation-duration: 0.5s;
+  animation-fill-mode: forwards;
 }
 
 .btn-large {
   animation-name: btn-large;
   animation-fill-mode: forwards;
+  animation-duration: 0.3s;
+}
+
+.category-up {
+  animation: category-up;
   animation-duration: 0.5s;
+  animation-fill-mode: forwards;
 }
 
-@keyframes slide-in {
-  from {
-    right: -400px;
+.category-down {
+  animation: category-down;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+}
+
+.selected-day {
+  animation: selected-day;
+  animation-duration: 0.8s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+}
+
+@keyframes task-detail-appear {
+  0% {
+    scale: 0;
   }
-  to {
-    right: 0;
+
+  33% {
+    scale: 100%;
+  }
+
+  66% {
+    scale: 80%;
+  }
+
+  100% {
+    scale: 100%;
   }
 }
 
-@keyframes slide-out {
-  from {
-    right: 0;
+@keyframes task-detail-disappear {
+  0% {
+    scale: 100%;
   }
-  to {
-    right: -400px;
+
+  100% {
+    scale: 0;
   }
 }
 
 @keyframes slide-up {
-  from {
-    top: 0;
+  0% {
   }
-  to {
-    top: -70px;
+
+  100% {
+    visibility: hidden;
+    height: 0;
   }
 }
 
 @keyframes slide-down {
-  from {
-    top: -70px;
+  0% {
+    height: 0;
   }
-  to {
-    top: 0;
+
+  100% {
+    visibility: visible;
+    height: 30px;
   }
 }
 
@@ -70,5 +106,72 @@
 
   100% {
     scale: 120%;
+  }
+}
+
+@keyframes category-up {
+  0% {
+    height: 100px;
+  }
+
+  100% {
+    visibility: hidden;
+    height: 0;
+  }
+}
+
+@keyframes category-down {
+  0% {
+    height: 0;
+  }
+
+  100% {
+    visibility: visible;
+    height: 100px;
+  }
+}
+
+// @keyframes selected-day {
+//   0% {
+//     scale: 0;
+//   }
+
+//   50% {
+//     scale: 150%;
+//     rotate: (0deg);
+//   }
+
+//   60% {
+//     rotate: (20deg);
+//   }
+
+//   70% {
+//     rotate: (-20deg);
+//   }
+
+//   80% {
+//     rotate: (20deg);
+//   }
+
+//   90% {
+//     rotate: (-20deg);
+//   }
+
+//   100% {
+//     scale: 150%;
+//   }
+// }
+
+@keyframes selected-day {
+  0% {
+    scale: 100%;
+  }
+
+  50% {
+    scale: 160%;
+  }
+
+  100% {
+    scale: 100%;
   }
 }

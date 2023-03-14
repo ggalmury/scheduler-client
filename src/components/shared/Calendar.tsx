@@ -67,7 +67,7 @@ const Calendar = ({ size }: CalendarProp) => {
                 return (
                   <td
                     key={idx}
-                    className={date.date === days.format("D") ? `${calendarClass}__selected` : ""}
+                    className={date.date === days.format("D") ? `${calendarClass}__selected selected-day` : ""}
                     onClick={() => {
                       dispatch(setDate(days));
                     }}

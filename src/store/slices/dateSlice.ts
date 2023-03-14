@@ -20,12 +20,16 @@ const dateSlice = createSlice({
     setDate: (state, action) => {
       const date: moment.Moment = action.payload;
 
-      state.selectedDate.moment = date;
-      state.selectedDate.year = date.format(DateFormat.YEAR_4);
-      state.selectedDate.month = date.format(DateFormat.MONTH_2);
-      state.selectedDate.date = date.format(DateFormat.DAY_1);
-      state.selectedDate.dateMatrix.x = date.weekday();
-      state.selectedDate.dateMatrix.y = weekOfMonth(date);
+      if (date) {
+        state.selectedDate.moment = date;
+        state.selectedDate.year = date.format(DateFormat.YEAR_4);
+        state.selectedDate.month = date.format(DateFormat.MONTH_2);
+        state.selectedDate.date = date.format(DateFormat.DAY_1);
+        state.selectedDate.dateMatrix.x = date.weekday();
+        state.selectedDate.dateMatrix.y = weekOfMonth(date);
+      } else {
+        state.selectedDate = initialState.selectedDate;
+      }
     },
   },
 });

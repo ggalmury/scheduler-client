@@ -1,5 +1,4 @@
-import { StoredTasks } from "../types";
-import { TaskResponse } from "./responseData";
+import { StoredTasks } from "../types/common";
 
 export interface Account {
   uid: number;

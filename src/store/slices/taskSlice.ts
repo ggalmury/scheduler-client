@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CustomErrorMessage } from "../../common/types/enums/errorCode";
 import { TaskResponse, TodoData } from "../../common/types/interfaces/responseData";
 import { TaskInitialState } from "../../common/types/interfaces/store";
 import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../apis/taskRequest";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
-import { StoredTasks } from "../../common/types/types";
+import { StoredTasks } from "../../common/types/types/common";
 import { current, enableMapSet } from "immer";
+import { CustomErrorMessage } from "../../common/types/types/errorMsg";
 
 enableMapSet();
 
@@ -14,7 +14,7 @@ const initialState: TaskInitialState = {
 };
 
 const commonReject = (action: any) => {
-  if (action.error.message === CustomErrorMessage.SESSION_EXPIRED) {
+  if (action.error.message === CustomErrorMessage.sessionExpired) {
     normalFail("Oops!", "Session expired. Please log in").then((res) => {
       window.location.href = "/";
     });
@@ -44,26 +44,40 @@ const taskSlice = createSlice({
       })
       .addCase(fetchTaskList.fulfilled, (state, action) => {
         const taskList: TaskResponse[] = action.payload;
+        const { selectedDate } = action.meta.arg;
 
-        let weekArrangedTask: StoredTasks = new Map<number, Map<number, TaskResponse[]>>();
+        const selectedMonth: number = selectedDate.month() + 1;
+        const weeksInMonth: number = Math.ceil(selectedDate.daysInMonth() / 7) - 1;
+
+        let weeklyArrangedTask: StoredTasks = new Map<number, Map<number, TaskResponse[]>>();
+
+        taskList.forEach((task) => {
+          const month: number = new Date(task.date).getMonth() + 1;
+
+          if (month < selectedMonth) {
+            task.dateMatrix.y = 0;
+          } else if (month > selectedMonth) {
+            task.dateMatrix.y = weeksInMonth;
+          }
+        });
 
         for (let i: number = 0; i < 6; i++) {
           const matrixY: TaskResponse[] = taskList.filter((task) => task.dateMatrix.y === i);
-          let dateArrangedTask: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
+          let dailyArrangedTask: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
 
           for (let j: number = 0; j < 7; j++) {
             const matrixX: TaskResponse[] = matrixY.filter((task) => task.dateMatrix.x === j);
             if (matrixX) {
-              dateArrangedTask.set(j, matrixX);
+              dailyArrangedTask.set(j, matrixX);
             } else {
-              dateArrangedTask.set(j, []);
+              dailyArrangedTask.set(j, []);
             }
           }
 
-          weekArrangedTask.set(i, dateArrangedTask);
+          weeklyArrangedTask.set(i, dailyArrangedTask);
         }
 
-        state.dailyTasks = weekArrangedTask;
+        state.dailyTasks = weeklyArrangedTask;
       })
       .addCase(fetchTaskList.rejected, (state, action) => {
         commonReject(action);
@@ -72,10 +86,13 @@ const taskSlice = createSlice({
         const taskResponse: TaskResponse = action.payload;
         const { x, y } = taskResponse.dateMatrix;
 
-        state.dailyTasks
-          .get(y)
-          ?.get(x)
-          ?.filter((task) => task.taskId !== taskResponse.taskId);
+        console.log(current(state.dailyTasks.get(y)));
+        console.log(current(state.dailyTasks.get(y)?.get(x)));
+
+        const oldTasks: TaskResponse[] = state.dailyTasks.get(y)?.get(x) ?? [];
+        const newTasks: TaskResponse[] = oldTasks.filter((task) => task.taskId !== taskResponse.taskId);
+
+        state.dailyTasks.set(y, new Map(state.dailyTasks.get(y)).set(x, newTasks));
 
         normalSuccess(undefined, "Task successfully deleted");
       })

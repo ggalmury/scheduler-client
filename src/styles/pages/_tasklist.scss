@@ -51,6 +51,7 @@
 
 .task-table {
   width: 95%;
+  height: 96%;
   border: $inner-border;
   border-radius: 10px;
   overflow: auto;
@@ -69,7 +70,8 @@
     height: 80px;
     position: absolute;
     background-color: $task-create-input-color;
-    border-radius: 10px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
     z-index: 99;
   }
 
@@ -82,13 +84,16 @@
     border-left: $table-inner-border;
 
     &--day {
-      height: 60%;
-      line-height: 50px;
+      $height: 30px;
+
+      margin-top: 15px;
+      height: $height;
+      line-height: $height;
       font-size: 0.8em;
+      font-weight: bolder;
     }
 
     &--date {
-      height: 40%;
       font-size: 0.7em;
     }
   }
@@ -99,9 +104,16 @@
 
   &__row {
     display: flex;
-    height: 90px;
     box-sizing: border-box;
     border-bottom: $table-inner-border;
+
+    &--hour {
+      height: 90px;
+    }
+
+    &--day {
+      height: 115px;
+    }
   }
 
   &__time {
@@ -120,9 +132,9 @@
 
   &__chart {
     display: flex;
-    flex: 1;
     justify-content: center;
     position: relative;
+    height: 100%;
   }
 }
 
@@ -153,11 +165,17 @@
   flex-direction: column;
   position: absolute;
   width: 300px;
-  height: 100%;
-  right: 0;
-  z-index: 999;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
+  height: 500px;
+  z-index: 9;
+  border-radius: 20px;
+
+  &--left {
+    left: 90%;
+  }
+
+  &--right {
+    right: 90%;
+  }
 
   &--basic {
     background-color: #e6cda3;
@@ -177,7 +195,7 @@
 .task-describe {
   display: flex;
   flex-direction: column;
-  height: 350px;
+  height: 250px;
   text-align: left;
   text-indent: 20px;
   font-size: 0.8em;
@@ -199,7 +217,7 @@
   }
 
   &__duration {
-    line-height: 25px;
+    line-height: 20px;
     font-size: 0.8em;
 
     & > svg {
@@ -209,7 +227,7 @@
   }
 
   &__location {
-    line-height: 30px;
+    line-height: 20px;
     font-size: 0.8em;
 
     & > svg {
@@ -219,9 +237,9 @@
   }
 
   &__privacy {
-    line-height: 30px;
+    line-height: 20px;
     font-size: 0.8em;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 
     & > svg {
       transform: translate(-30%, 40%);
@@ -231,7 +249,7 @@
 
   &__description {
     flex: 1;
-    font-size: 1.2em;
+    font-size: 1em;
 
     &--text {
       line-height: 40px;
@@ -244,10 +262,8 @@
   }
 
   &__todolist {
-    display: flex;
-    flex-direction: column;
     flex: 1;
-    overflow: hidden;
+    overflow: scroll;
     text-align: left;
   }
 
@@ -260,6 +276,8 @@
   }
 
   &__todo-body {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     overflow: scroll;
 
@@ -273,6 +291,7 @@
 
   &__footer {
     height: 50px;
+    line-height: 45px;
   }
 
   &__btn {

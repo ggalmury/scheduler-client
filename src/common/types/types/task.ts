@@ -1,5 +1,3 @@
-import { TaskResponse } from "./interfaces/responseData";
-
 export const TaskPrivacy = {
   public: "public",
   private: "private",
@@ -24,8 +22,3 @@ export const TaskType = {
     color: "#EAB0E3",
   },
 } as const;
-
-export type DateMatrix = { x: number; y: number };
-export type StoredTasks = Map<number, Map<number, TaskResponse[]>>;
-
-export type Types<T> = T[keyof T];

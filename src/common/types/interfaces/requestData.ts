@@ -1,5 +1,6 @@
-import { DateMatrix, TaskPrivacy, TaskType, Types } from "../types";
-import { TaskTime } from "./global";
+import { DateMatrix, Types } from "../types/common";
+import { TaskPrivacy, TaskType } from "../types/task";
+import { TaskTime } from "./common";
 
 export interface LoginRequest {
   email: string;
@@ -26,6 +27,7 @@ export interface TaskCreateRequest {
 export interface TaskListRequest {
   startOfWeek: Date;
   endOfWeek: Date;
+  selectedDate: moment.Moment;
 }
 
 export interface TaskDeleteOrDoneRequest {

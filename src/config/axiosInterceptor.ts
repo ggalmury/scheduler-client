@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { store } from "..";
+import { AxiosErrorMessage, CustomErrorMessage } from "../common/types/types/errorMsg";
 import { fetchToken } from "../store/apis/authRequest";
 import { RootState } from "../store/rootReducer";
 import { setServerEnv } from "./envConfig";
-import { AxiosErrorMessage, CustomErrorMessage } from "../common/types/enums/errorCode";
 
 export const customAxiosRequest = axios.create({ baseURL: `${setServerEnv()}` });
 
@@ -21,7 +21,7 @@ customAxiosRequest.interceptors.response.use(
   },
   async (err: any) => {
     if (err instanceof AxiosError) {
-      if (err.message === AxiosErrorMessage.UNAUTHORIZED) {
+      if (err.message === AxiosErrorMessage.unauthorized) {
         const url: string | undefined = err.config?.url;
         const data: string | undefined = err.config?.data ? JSON.parse(err.config?.data) : undefined;
 
@@ -31,7 +31,7 @@ customAxiosRequest.interceptors.response.use(
 
           if (fetchToken.rejected.match(test)) {
             console.log("session expired");
-            throw new Error(CustomErrorMessage.SESSION_EXPIRED);
+            throw new Error(CustomErrorMessage.sessionExpired);
           }
 
           const result: AxiosResponse = await customAxiosRequest.post(url, data);

@@ -4,9 +4,6 @@
   justify-content: space-between;
   width: 185px;
 
-  // &__memu {
-  // }
-
   &__title {
     display: flex;
     align-items: center;
@@ -21,12 +18,45 @@
 
   &__category {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
     margin-top: 10px;
     cursor: pointer;
 
     &:first-child {
       margin-top: 30px;
+    }
+  }
+
+  &__sub-category {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    width: 140px;
+    background-color: $select-color-gray;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    font-size: 0.8em;
+    overflow: hidden;
+    cursor: default;
+
+    &--menu {
+      $height: 30px;
+
+      width: 100px;
+      height: $height;
+      line-height: $height;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        background-color: $select-color-black;
+        color: white;
+      }
     }
   }
 

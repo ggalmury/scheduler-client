@@ -42,6 +42,7 @@
 
   &__today {
     color: rgba(255, 0, 0, 0.729);
+    scale: 150%;
   }
 
   &__except {
@@ -49,6 +50,6 @@
   }
 
   &__selected {
-    color: rgb(0, 17, 255);
+    color: #3a6a8e;
   }
 }
