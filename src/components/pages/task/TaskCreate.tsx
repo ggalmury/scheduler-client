@@ -4,10 +4,10 @@ import TimePicker from "../../../common/modals/TimePicker";
 import { ClockSvg, DescriptionSvg, LocationSvg } from "../../../common/svg";
 import { TaskTimeDetail } from "../../../common/types/interfaces/common";
 import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
-import { StoredTasks, Types } from "../../../common/types/types/common";
+import { StoredTask, Types } from "../../../common/types/types/common";
 import { TaskPrivacy, TaskType } from "../../../common/types/types/task";
 import { normalFail } from "../../../common/utils/alert";
-import { addPad } from "../../../common/utils/dateUtil";
+import { addPad, fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskCreate } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 import { TaskResponse } from "../../../common/types/interfaces/responseData";
@@ -15,7 +15,7 @@ import { TaskResponse } from "../../../common/types/interfaces/responseData";
 const TaskCreate = () => {
   const dispatch = useDispatch();
 
-  const userTask: StoredTasks = useSelector((state: RootState) => state.task.dailyTasks);
+  const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const startTimePicker = useRef<HTMLDivElement>(null);
@@ -103,7 +103,7 @@ const TaskCreate = () => {
       return;
     }
 
-    const taskTypeArr: TaskResponse[] | undefined = userTask.get(date.dateMatrix.y)?.get(date.dateMatrix.x);
+    const taskTypeArr: TaskResponse[] | undefined = userTask.get(fullDateFormat(date.moment));
 
     let checker: boolean = false;
 
@@ -134,15 +134,14 @@ const TaskCreate = () => {
       title,
       description,
       location,
-      date: new Date(date.moment.format("YYYY-MM-DD")),
+      date: date.moment.format("YYYY-MM-DD"),
       time: { startAt: startTime, endAt: endTime },
       privacy,
       type,
-      dateMatrix: date.dateMatrix,
     };
 
-    setInitialState();
     dispatch(fetchTaskCreate(taskRequest) as any);
+    setInitialState();
   };
 
   const changeStartTimePickerStatus = (): void => {

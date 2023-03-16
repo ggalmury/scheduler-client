@@ -1,4 +1,4 @@
-import { DateMatrix, Types } from "../types/common";
+import { Types } from "../types/common";
 import { TaskPrivacy, TaskType } from "../types/task";
 import { TaskTime } from "./common";
 
@@ -32,14 +32,13 @@ export interface TaskResponse {
   title: string;
   description: string;
   location: string;
-  date: Date;
+  date: string;
   time: TaskTime;
   color: string;
   privacy: Types<typeof TaskPrivacy>;
   type: Types<typeof TaskType>;
   createdDt: Date;
   state: boolean;
-  dateMatrix: DateMatrix;
   createdTodo: TodoData[];
 }
 
@@ -47,7 +46,7 @@ export interface TodoResponse {
   todoId: number;
   uid: number;
   description: string;
-  date: Date;
+  date: string;
   createdTask: { taskId: number };
 }
 

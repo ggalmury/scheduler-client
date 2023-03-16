@@ -1,9 +1,9 @@
 import moment from "moment";
-import { DateFormat } from "./enums";
+import { DateFormat, Types } from "../types/types/common";
 
 export const getMoment = moment();
 
-export const getDate = (format: DateFormat | string): string | number => {
+export const getDate = (format: Types<typeof DateFormat> | string): string | number => {
   return getMoment.format(format);
 };
 
@@ -16,7 +16,7 @@ export const toISOAndSlice = (date: Date): string => {
 };
 
 export const weekOfMonth = (m: moment.Moment): number => {
-  return m.week() - moment(m).startOf("month").week();
+  return m.clone().week() - moment(m).startOf("month").week();
 };
 
 export const weekCountOfMonth = (m: moment.Moment): number => {
@@ -25,4 +25,8 @@ export const weekCountOfMonth = (m: moment.Moment): number => {
   const weeksInMonth = lastDayOfMonth.week() - firstDayOfMonth.week() + 1;
 
   return weeksInMonth;
+};
+
+export const fullDateFormat = (m: moment.Moment): string => {
+  return m.clone().format("YYYY-MM-DD");
 };

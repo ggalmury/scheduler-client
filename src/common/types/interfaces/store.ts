@@ -1,4 +1,4 @@
-import { StoredTasks } from "../types/common";
+import { StoredTask } from "../types/common";
 
 export interface Account {
   uid: number;
@@ -19,5 +19,5 @@ export interface AccountStatus {
 }
 
 export interface TaskInitialState {
-  dailyTasks: StoredTasks;
+  dailyTasks: StoredTask;
 }

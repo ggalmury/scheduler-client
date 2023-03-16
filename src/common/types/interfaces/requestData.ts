@@ -1,4 +1,4 @@
-import { DateMatrix, Types } from "../types/common";
+import { Types } from "../types/common";
 import { TaskPrivacy, TaskType } from "../types/task";
 import { TaskTime } from "./common";
 
@@ -17,11 +17,10 @@ export interface TaskCreateRequest {
   title: string;
   description: string;
   location: string;
-  date: Date;
+  date: string;
   time: TaskTime;
   privacy: Types<typeof TaskPrivacy>;
   type: Types<typeof TaskType>;
-  dateMatrix: DateMatrix;
 }
 
 export interface TaskListRequest {
@@ -37,7 +36,7 @@ export interface TaskDeleteOrDoneRequest {
 export interface TodoCreateRequest {
   taskId: number;
   description: string;
-  date: Date;
+  date: string;
 }
 
 export interface TodoDeleteRequest {

@@ -1,9 +1,8 @@
-import { CalendarType } from "../../utils/enums";
+import { CalendarType, Types } from "../types/common";
 import { TaskTimeDetail, TodayTask } from "./common";
-import { TaskResponse } from "./responseData";
 
 export interface CalendarProp {
-  size: CalendarType;
+  size: Types<typeof CalendarType>;
 }
 
 export interface TimePickerProp {

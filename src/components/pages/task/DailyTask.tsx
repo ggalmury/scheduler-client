@@ -3,22 +3,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { CheckSvg, ClockSvg, ForwardSvg, LocationSvg, ScopeSvg, TrashSvg } from "../../../common/svg";
 import { TaskDeleteOrDoneRequest, TaskListRequest, TodoCreateRequest, TodoDeleteRequest } from "../../../common/types/interfaces/requestData";
 import { TaskResponse, TodoData } from "../../../common/types/interfaces/responseData";
-import { StoredTasks } from "../../../common/types/types/common";
-import { addPad } from "../../../common/utils/dateUtil";
-import { DateFormat } from "../../../common/utils/enums";
+import { DateFormat, StoredTask } from "../../../common/types/types/common";
+import { addPad, fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
 
 const DailyTask = () => {
   const dispatch = useDispatch();
 
-  const userTask: StoredTasks = useSelector((state: RootState) => state.task.dailyTasks);
+  const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const initialState = {
     isDataFetched: false as boolean,
     weeklyTask: new Map<number, TaskResponse[]>() as Map<number, TaskResponse[]>,
-    selectedTaskId: null as number | null,
+    selectedTaskCopy: null as { id: number; date: string } | null,
     createTodo: false as boolean,
     statOn: false as boolean,
     newTodo: "" as string,
@@ -26,30 +25,21 @@ const DailyTask = () => {
 
   const [isDataFetched, setIsDataFetched] = useState<boolean>(initialState.isDataFetched);
   const [weeklyTask, setWeelkyTask] = useState<Map<number, TaskResponse[]>>(initialState.weeklyTask);
-  const [selectedTaskId, setSelectedTaskId] = useState<number | null>(initialState.selectedTaskId);
+  const [selectedTaskCopy, setSelectedTaskCopy] = useState<{ id: number; date: string } | null>(initialState.selectedTaskId);
   const [createTodo, setCreateTodo] = useState<boolean>(initialState.createTodo);
   const [statOn, setStatOn] = useState<boolean>(initialState.statOn);
   const [newTodo, setNewTodo] = useState<string>(initialState.newTodo);
 
   const hourCount: number[] = new Array(24).fill(0);
-  const today: string = date.moment.clone().format(DateFormat.DAY_4);
+  const today: string = date.moment.clone().format(DateFormat.day4);
 
   const selectedTask = useMemo((): TaskResponse | null => {
-    let result: TaskResponse | null = null;
+    const data: TaskResponse[] | null = selectedTaskCopy ? userTask.get(selectedTaskCopy.date) ?? null : null;
 
-    userTask.forEach((taskY) => {
-      taskY.forEach((taskX) => {
-        taskX.forEach((task) => {
-          if (task.taskId === selectedTaskId) {
-            result = task;
-          }
-        });
-      });
-    });
+    return data ? data.filter((task) => task.taskId === selectedTaskCopy?.id)[0] : null;
+  }, [selectedTaskCopy, userTask]);
 
-    return selectedTaskId != null ? result ?? null : null;
-  }, [selectedTaskId, userTask]);
-
+  // schedule table header
   const dateArr = useMemo((): string[][] => {
     const firstDay: moment.Moment = date.moment.clone().startOf("week");
 
@@ -57,7 +47,7 @@ const DailyTask = () => {
 
     for (let i = 0; i < 7; i++) {
       const newMoment: moment.Moment = firstDay.clone().add(i, "day");
-      const newDay: string = newMoment.format(DateFormat.DAY_4);
+      const newDay: string = newMoment.format(DateFormat.day4);
       const newDate: string = newMoment.format("MM/DD");
 
       dateArr.push([newDay, newDate]);
@@ -90,49 +80,56 @@ const DailyTask = () => {
 
   useEffect(() => {
     console.log("set weekly tasks");
+    const startOfWeek: moment.Moment = date.moment.clone().startOf("week");
 
-    const taskMap: Map<number, TaskResponse[]> | undefined = userTask.get(date.dateMatrix.y);
+    let tempwWeeklyTask: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
 
-    if (taskMap) {
-      setWeelkyTask(taskMap);
+    for (let i: number = 0; i < 7; i++) {
+      const key: string = fullDateFormat(startOfWeek.clone().add(i, "day"));
+      const taskByDay: TaskResponse[] | undefined = userTask.get(key);
+
+      taskByDay ? tempwWeeklyTask.set(i, taskByDay) : tempwWeeklyTask.set(i, []);
     }
+
+    setWeelkyTask(tempwWeeklyTask);
   }, [date, userTask]);
 
-  const confirmTask = () => {
+  const confirmTask = (): void => {
     setStatOn(false);
     setTimeout(() => {
-      setSelectedTaskId(null);
+      setSelectedTaskCopy(null);
     }, 500);
   };
 
-  const deleteTask = async () => {
+  const deleteTask = async (): Promise<void> => {
     if (selectedTask) {
+      console.log(selectedTask);
       const taskDeleteRequest: TaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
 
       await dispatch(fetchTaskDelete(taskDeleteRequest) as any);
 
       setStatOn(false);
-      setSelectedTaskId(null);
+      setSelectedTaskCopy(null);
     }
   };
 
-  const endTask = async () => {
+  const endTask = async (): Promise<void> => {
     if (selectedTask) {
       const taskDoneRequest: TaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
 
       await dispatch(fetchTaskDone(taskDoneRequest) as any);
 
       setStatOn(false);
-      setSelectedTaskId(null);
+      setSelectedTaskCopy(null);
     }
   };
 
-  const setTodoCreateMode = (event: React.MouseEvent<HTMLElement>) => {
+  const setTodoCreateMode = (): void => {
     setCreateTodo(!createTodo);
   };
 
-  const taskGraph = (time: number, date: number) => {
-    const taskArr: TaskResponse[] | undefined = weeklyTask.get(date);
+  const taskGraph = (time: number, dt: number): (JSX.Element | undefined)[] | undefined => {
+    const taskArr: TaskResponse[] | undefined = weeklyTask.get(dt);
 
     if (taskArr) {
       return taskArr.map((task, idx) => {
@@ -145,7 +142,7 @@ const DailyTask = () => {
         const duration: string = addPad(startHour) + ":" + addPad(startMinute) + " ~ " + addPad(endHour) + ":" + addPad(endMinute);
 
         const taskClick = () => {
-          setSelectedTaskId(task.taskId);
+          setSelectedTaskCopy({ id: task.taskId, date: task.date });
           setStatOn(true);
         };
 
@@ -171,7 +168,7 @@ const DailyTask = () => {
                 </div>
               </div>
               {selectedTask && selectedTask.taskId === task.taskId ? (
-                <div className={`task-detail ${date < 4 ? "task-detail--left" : "task-detail--right"} ${statOn ? "task-detail-appear" : "task-detail-disappear"} task-detail--${selectedTask.type}`}>
+                <div className={`task-detail ${dt < 4 ? "task-detail--left" : "task-detail--right"} ${statOn ? "task-detail-appear" : "task-detail-disappear"} task-detail--${selectedTask.type}`}>
                   <div className="task-describe">
                     <div className="task-describe__header">
                       <div className="task-describe__header--title">{selectedTask.title}</div>
@@ -235,12 +232,12 @@ const DailyTask = () => {
     }
   };
 
-  const todoBox = () => {
+  const todoBox = (): JSX.Element[] | undefined => {
     return selectedTask?.createdTodo.map((task, idx) => {
       return (
         <div className="todo-list" key={idx}>
           <div className="todo-list__description">{task.description}</div>
-          <div className="todo-list__svg" onClick={(event) => deleteTodo(event, task)}>
+          <div className="todo-list__svg" onClick={() => deleteTodo(task)}>
             <TrashSvg></TrashSvg>
           </div>
         </div>
@@ -248,11 +245,11 @@ const DailyTask = () => {
     });
   };
 
-  const getNewTodo = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const getNewTodo = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
     setNewTodo(event.target.value);
   };
 
-  const submitTodo = (event: React.MouseEvent<HTMLElement>) => {
+  const submitTodo = (): void => {
     if (selectedTask && newTodo !== "") {
       const todoRequest: TodoCreateRequest = {
         taskId: selectedTask.taskId,
@@ -266,7 +263,7 @@ const DailyTask = () => {
     setNewTodo("");
   };
 
-  const deleteTodo = (event: React.MouseEvent<HTMLElement>, todoData: TodoData) => {
+  const deleteTodo = (todoData: TodoData): void => {
     if (selectedTask) {
       const todoRequest: TodoDeleteRequest = {
         todoId: todoData.todoId,

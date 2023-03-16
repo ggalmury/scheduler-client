@@ -3,14 +3,14 @@ import { TaskResponse, TodoData } from "../../common/types/interfaces/responseDa
 import { TaskInitialState } from "../../common/types/interfaces/store";
 import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../apis/taskRequest";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
-import { StoredTasks } from "../../common/types/types/common";
 import { current, enableMapSet } from "immer";
 import { CustomErrorMessage } from "../../common/types/types/errorMsg";
+import { StoredTask } from "../../common/types/types/common";
 
 enableMapSet();
 
 const initialState: TaskInitialState = {
-  dailyTasks: new Map<number, Map<number, TaskResponse[]>>(),
+  dailyTasks: new Map<string, TaskResponse[]>() as StoredTask,
 };
 
 const commonReject = (action: any) => {
@@ -33,9 +33,15 @@ const taskSlice = createSlice({
     builder
       .addCase(fetchTaskCreate.fulfilled, (state, action) => {
         const taskResponse: TaskResponse = action.payload;
-        const { x, y } = taskResponse.dateMatrix;
+        const key: string = taskResponse.date;
+        const taskArr: TaskResponse[] | undefined = state.dailyTasks.get(key);
 
-        state.dailyTasks.get(y)?.get(x)?.push(taskResponse);
+        if (taskArr) {
+          taskArr.push(taskResponse);
+          state.dailyTasks.set(key, taskArr);
+        } else {
+          state.dailyTasks.set(key, [taskResponse]);
+        }
 
         normalSuccess(undefined, "Task successfully created");
       })
@@ -44,55 +50,32 @@ const taskSlice = createSlice({
       })
       .addCase(fetchTaskList.fulfilled, (state, action) => {
         const taskList: TaskResponse[] = action.payload;
-        const { selectedDate } = action.meta.arg;
 
-        const selectedMonth: number = selectedDate.month() + 1;
-        const weeksInMonth: number = Math.ceil(selectedDate.daysInMonth() / 7) - 1;
-
-        let weeklyArrangedTask: StoredTasks = new Map<number, Map<number, TaskResponse[]>>();
+        const taskMap: Map<string, TaskResponse[]> = new Map<string, TaskResponse[]>();
 
         taskList.forEach((task) => {
-          const month: number = new Date(task.date).getMonth() + 1;
+          const key: string = task.date.toString();
 
-          if (month < selectedMonth) {
-            task.dateMatrix.y = 0;
-          } else if (month > selectedMonth) {
-            task.dateMatrix.y = weeksInMonth;
+          if (taskMap.has(key)) {
+            taskMap.get(key)?.push(task);
+          } else {
+            taskMap.set(key, [task]);
           }
         });
 
-        for (let i: number = 0; i < 6; i++) {
-          const matrixY: TaskResponse[] = taskList.filter((task) => task.dateMatrix.y === i);
-          let dailyArrangedTask: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
-
-          for (let j: number = 0; j < 7; j++) {
-            const matrixX: TaskResponse[] = matrixY.filter((task) => task.dateMatrix.x === j);
-            if (matrixX) {
-              dailyArrangedTask.set(j, matrixX);
-            } else {
-              dailyArrangedTask.set(j, []);
-            }
-          }
-
-          weeklyArrangedTask.set(i, dailyArrangedTask);
-        }
-
-        state.dailyTasks = weeklyArrangedTask;
+        state.dailyTasks = taskMap;
       })
       .addCase(fetchTaskList.rejected, (state, action) => {
         commonReject(action);
       })
       .addCase(fetchTaskDelete.fulfilled, (state, action) => {
         const taskResponse: TaskResponse = action.payload;
-        const { x, y } = taskResponse.dateMatrix;
+        const key: string = taskResponse.date;
 
-        console.log(current(state.dailyTasks.get(y)));
-        console.log(current(state.dailyTasks.get(y)?.get(x)));
-
-        const oldTasks: TaskResponse[] = state.dailyTasks.get(y)?.get(x) ?? [];
+        const oldTasks: TaskResponse[] = state.dailyTasks.get(key) ?? [];
         const newTasks: TaskResponse[] = oldTasks.filter((task) => task.taskId !== taskResponse.taskId);
 
-        state.dailyTasks.set(y, new Map(state.dailyTasks.get(y)).set(x, newTasks));
+        state.dailyTasks.set(key, newTasks);
 
         normalSuccess(undefined, "Task successfully deleted");
       })
@@ -114,6 +97,7 @@ const taskSlice = createSlice({
       })
       .addCase(fetchTodoCreate.fulfilled, (state, action) => {
         const taskId: number = action.payload.createdTask.taskId;
+        const key: string = action.payload.date.toString();
 
         const todoData: TodoData = {
           taskId,
@@ -122,14 +106,10 @@ const taskSlice = createSlice({
           description: action.payload.description,
         };
 
-        state.dailyTasks.forEach((taskY) => {
-          taskY.forEach((taskX) => {
-            taskX.filter((task) => {
-              if (task.taskId === taskId) {
-                task.createdTodo.push(todoData);
-              }
-            });
-          });
+        state.dailyTasks.get(key)?.forEach((task) => {
+          if (task.taskId === taskId) {
+            task.createdTodo.push(todoData);
+          }
         });
       })
       .addCase(fetchTodoCreate.rejected, (state, action) => {
@@ -138,16 +118,12 @@ const taskSlice = createSlice({
       .addCase(fetchTodoDelete.fulfilled, (state, action) => {
         const taskId: number = action.payload.createdTask.taskId;
         const todoId: number = action.payload.todoId;
+        const key: string = action.payload.date.toString();
 
-        state.dailyTasks.forEach((taskY) => {
-          taskY.forEach((taskX) => {
-            taskX.filter((task) => {
-              if (task.taskId === taskId) {
-                console.log(todoId);
-                task.createdTodo = task.createdTodo.filter((todo) => todo.todoId !== todoId);
-              }
-            });
-          });
+        state.dailyTasks.get(key)?.forEach((task) => {
+          if (task.taskId === taskId) {
+            task.createdTodo = task.createdTodo.filter((todo) => todo.todoId !== todoId);
+          }
         });
       })
       .addCase(fetchTodoDelete.rejected, (state, action) => {

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NextSvg, PrevSvg } from "../../common/svg";
 import { CalendarProp } from "../../common/types/interfaces/props";
-import { CalendarType } from "../../common/utils/enums";
+import { CalendarType, Types } from "../../common/types/types/common";
 import { RootState } from "../../store/rootReducer";
 import { setDate } from "../../store/slices/dateSlice";
 
@@ -13,7 +13,7 @@ const Calendar = ({ size }: CalendarProp) => {
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const [getMoment, setMoment] = useState<moment.Moment>(moment());
-  const calendarClass: CalendarType = size;
+  const calendarClass: Types<typeof CalendarType> = size;
 
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf("month").week();
@@ -45,7 +45,6 @@ const Calendar = ({ size }: CalendarProp) => {
               const days: moment.Moment = today.clone().week(week).startOf("week").add(idx, "day");
 
               if (moment().format("YYYYMMDD") === days.format("YYYYMMDD")) {
-                // TODO: change background color (today or not this month case)
                 return (
                   <td
                     className={`${calendarClass}__today`}

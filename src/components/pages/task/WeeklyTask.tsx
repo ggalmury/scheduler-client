@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
+import { DateFormat } from "../../../common/types/types/common";
 import { weekCountOfMonth } from "../../../common/utils/dateUtil";
-import { DateFormat } from "../../../common/utils/enums";
 import { RootState } from "../../../store/rootReducer";
 
 const WeeklyTask = () => {
@@ -16,8 +16,7 @@ const WeeklyTask = () => {
 
     for (let i = 0; i < 7; i++) {
       const newMoment: moment.Moment = firstDay.clone().add(i, "day");
-      const newDay: string = newMoment.format(DateFormat.DAY_4);
-      const newDate: string = newMoment.format("MM-DD");
+      const newDay: string = newMoment.format(DateFormat.day4);
 
       dateArr.push(newDay);
     }
