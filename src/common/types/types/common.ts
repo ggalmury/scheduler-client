@@ -1,4 +1,4 @@
-import { TaskResponse } from "../interfaces/responseData";
+import { DefaultDailyTask } from "../interfaces/task";
 
 export const RouteName = {
   home: "home" as string,
@@ -26,6 +26,7 @@ export const DateFormat = {
   day1: "D" as string,
 } as const;
 
-export type StoredTask = Map<string, TaskResponse[]>;
+export type StoredTask = Map<string, DefaultDailyTask[]>;
 
-export type Types<T> = T[keyof T];
+type Types<T> = T[keyof T];
+export default Types;

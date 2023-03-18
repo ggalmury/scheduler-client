@@ -1,13 +1,19 @@
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
-import { CalendarType, DateFormat } from "../../../common/types/types/common";
+import { Location, Outlet, useLocation } from "react-router-dom";
+import Types, { CalendarType, DateFormat } from "../../../common/types/types/common";
+import { TaskCreatorType } from "../../../common/types/types/task";
 import { RootState } from "../../../store/rootReducer";
 import Calendar from "../../shared/Calendar";
 import TaskCreate from "./TaskCreate";
 
 const TaskList = () => {
+  const location: Location = useLocation();
   const date = useSelector((state: RootState) => state.date.selectedDate);
+
+  const creatorType = useMemo((): Types<typeof TaskCreatorType> => {
+    return location.pathname === "/main/task/daily" ? TaskCreatorType.daily : TaskCreatorType.weekly;
+  }, [location.pathname]);
 
   return (
     <Fragment>
@@ -25,7 +31,7 @@ const TaskList = () => {
         </div>
         <div className="task-option">
           <Calendar size={CalendarType.small}></Calendar>
-          <TaskCreate></TaskCreate>
+          <TaskCreate creatorType={creatorType}></TaskCreate>
         </div>
       </div>
     </Fragment>

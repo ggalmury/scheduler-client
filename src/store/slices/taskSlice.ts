@@ -1,16 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { TaskResponse, TodoData } from "../../common/types/interfaces/responseData";
+import { DefaultDailyTask } from "../../common/types/interfaces/task";
 import { TaskInitialState } from "../../common/types/interfaces/store";
 import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../apis/taskRequest";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
 import { current, enableMapSet } from "immer";
 import { CustomErrorMessage } from "../../common/types/types/errorMsg";
 import { StoredTask } from "../../common/types/types/common";
+import { DefaultTodo } from "../../common/types/interfaces/todo";
 
 enableMapSet();
 
 const initialState: TaskInitialState = {
-  dailyTasks: new Map<string, TaskResponse[]>() as StoredTask,
+  dailyTasks: new Map<string, DefaultDailyTask[]>() as StoredTask,
 };
 
 const commonReject = (action: any) => {
@@ -32,15 +33,15 @@ const taskSlice = createSlice({
   extraReducers(builder) {
     builder
       .addCase(fetchTaskCreate.fulfilled, (state, action) => {
-        const taskResponse: TaskResponse = action.payload;
-        const key: string = taskResponse.date;
-        const taskArr: TaskResponse[] | undefined = state.dailyTasks.get(key);
+        const defaultDailyTask: DefaultDailyTask = action.payload;
+        const key: string = defaultDailyTask.date;
+        const taskArr: DefaultDailyTask[] | undefined = state.dailyTasks.get(key);
 
         if (taskArr) {
-          taskArr.push(taskResponse);
+          taskArr.push(defaultDailyTask);
           state.dailyTasks.set(key, taskArr);
         } else {
-          state.dailyTasks.set(key, [taskResponse]);
+          state.dailyTasks.set(key, [defaultDailyTask]);
         }
 
         normalSuccess(undefined, "Task successfully created");
@@ -49,9 +50,9 @@ const taskSlice = createSlice({
         commonReject(action);
       })
       .addCase(fetchTaskList.fulfilled, (state, action) => {
-        const taskList: TaskResponse[] = action.payload;
+        const taskList: DefaultDailyTask[] = action.payload;
 
-        const taskMap: Map<string, TaskResponse[]> = new Map<string, TaskResponse[]>();
+        const taskMap: Map<string, DefaultDailyTask[]> = new Map<string, DefaultDailyTask[]>();
 
         taskList.forEach((task) => {
           const key: string = task.date.toString();
@@ -69,11 +70,11 @@ const taskSlice = createSlice({
         commonReject(action);
       })
       .addCase(fetchTaskDelete.fulfilled, (state, action) => {
-        const taskResponse: TaskResponse = action.payload;
-        const key: string = taskResponse.date;
+        const DefaultDailyTask: DefaultDailyTask = action.payload;
+        const key: string = DefaultDailyTask.date;
 
-        const oldTasks: TaskResponse[] = state.dailyTasks.get(key) ?? [];
-        const newTasks: TaskResponse[] = oldTasks.filter((task) => task.taskId !== taskResponse.taskId);
+        const oldTasks: DefaultDailyTask[] = state.dailyTasks.get(key) ?? [];
+        const newTasks: DefaultDailyTask[] = oldTasks.filter((task) => task.taskId !== DefaultDailyTask.taskId);
 
         state.dailyTasks.set(key, newTasks);
 
@@ -99,7 +100,7 @@ const taskSlice = createSlice({
         const taskId: number = action.payload.createdTask.taskId;
         const key: string = action.payload.date.toString();
 
-        const todoData: TodoData = {
+        const defaultTodo: DefaultTodo = {
           taskId,
           todoId: action.payload.todoId,
           uid: action.payload.uid,
@@ -108,7 +109,7 @@ const taskSlice = createSlice({
 
         state.dailyTasks.get(key)?.forEach((task) => {
           if (task.taskId === taskId) {
-            task.createdTodo.push(todoData);
+            task.createdTodo.push(defaultTodo);
           }
         });
       })

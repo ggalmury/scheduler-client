@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CheckSvg, ClockSvg, ForwardSvg, LocationSvg, ScopeSvg, TrashSvg } from "../../../common/svg";
-import { TaskDeleteOrDoneRequest, TaskListRequest, TodoCreateRequest, TodoDeleteRequest } from "../../../common/types/interfaces/requestData";
-import { TaskResponse, TodoData } from "../../../common/types/interfaces/responseData";
+import { DailyTaskDeleteOrDoneRequest, DailyTaskListRequest, DefaultDailyTask } from "../../../common/types/interfaces/task";
+import { TodoCreateRequest, TodoDeleteRequest, DefaultTodo } from "../../../common/types/interfaces/todo";
 import { DateFormat, StoredTask } from "../../../common/types/types/common";
 import { addPad, fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../../../store/apis/taskRequest";
@@ -16,7 +16,7 @@ const DailyTask = () => {
 
   const initialState = {
     isDataFetched: false as boolean,
-    weeklyTask: new Map<number, TaskResponse[]>() as Map<number, TaskResponse[]>,
+    weeklyTask: new Map<number, DefaultDailyTask[]>() as Map<number, DefaultDailyTask[]>,
     selectedTaskCopy: null as { id: number; date: string } | null,
     createTodo: false as boolean,
     statOn: false as boolean,
@@ -24,7 +24,7 @@ const DailyTask = () => {
   } as any;
 
   const [isDataFetched, setIsDataFetched] = useState<boolean>(initialState.isDataFetched);
-  const [weeklyTask, setWeelkyTask] = useState<Map<number, TaskResponse[]>>(initialState.weeklyTask);
+  const [weeklyTask, setWeelkyTask] = useState<Map<number, DefaultDailyTask[]>>(initialState.weeklyTask);
   const [selectedTaskCopy, setSelectedTaskCopy] = useState<{ id: number; date: string } | null>(initialState.selectedTaskId);
   const [createTodo, setCreateTodo] = useState<boolean>(initialState.createTodo);
   const [statOn, setStatOn] = useState<boolean>(initialState.statOn);
@@ -33,13 +33,12 @@ const DailyTask = () => {
   const hourCount: number[] = new Array(24).fill(0);
   const today: string = date.moment.clone().format(DateFormat.day4);
 
-  const selectedTask = useMemo((): TaskResponse | null => {
-    const data: TaskResponse[] | null = selectedTaskCopy ? userTask.get(selectedTaskCopy.date) ?? null : null;
+  const selectedTask = useMemo((): DefaultDailyTask | null => {
+    const data: DefaultDailyTask[] | null = selectedTaskCopy ? userTask.get(selectedTaskCopy.date) ?? null : null;
 
     return data ? data.filter((task) => task.taskId === selectedTaskCopy?.id)[0] : null;
   }, [selectedTaskCopy, userTask]);
 
-  // schedule table header
   const dateArr = useMemo((): string[][] => {
     const firstDay: moment.Moment = date.moment.clone().startOf("week");
 
@@ -71,7 +70,9 @@ const DailyTask = () => {
       const endOfWeek: Date = date.moment.clone().week(endWeek).endOf("week").toDate();
       const selectedDate: moment.Moment = date.moment;
 
-      const param: TaskListRequest = { startOfWeek, endOfWeek, selectedDate };
+      console.log(date.moment.clone().week(startWeek).startOf("week"));
+
+      const param: DailyTaskListRequest = { startOfWeek, endOfWeek, selectedDate };
 
       dispatch(fetchTaskList(param) as any);
       setIsDataFetched(true);
@@ -82,11 +83,11 @@ const DailyTask = () => {
     console.log("set weekly tasks");
     const startOfWeek: moment.Moment = date.moment.clone().startOf("week");
 
-    let tempwWeeklyTask: Map<number, TaskResponse[]> = new Map<number, TaskResponse[]>();
+    let tempwWeeklyTask: Map<number, DefaultDailyTask[]> = new Map<number, DefaultDailyTask[]>();
 
     for (let i: number = 0; i < 7; i++) {
       const key: string = fullDateFormat(startOfWeek.clone().add(i, "day"));
-      const taskByDay: TaskResponse[] | undefined = userTask.get(key);
+      const taskByDay: DefaultDailyTask[] | undefined = userTask.get(key);
 
       taskByDay ? tempwWeeklyTask.set(i, taskByDay) : tempwWeeklyTask.set(i, []);
     }
@@ -104,7 +105,7 @@ const DailyTask = () => {
   const deleteTask = async (): Promise<void> => {
     if (selectedTask) {
       console.log(selectedTask);
-      const taskDeleteRequest: TaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
+      const taskDeleteRequest: DailyTaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
 
       await dispatch(fetchTaskDelete(taskDeleteRequest) as any);
 
@@ -115,7 +116,7 @@ const DailyTask = () => {
 
   const endTask = async (): Promise<void> => {
     if (selectedTask) {
-      const taskDoneRequest: TaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
+      const taskDoneRequest: DailyTaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
 
       await dispatch(fetchTaskDone(taskDoneRequest) as any);
 
@@ -129,7 +130,7 @@ const DailyTask = () => {
   };
 
   const taskGraph = (time: number, dt: number): (JSX.Element | undefined)[] | undefined => {
-    const taskArr: TaskResponse[] | undefined = weeklyTask.get(dt);
+    const taskArr: DefaultDailyTask[] | undefined = weeklyTask.get(dt);
 
     if (taskArr) {
       return taskArr.map((task, idx) => {
@@ -263,13 +264,34 @@ const DailyTask = () => {
     setNewTodo("");
   };
 
-  const deleteTodo = (todoData: TodoData): void => {
+  const deleteTodo = (DefaultTodo: DefaultTodo): void => {
     if (selectedTask) {
       const todoRequest: TodoDeleteRequest = {
-        todoId: todoData.todoId,
+        todoId: DefaultTodo.todoId,
       };
 
       dispatch(fetchTodoDelete(todoRequest) as any);
+    }
+  };
+
+  const [childHeight, setChildHeight] = useState(0);
+
+  const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
+    if (event.buttons === 1) {
+      // 마우스 왼쪽 버튼이 눌린 경우
+      const parentTop = event.currentTarget.offsetTop; // 부모 요소 A의 offsetTop 값
+      const childHeight = event.clientY - parentTop - 150; // 자식 요소 B의 높이값 계산
+      let height = 0;
+      if (childHeight < 30) {
+        height = 10;
+      } else if (childHeight < 50) {
+        height = 30;
+      } else if (childHeight < 70) {
+        height = 50;
+      } else {
+        height = 50;
+      }
+      setChildHeight(height); // 자식 요소 B의 높이값 설정
     }
   };
 
@@ -299,7 +321,10 @@ const DailyTask = () => {
                   .map((value, date) => {
                     return (
                       <div key={date} className="task-table__elem">
-                        {isDataFetched ? <div className="task-table__chart">{taskGraph(hour, date)}</div> : null}
+                        {/* {isDataFetched ? <div className="task-table__chart">{taskGraph(hour, date)}</div> : null} */}
+                        <div className="task-table__chart" onMouseMove={handleMouseMove}>
+                          <div style={{ height: childHeight, backgroundColor: "yellow" }}>자식 요소 B</div>
+                        </div>
                       </div>
                     );
                   })}

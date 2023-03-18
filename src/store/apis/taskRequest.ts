@@ -1,34 +1,34 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AxiosResponse } from "axios";
-import { TaskCreateRequest, TaskDeleteOrDoneRequest, TaskListRequest, TodoCreateRequest, TodoDeleteRequest } from "../../common/types/interfaces/requestData";
-import { TaskResponse, TodoResponse } from "../../common/types/interfaces/responseData";
+import { DailyTaskCreateRequest, DailyTaskDeleteOrDoneRequest, DailyTaskListRequest, DefaultDailyTask } from "../../common/types/interfaces/task";
+import { TodoCreateRequest, TodoDeleteRequest, TodoResponse } from "../../common/types/interfaces/todo";
 import { customAxiosRequest } from "../../config/axiosInterceptor";
 import { setServerEnv } from "../../config/envConfig";
 
-export const fetchTaskCreate = createAsyncThunk("task/create", async (taskCreateRequest: TaskCreateRequest, thunkApi): Promise<any> => {
+export const fetchTaskCreate = createAsyncThunk("task/create", async (taskCreateRequest: DailyTaskCreateRequest, thunkApi): Promise<any> => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/create`, taskCreateRequest);
-  const data: TaskResponse = response.data;
+  const data: DefaultDailyTask = response.data;
 
   return data;
 });
 
-export const fetchTaskList = createAsyncThunk("task/list", async (taskListRequest: TaskListRequest) => {
+export const fetchTaskList = createAsyncThunk("task/list", async (taskListRequest: DailyTaskListRequest) => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/list`, taskListRequest);
-  const data: TaskResponse[] = response.data;
+  const data: DefaultDailyTask[] = response.data;
 
   return data;
 });
 
-export const fetchTaskDelete = createAsyncThunk("task/delete", async (taskDeleteOrDoneRequest: TaskDeleteOrDoneRequest) => {
+export const fetchTaskDelete = createAsyncThunk("task/delete", async (taskDeleteOrDoneRequest: DailyTaskDeleteOrDoneRequest) => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/delete`, taskDeleteOrDoneRequest);
-  const data: TaskResponse = response.data;
+  const data: DefaultDailyTask = response.data;
 
   return data;
 });
 
-export const fetchTaskDone = createAsyncThunk("task/done", async (taskDeleteOrDoneRequest: TaskDeleteOrDoneRequest) => {
+export const fetchTaskDone = createAsyncThunk("task/done", async (taskDeleteOrDoneRequest: DailyTaskDeleteOrDoneRequest) => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/done`, taskDeleteOrDoneRequest);
-  const data: TaskResponse = response.data;
+  const data: DefaultDailyTask = response.data;
 
   return data;
 });

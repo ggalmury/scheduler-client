@@ -1,5 +1,5 @@
 import moment from "moment";
-import { DateFormat, Types } from "../types/types/common";
+import Types, { DateFormat } from "../types/types/common";
 
 export const getMoment = moment();
 

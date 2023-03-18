@@ -2,17 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TimePicker from "../../../common/modals/TimePicker";
 import { ClockSvg, DescriptionSvg, LocationSvg } from "../../../common/svg";
-import { TaskTimeDetail } from "../../../common/types/interfaces/common";
-import { TaskCreateRequest } from "../../../common/types/interfaces/requestData";
-import { StoredTask, Types } from "../../../common/types/types/common";
+import { TaskCreatorTypeProp } from "../../../common/types/interfaces/props";
+import { DefaultDailyTask, TaskTimeDetail } from "../../../common/types/interfaces/task";
+import { DailyTaskCreateRequest } from "../../../common/types/interfaces/task";
+import Types, { StoredTask } from "../../../common/types/types/common";
 import { TaskPrivacy, TaskType } from "../../../common/types/types/task";
 import { normalFail } from "../../../common/utils/alert";
 import { addPad, fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskCreate } from "../../../store/apis/taskRequest";
 import { RootState } from "../../../store/rootReducer";
-import { TaskResponse } from "../../../common/types/interfaces/responseData";
 
-const TaskCreate = () => {
+const TaskCreate = ({ creatorType }: TaskCreatorTypeProp) => {
   const dispatch = useDispatch();
 
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
@@ -103,7 +103,7 @@ const TaskCreate = () => {
       return;
     }
 
-    const taskTypeArr: TaskResponse[] | undefined = userTask.get(fullDateFormat(date.moment));
+    const taskTypeArr: DefaultDailyTask[] | undefined = userTask.get(fullDateFormat(date.moment));
 
     let checker: boolean = false;
 
@@ -130,7 +130,7 @@ const TaskCreate = () => {
       }
     }
 
-    const taskRequest: TaskCreateRequest = {
+    const taskRequest: DailyTaskCreateRequest = {
       title,
       description,
       location,
@@ -158,7 +158,7 @@ const TaskCreate = () => {
 
   return (
     <div className="task-create">
-      <div className="task-create__intro">Create new task</div>
+      <div className="task-create__intro">{`Create ${creatorType} task`}</div>
       <div className="task-create__input task-create__input--title">
         <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" value={title} onChange={getTitle}></textarea>
       </div>

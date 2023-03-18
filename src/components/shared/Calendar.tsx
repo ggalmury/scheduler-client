@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NextSvg, PrevSvg } from "../../common/svg";
 import { CalendarProp } from "../../common/types/interfaces/props";
-import { CalendarType, Types } from "../../common/types/types/common";
+import Types, { CalendarType } from "../../common/types/types/common";
 import { RootState } from "../../store/rootReducer";
 import { setDate } from "../../store/slices/dateSlice";
 

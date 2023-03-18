@@ -1,15 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import { store } from "../..";
-import { LoginRequest, RegisterRequest } from "../../common/types/interfaces/requestData";
-import { LoginResponse, RegisterResponse, TokenResponse } from "../../common/types/interfaces/responseData";
+import { LoginRequest, RegisterRequest, DefaultUser, RegisterResponse, TokenResponse } from "../../common/types/interfaces/auth";
 import { Account, Auth } from "../../common/types/interfaces/store";
 import { setServerEnv } from "../../config/envConfig";
 import { RootState } from "../rootReducer";
 
 export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<{ account: Account; auth: Auth }> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signin`, { email, credential });
-  const data: LoginResponse = response.data;
+  const data: DefaultUser = response.data;
 
   const account: Account = {
     uid: data.uid,

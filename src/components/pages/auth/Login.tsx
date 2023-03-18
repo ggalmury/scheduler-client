@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/rootReducer";
-import { LoginRequest } from "../../../common/types/interfaces/requestData";
+import { LoginRequest } from "../../../common/types/interfaces/auth";
 import { fetchLogin } from "../../../store/apis/authRequest";
-import { logout } from "../../../store/slices/loginSlice";
 
 const Login = () => {
   const navigate = useNavigate();

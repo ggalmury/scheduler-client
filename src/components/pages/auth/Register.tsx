@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { RegisterRequest } from "../../../common/types/interfaces/requestData";
+import { RegisterRequest } from "../../../common/types/interfaces/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRegister } from "../../../store/apis/authRequest";
 import { RootState } from "../../../store/rootReducer";
