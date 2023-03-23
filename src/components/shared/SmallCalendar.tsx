@@ -2,18 +2,15 @@ import moment from "moment";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NextSvg, PrevSvg } from "../../common/svg";
-import { CalendarProp } from "../../common/types/interfaces/props";
-import Types, { CalendarType } from "../../common/types/types/common";
 import { RootState } from "../../store/rootReducer";
 import { setDate } from "../../store/slices/dateSlice";
 
-const Calendar = ({ size }: CalendarProp) => {
+const SmallCalendar = () => {
   const dispatch = useDispatch();
 
   const date = useSelector((state: RootState) => state.date.selectedDate);
 
   const [getMoment, setMoment] = useState<moment.Moment>(moment());
-  const calendarClass: Types<typeof CalendarType> = size;
 
   const today: moment.Moment = getMoment;
   const firstWeek: number = today.clone().startOf("month").week();
@@ -47,7 +44,7 @@ const Calendar = ({ size }: CalendarProp) => {
               if (moment().format("YYYYMMDD") === days.format("YYYYMMDD")) {
                 return (
                   <td
-                    className={`${calendarClass}__today`}
+                    className="small-cal__today"
                     key={idx}
                     onClick={() => {
                       dispatch(setDate(days));
@@ -58,7 +55,7 @@ const Calendar = ({ size }: CalendarProp) => {
                 );
               } else if (days.format("MM") !== today.format("MM")) {
                 return (
-                  <td className={`${calendarClass}__except`} key={idx}>
+                  <td className="small-cal__except" key={idx}>
                     <span>{days.format("D")}</span>
                   </td>
                 );
@@ -66,7 +63,7 @@ const Calendar = ({ size }: CalendarProp) => {
                 return (
                   <td
                     key={idx}
-                    className={date.date === days.format("D") ? `${calendarClass}__selected selected-day` : ""}
+                    className={date.date === days.format("D") ? "small-cal__selected selected-day" : ""}
                     onClick={() => {
                       dispatch(setDate(days));
                     }}
@@ -84,19 +81,19 @@ const Calendar = ({ size }: CalendarProp) => {
   };
 
   return (
-    <div className={`${calendarClass}`}>
-      <div className={`${calendarClass}__caption`}>
+    <div className="small-cal">
+      <div className="small-cal__caption">
         <span onClick={returnToday}>{today.format("MMM, YYYY")}</span>
-        <div className={`${calendarClass}__month-select`}>
-          <div className={`${calendarClass}__svg`} onClick={prevMonth}>
+        <div className="small-cal__month-select">
+          <div className="small-cal__svg" onClick={prevMonth}>
             <PrevSvg></PrevSvg>
           </div>
-          <div className={`${calendarClass}__svg`} onClick={nextMonth}>
+          <div className="small-cal__svg" onClick={nextMonth}>
             <NextSvg></NextSvg>
           </div>
         </div>
       </div>
-      <table className={`${calendarClass}__table`}>
+      <table className="small-cal__table">
         <thead>
           <tr>
             <th>Su</th>
@@ -114,4 +111,4 @@ const Calendar = ({ size }: CalendarProp) => {
   );
 };
 
-export default Calendar;
+export default SmallCalendar;

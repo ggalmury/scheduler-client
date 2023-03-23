@@ -7,11 +7,6 @@ export const RouteName = {
   message: "message" as string,
 } as const;
 
-export const CalendarType = {
-  big: "big-cal" as string,
-  small: "small-cal" as string,
-} as const;
-
 export const DateFormat = {
   year4: "YYYY" as string,
   year2: "YY" as string,

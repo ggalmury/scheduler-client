@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
-  width: 100%;
-  position: relative;
+  width: 280px;
+  background-color: whitesmoke;
+  border: $inner-border;
 
   & > label {
     font-size: 2em;
@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 230px;
+    width: 220px;
 
     &--title {
       border-bottom: 1px solid black;

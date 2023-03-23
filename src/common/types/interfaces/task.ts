@@ -25,7 +25,6 @@ export interface DailyTaskCreateRequest {
 export interface DailyTaskListRequest {
   startOfWeek: Date;
   endOfWeek: Date;
-  selectedDate: moment.Moment;
 }
 
 export interface DailyTaskDeleteOrDoneRequest {
