@@ -32,7 +32,6 @@
 
 .slide-up {
   animation: slide-up 0.5s ease forwards;
-  top: -70px;
 }
 
 .slide-down {
@@ -175,22 +174,24 @@
 
 @keyframes slide-up {
   0% {
+    top: 0;
   }
 
   100% {
     visibility: hidden;
+    top: -40px;
     height: 0;
   }
 }
 
 @keyframes slide-down {
   0% {
-    height: 0;
+    top: -40px;
   }
 
   100% {
     visibility: visible;
-    height: 30px;
+    top: 0;
   }
 }
 

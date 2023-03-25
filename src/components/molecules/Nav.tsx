@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { CalendarSvg, HomeSvg, LogoutSvg } from "../../common/svg";
+import { CalendarSvg, GroupSvg, HomeSvg, LogoutSvg, MessageSvg } from "../../common/svg";
 import { RouteName } from "../../common/types/types/common";
 import { setClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/loginSlice";
@@ -84,13 +84,13 @@ const Nav = () => {
         </div>
         <div className="nav__category" onClick={goToGroup}>
           <div className={`nav__content nav__content--${activeButton === RouteName.group ? "click" : "hover"}`}>
-            <CalendarSvg></CalendarSvg>
+            <GroupSvg />
             <span>Group</span>
           </div>
         </div>
         <div className="nav__category" onClick={goToMessage}>
           <div className={`nav__content nav__content--${activeButton === RouteName.message ? "click" : "hover"}`}>
-            <CalendarSvg></CalendarSvg>
+            <MessageSvg />
             <span>Message</span>
           </div>
         </div>

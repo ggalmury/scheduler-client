@@ -21,3 +21,14 @@ export interface AccountStatus {
 export interface TaskInitialState {
   dailyTasks: StoredTask;
 }
+
+export interface SelectedDate {
+  moment: moment.Moment;
+  year: string;
+  month: string;
+  date: string;
+}
+
+export interface TimeInitialState {
+  selectedDate: SelectedDate;
+}

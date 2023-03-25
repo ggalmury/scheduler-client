@@ -69,11 +69,6 @@
       background-color: $select-color-black;
       color: white;
       transition: 0.4s;
-
-      & > svg {
-        fill: #fff;
-        stroke-width: 0.2;
-      }
     }
 
     &--hover {

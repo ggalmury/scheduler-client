@@ -1,4 +1,4 @@
-.task-timestamp {
+.task-content {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -7,21 +7,21 @@
   &__header {
     display: flex;
     text-align: left;
-    height: 70px;
+    height: 60px;
     justify-content: space-between;
   }
 
   &__date {
     width: 270px;
     margin-left: 2%;
+    font-size: 1.1em;
+    font-weight: bolder;
 
     &--month {
-      font-size: 1.4em;
-      line-height: 45px;
+      line-height: 60px;
     }
 
     &--today {
-      font-size: 0.7em;
       color: gray;
     }
   }
@@ -47,10 +47,6 @@
     height: 40px;
   }
 
-  tr {
-    position: relative;
-  }
-
   td {
     position: relative;
     border: $inner-border;
@@ -65,7 +61,6 @@
     }
 
     span {
-      display: block;
       position: absolute;
       right: 7%;
       top: 5%;

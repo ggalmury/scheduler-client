@@ -5,7 +5,7 @@ import { TodoCreateRequest, TodoDeleteRequest, TodoResponse } from "../../common
 import { customAxiosRequest } from "../../config/axiosInterceptor";
 import { setServerEnv } from "../../config/envConfig";
 
-export const fetchTaskCreate = createAsyncThunk("task/create", async (taskCreateRequest: DailyTaskCreateRequest, thunkApi): Promise<any> => {
+export const fetchTaskCreate = createAsyncThunk("task/create", async (taskCreateRequest: DailyTaskCreateRequest): Promise<any> => {
   const response: AxiosResponse = await customAxiosRequest.post(`${setServerEnv()}/task/create`, taskCreateRequest);
   const data: DefaultDailyTask = response.data;
 

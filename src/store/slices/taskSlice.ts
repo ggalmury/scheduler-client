@@ -109,7 +109,7 @@ const taskSlice = createSlice({
 
         state.dailyTasks.get(key)?.forEach((task) => {
           if (task.taskId === taskId) {
-            task.createdTodo.push(defaultTodo);
+            task.createdTodo.unshift(defaultTodo);
           }
         });
       })

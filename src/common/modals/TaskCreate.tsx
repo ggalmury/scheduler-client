@@ -1,26 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { Dispatch, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import TimePicker from "../../../common/modals/TimePicker";
-import { ClockSvg, DescriptionSvg, LocationSvg } from "../../../common/svg";
-import { DefaultDailyTask, TaskTimeDetail } from "../../../common/types/interfaces/task";
-import { DailyTaskCreateRequest } from "../../../common/types/interfaces/task";
-import Types, { StoredTask } from "../../../common/types/types/common";
-import { TaskPrivacy, TaskType } from "../../../common/types/types/task";
-import { normalFail } from "../../../common/utils/alert";
-import { addPad, fullDateFormat } from "../../../common/utils/dateUtil";
-import { fetchTaskCreate } from "../../../store/apis/taskRequest";
-import { RootState } from "../../../store/rootReducer";
+import TimePicker from "./TimePicker";
+import { ClockSvg, DescriptionSvg, LocationSvg } from "../svg";
+import { SelectedDate } from "../types/interfaces/store";
+import { DefaultDailyTask, TaskTimeDetail } from "../types/interfaces/task";
+import { DailyTaskCreateRequest } from "../types/interfaces/task";
+import Types, { StoredTask } from "../types/types/common";
+import { TaskPrivacy, TaskType } from "../types/types/task";
+import { normalFail } from "../utils/alert";
+import { addPad, fullDateFormat } from "../utils/dateUtil";
+import { fetchTaskCreate } from "../../store/apis/taskRequest";
+import { RootState } from "../../store/rootReducer";
+import { AnyAction } from "@reduxjs/toolkit";
 
 const TaskCreate = () => {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
-  const date = useSelector((state: RootState) => state.date.selectedDate);
+  const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 
   const startTimePicker = useRef<HTMLDivElement>(null);
   const endTimePicker = useRef<HTMLDivElement>(null);
 
-  const initialState = {
+  const initialValue = {
     title: "" as string,
     description: "" as string,
     location: "" as string,
@@ -33,16 +35,16 @@ const TaskCreate = () => {
     typeSelectBtn: null as string | null,
   } as any;
 
-  const [title, setTitle] = useState<string>(initialState.title);
-  const [description, setDescription] = useState<string>(initialState.description);
-  const [location, setLocation] = useState<string>(initialState.location);
-  const [startTime, setStartTime] = useState<TaskTimeDetail>(initialState.startTime);
-  const [endTime, setEndTime] = useState<TaskTimeDetail>(initialState.endTime);
-  const [privacy, setPrivacy] = useState<Types<typeof TaskPrivacy>>(initialState.privacy);
-  const [type, setType] = useState<Types<typeof TaskType>>(initialState.type);
-  const [startTimePickerOn, setStartTimePickerOn] = useState<boolean>(initialState.startTimePickerOn);
-  const [endTimePickerOn, setEndTimePickerOn] = useState<boolean>(initialState.endTimePickerOn);
-  const [typeSelectBtn, setTypeSelectBtn] = useState<string | null>(initialState.typeSelectBtn);
+  const [title, setTitle] = useState<string>(initialValue.title);
+  const [description, setDescription] = useState<string>(initialValue.description);
+  const [location, setLocation] = useState<string>(initialValue.location);
+  const [startTime, setStartTime] = useState<TaskTimeDetail>(initialValue.startTime);
+  const [endTime, setEndTime] = useState<TaskTimeDetail>(initialValue.endTime);
+  const [privacy, setPrivacy] = useState<Types<typeof TaskPrivacy>>(initialValue.privacy);
+  const [type, setType] = useState<Types<typeof TaskType>>(initialValue.type);
+  const [startTimePickerOn, setStartTimePickerOn] = useState<boolean>(initialValue.startTimePickerOn);
+  const [endTimePickerOn, setEndTimePickerOn] = useState<boolean>(initialValue.endTimePickerOn);
+  const [typeSelectBtn, setTypeSelectBtn] = useState<string | null>(initialValue.typeSelectBtn);
 
   useEffect(() => {
     if (startTimePicker.current && endTimePicker.current) {
@@ -51,17 +53,17 @@ const TaskCreate = () => {
     }
   }, [startTimePickerOn, endTimePickerOn]);
 
-  const setInitialState = () => {
-    setTitle(initialState.title);
-    setDescription(initialState.description);
-    setLocation(initialState.location);
-    setStartTime(initialState.startTime);
-    setEndTime(initialState.endTime);
-    setPrivacy(initialState.privacy);
-    setType(initialState.type);
-    setStartTimePickerOn(initialState.startTimePickerOn);
-    setEndTimePickerOn(initialState.endTimePickerOn);
-    setTypeSelectBtn(initialState.typeSelectBtn);
+  const setInitialValue = (): void => {
+    setTitle(initialValue.title);
+    setDescription(initialValue.description);
+    setLocation(initialValue.location);
+    setStartTime(initialValue.startTime);
+    setEndTime(initialValue.endTime);
+    setPrivacy(initialValue.privacy);
+    setType(initialValue.type);
+    setStartTimePickerOn(initialValue.startTimePickerOn);
+    setEndTimePickerOn(initialValue.endTimePickerOn);
+    setTypeSelectBtn(initialValue.typeSelectBtn);
   };
 
   const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -79,7 +81,7 @@ const TaskCreate = () => {
   const getType = (type: Types<typeof TaskType>): void => {
     if (typeSelectBtn === type.type) {
       setTypeSelectBtn(null);
-      setType(initialState.type);
+      setType(initialValue.type);
       return;
     }
 
@@ -113,12 +115,7 @@ const TaskCreate = () => {
         const startNew: number = startTime.hour * 60 + startTime.minute;
         const endNew: number = endTime.hour * 60 + endTime.minute;
 
-        if (
-          (startNew >= startAlready && startNew <= endAlready) ||
-          (endNew >= startAlready && endNew <= endAlready) ||
-          (startNew >= startAlready && endNew <= endAlready) ||
-          (startNew <= startAlready && endNew >= endAlready)
-        ) {
+        if ((startNew > startAlready && startNew < endAlready) || (endNew > startAlready && endNew < endAlready) || (startNew > startAlready && endNew < endAlready) || (startNew < startAlready && endNew > endAlready)) {
           checker = true;
         }
       });
@@ -140,7 +137,7 @@ const TaskCreate = () => {
     };
 
     dispatch(fetchTaskCreate(taskRequest) as any);
-    setInitialState();
+    setInitialValue();
   };
 
   const changeStartTimePickerStatus = (): void => {

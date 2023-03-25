@@ -5,7 +5,7 @@ import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
 import Main from "../pages/Main";
 import DailyTask from "../pages/task/DailyTask";
-import TaskList from "../pages/task/TaskList";
+import TaskContent from "../pages/task/TaskContent";
 import WeeklyTask from "../pages/task/WeeklyTask";
 
 const MainRouter = () => {
@@ -18,7 +18,7 @@ const MainRouter = () => {
         <Route path="/signup" element={<Register />}></Route>
         <Route path="/main/" element={<Main />}>
           <Route path="home" element={<Home />}></Route>
-          <Route path="task" element={<TaskList />}>
+          <Route path="task" element={<TaskContent />}>
             <Route path="daily" element={<DailyTask />}></Route>
             <Route path="weekly" element={<WeeklyTask />}></Route>
           </Route>

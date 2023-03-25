@@ -1,0 +1,109 @@
+.task-detail {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 450px;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+
+  & hr {
+    width: 80%;
+    margin-top: 15px;
+  }
+
+  &__svg {
+    padding: 0 8px 0 20px;
+    transform: translate(0%, 7%);
+  }
+
+  &__exp {
+    height: 200px;
+  }
+
+  &__header {
+    display: flex;
+    height: 45px;
+    justify-content: space-between;
+    align-items: center;
+
+    &--title {
+      margin-left: 17px;
+      padding: 5px;
+      font-size: 1.1em;
+      font-weight: 900;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    font-size: 0.65em;
+    margin-right: 20px;
+  }
+}
+
+.todolist {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  text-align: left;
+
+  &__header {
+    display: flex;
+    height: 35px;
+    text-indent: 20px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+  }
+
+  &__body {
+    flex: 1;
+  }
+
+  &__new-todo {
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin-left: 14px;
+  }
+
+  &__input {
+    display: flex;
+    align-items: center;
+    width: 200px;
+    height: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+  }
+
+  &__textarea {
+    height: 10px;
+    line-height: 10px;
+    font-size: 0.7em;
+  }
+
+  &__list {
+    $height: 30px;
+
+    width: 200px;
+    height: $height;
+    line-height: $height;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin: 10px 14px;
+  }
+
+  &__description {
+    text-indent: 14px;
+    font-size: 0.8em;
+  }
+
+  &__footer {
+    height: 40px;
+  }
+}

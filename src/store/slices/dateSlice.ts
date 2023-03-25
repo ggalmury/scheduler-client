@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import moment from "moment";
+import { TimeInitialState } from "../../common/types/interfaces/store";
 import { DateFormat } from "../../common/types/types/common";
 
-const initialState = {
+const initialState: TimeInitialState = {
   selectedDate: {
     moment: moment(),
     year: moment().format(DateFormat.year4),

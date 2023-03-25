@@ -16,12 +16,13 @@
 
 // modal
 @import "modal/timepicker";
-@import "modal/dailyTask";
+@import "modal/dailytask";
+@import "modal/taskcreate";
+@import "modal/taskdetail";
 
 // pages
 @import "pages/index";
 @import "pages/main";
 @import "pages/auth";
 @import "pages/home";
-@import "pages/taskcreate";
-@import "pages/tasklist";
+@import "pages/taskcontent";
