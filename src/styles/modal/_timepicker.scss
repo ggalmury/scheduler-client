@@ -1,9 +1,7 @@
 $box-height: 45px;
 
 .timepicker {
-  display: none;
   position: absolute;
-  justify-content: space-evenly;
   width: 150px;
   height: $box-height * 3;
   overflow: hidden;
@@ -13,19 +11,12 @@ $box-height: 45px;
   right: 0px;
   top: 20px;
   z-index: 9;
+  overflow: scroll;
 
   &__selector {
     position: relative;
-    width: 40px;
+    left: 30px;
     font-size: 0.7em;
-    overflow: scroll;
-
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   &__options {

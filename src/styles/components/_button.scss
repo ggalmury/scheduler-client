@@ -28,17 +28,19 @@
 }
 
 .btn-submit-small {
-  width: 80px;
-  height: 30px;
+  width: 70px;
+  height: 25px;
   background-color: whitesmoke;
   color: black;
   border: none;
   border-radius: 8px;
+  margin: 10px;
+  font-size: 0.75rem;
   cursor: pointer;
 
   &:hover {
     transition: 0.2s;
-    scale: 120%;
+    scale: 110%;
   }
 }
 

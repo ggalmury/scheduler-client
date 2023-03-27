@@ -2,13 +2,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 280px;
+  width: 100%;
   background-color: whitesmoke;
   border-radius: 10px;
   box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
 
-  & > label {
-    font-size: 2em;
+  &__header {
+    margin: 3% 0 0 80%;
   }
 
   &__input {
@@ -16,6 +16,7 @@
     justify-content: center;
     align-items: center;
     width: 220px;
+    transition: 0.3s;
 
     &--title {
       border-bottom: 1px solid black;
@@ -23,8 +24,6 @@
     }
 
     &--extra {
-      display: flex;
-      align-items: center;
       height: 35px;
     }
   }
@@ -54,8 +53,9 @@
     }
   }
 
-  &__intro {
-    margin-top: 20px;
+  &__timebox {
+    display: flex;
+    width: 100%;
   }
 
   &__svg {
@@ -108,21 +108,14 @@
 
   &__time {
     $height: 25px;
+
     width: 100px;
     height: $height;
+    line-height: $height;
     border: none;
-    background-color: rgb(235, 235, 235);
-    border-radius: 7px;
-    color: #555555;
-    margin-left: 5px;
-    margin-right: 5px;
+    font-size: 0.7em;
     position: relative;
     cursor: pointer;
-
-    & > span {
-      font-size: 0.6em;
-      line-height: $height;
-    }
   }
 
   &__select {
@@ -148,7 +141,6 @@
   }
 
   &__submit {
-    margin-top: 20px;
-    flex: 1;
+    margin: 20px 0;
   }
 }

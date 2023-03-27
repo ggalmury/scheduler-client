@@ -75,7 +75,7 @@
 
     & hr {
       width: 60%;
-      height: 5%;
+      height: 4%;
       border: none;
     }
   }
@@ -111,11 +111,15 @@
     font-size: 0.8em;
     text-align: start;
     text-indent: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
 .task-child-modal {
   position: absolute;
+  width: 280px;
   top: 0;
   margin: 0 5px;
 }

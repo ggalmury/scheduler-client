@@ -24,7 +24,7 @@
 
   &__header {
     display: flex;
-    height: 45px;
+    height: 60px;
     justify-content: space-between;
     align-items: center;
 
@@ -42,6 +42,12 @@
     height: 30px;
     font-size: 0.65em;
     margin-right: 20px;
+  }
+
+  &__footer {
+    $height: 50px;
+    height: $height;
+    line-height: $height;
   }
 }
 

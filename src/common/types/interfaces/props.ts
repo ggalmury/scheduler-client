@@ -5,6 +5,7 @@ import { DefaultDailyTask, TaskTimeDetail } from "./task";
 
 export interface TimePickerProp {
   setTime: React.Dispatch<React.SetStateAction<TaskTimeDetail>>;
+  setTimePickerOn: Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface DailyTaskListProp {
@@ -17,4 +18,8 @@ export interface DailyTaskListProp {
 export interface TaskDetailProp {
   selectedTask: DefaultDailyTask | null;
   setTaskDetail: Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface TaskCreateProp {
+  setTaskCreate: Dispatch<React.SetStateAction<boolean>>;
 }

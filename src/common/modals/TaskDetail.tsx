@@ -1,9 +1,10 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { Dispatch, Fragment, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchTodoCreate } from "../../store/apis/taskRequest";
+import { fetchTaskDelete, fetchTodoCreate } from "../../store/apis/taskRequest";
 import { CheckSvg, ClockSvg, DescriptionSvg, LocationSvg, ScopeSvg, XSvg } from "../svg";
 import { TaskDetailProp } from "../types/interfaces/props";
+import { DailyTaskDeleteOrDoneRequest } from "../types/interfaces/task";
 import { TodoCreateRequest } from "../types/interfaces/todo";
 import { addPad } from "../utils/dateUtil";
 
@@ -18,7 +19,7 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
   const [createTodo, setCreateTodo] = useState<boolean>(initialValue.createTodo);
   const [todoDescription, setTodoDescription] = useState<string>(initialValue.todoDescription);
 
-  const taskDetailToggle = (): void => {
+  const taskDetailOff = (): void => {
     setTaskDetail(false);
   };
 
@@ -54,14 +55,24 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
     setTodoDescription("");
   };
 
+  const deleteTask = () => {
+    if (selectedTask) {
+      const taskDeleteRequest: DailyTaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
+
+      dispatch(fetchTaskDelete(taskDeleteRequest) as any);
+
+      setTaskDetail(false);
+    }
+  };
+
   return (
     <Fragment>
       {selectedTask ? (
-        <div className="task-detail" style={{ border: `3px solid ${selectedTask.color}` }}>
+        <div className="task-detail" style={{ backgroundColor: `${selectedTask.color}` }}>
           <div className="task-detail__exp">
             <div className="task-detail__header">
               <div className="task-detail__header--title invisible-scroll">{selectedTask.title}</div>
-              <div className="task-detail__svg" onClick={taskDetailToggle}>
+              <div className="task-detail__svg" onClick={taskDetailOff}>
                 <XSvg />
               </div>
             </div>
@@ -110,9 +121,11 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
               <div>{todoBox()}</div>
             </div>
           </div>
-          <div className="todolist__footer">
+          <div className="task-detail__footer">
             <button className="btn-submit-small task-detail__btn--modify">modify</button>
-            <button className="btn-submit-small task-detail__btn--delete">delete</button>
+            <button className="btn-submit-small task-detail__btn--delete" onClick={deleteTask}>
+              delete
+            </button>
           </div>
         </div>
       ) : null}

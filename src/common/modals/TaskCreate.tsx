@@ -1,7 +1,7 @@
 import React, { Dispatch, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TimePicker from "./TimePicker";
-import { ClockSvg, DescriptionSvg, LocationSvg } from "../svg";
+import { ClockSvg, DescriptionSvg, LocationSvg, XSvg } from "../svg";
 import { SelectedDate } from "../types/interfaces/store";
 import { DefaultDailyTask, TaskTimeDetail } from "../types/interfaces/task";
 import { DailyTaskCreateRequest } from "../types/interfaces/task";
@@ -12,8 +12,9 @@ import { addPad, fullDateFormat } from "../utils/dateUtil";
 import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
+import { TaskCreateProp } from "../types/interfaces/props";
 
-const TaskCreate = () => {
+const TaskCreate = ({ setTaskCreate }: TaskCreateProp) => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
@@ -64,6 +65,10 @@ const TaskCreate = () => {
     setStartTimePickerOn(initialValue.startTimePickerOn);
     setEndTimePickerOn(initialValue.endTimePickerOn);
     setTypeSelectBtn(initialValue.typeSelectBtn);
+  };
+
+  const taskCreateOff = (): void => {
+    setTaskCreate(false);
   };
 
   const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -154,7 +159,9 @@ const TaskCreate = () => {
 
   return (
     <div className="task-create">
-      <div className="task-create__intro">Create new Task</div>
+      <div className="task-create__header" onClick={taskCreateOff}>
+        <XSvg />
+      </div>
       <div className="task-create__input task-create__input--title">
         <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" value={title} onChange={getTitle}></textarea>
       </div>
@@ -179,16 +186,18 @@ const TaskCreate = () => {
         <div className="task-create__svg">
           <ClockSvg></ClockSvg>
         </div>
-        <div className="task-create__time" onClick={changeStartTimePickerStatus}>
-          <span>From {`${addPad(startTime.hour)} : ${addPad(startTime.minute)}`}</span>
-          <div className="timepicker" ref={startTimePicker} onClick={stopEventBubbling}>
-            <TimePicker setTime={setStartTime}></TimePicker>
+        <div className="task-create__timebox">
+          <div className="task-create__time" onClick={changeStartTimePickerStatus}>
+            From {`${addPad(startTime.hour)} : ${addPad(startTime.minute)}`}
+            <div className="timepicker" ref={startTimePicker} onClick={stopEventBubbling}>
+              <TimePicker setTime={setStartTime} setTimePickerOn={setStartTimePickerOn}></TimePicker>
+            </div>
           </div>
-        </div>
-        <div className="task-create__time" onClick={changeEndTimePickerStatus}>
-          <span>To {`${addPad(endTime.hour)} : ${addPad(endTime.minute)}`}</span>
-          <div className="timepicker" ref={endTimePicker} onClick={stopEventBubbling}>
-            <TimePicker setTime={setEndTime}></TimePicker>
+          <div className="task-create__time" onClick={changeEndTimePickerStatus}>
+            To {`${addPad(endTime.hour)} : ${addPad(endTime.minute)}`}
+            <div className="timepicker" ref={endTimePicker} onClick={stopEventBubbling}>
+              <TimePicker setTime={setEndTime} setTimePickerOn={setEndTimePickerOn}></TimePicker>
+            </div>
           </div>
         </div>
       </div>

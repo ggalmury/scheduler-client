@@ -134,7 +134,7 @@ const DailyTaskList = ({ idx, selectedDayTasks, taskDetailOn, setTaskDetailOn }:
           taskCreate ? (idx > 4 || idx === 2 ? "task-creator-appear-right" : "task-creator-appear-left") : idx > 4 || idx === 2 ? "task-creator-disappear-right" : "task-creator-disappear-left"
         }`}
       >
-        <TaskCreate />
+        <TaskCreate setTaskCreate={setTaskCreate} />
       </div>
       <div
         className={`task-child-modal ${
