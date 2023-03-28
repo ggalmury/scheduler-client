@@ -27,7 +27,6 @@ customAxiosRequest.interceptors.response.use(
 
         if (url) {
           const test = await store.dispatch(fetchToken() as any);
-          console.log(test);
 
           if (fetchToken.rejected.match(test)) {
             console.log("session expired");
@@ -41,5 +40,5 @@ customAxiosRequest.interceptors.response.use(
     }
 
     return Promise.reject(err);
-  }
+  },
 );

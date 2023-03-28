@@ -13,6 +13,7 @@ import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
 import { TaskCreateProp } from "../types/interfaces/props";
+import {TaskCreateState} from "../types/interfaces/state";
 
 const TaskCreate = ({ setTaskCreate }: TaskCreateProp) => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
@@ -23,18 +24,18 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp) => {
   const startTimePicker = useRef<HTMLDivElement>(null);
   const endTimePicker = useRef<HTMLDivElement>(null);
 
-  const initialValue = {
-    title: "" as string,
-    description: "" as string,
-    location: "" as string,
-    startTime: { hour: 0, minute: 0 } as TaskTimeDetail,
-    endTime: { hour: 0, minute: 0 } as TaskTimeDetail,
-    privacy: TaskPrivacy.public as Types<typeof TaskPrivacy>,
-    type: TaskType.basic as Types<typeof TaskType>,
-    startTimePickerOn: false as boolean,
-    endTimePickerOn: false as boolean,
-    typeSelectBtn: null as string | null,
-  } as any;
+  const initialValue: TaskCreateState = {
+    title: "",
+    description: "",
+    location: "",
+    startTime: { hour: 0, minute: 0 },
+    endTime: { hour: 0, minute: 0 },
+    privacy: TaskPrivacy.public,
+    type: TaskType.basic,
+    startTimePickerOn: false,
+    endTimePickerOn: false,
+    typeSelectBtn: null,
+  };
 
   const [title, setTitle] = useState<string>(initialValue.title);
   const [description, setDescription] = useState<string>(initialValue.description);

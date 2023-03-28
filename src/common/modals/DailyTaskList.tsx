@@ -6,37 +6,38 @@ import { PlusSvg, XSvg } from "../svg";
 import { DailyTaskListProp } from "../types/interfaces/props";
 import { SelectedDate } from "../types/interfaces/store";
 import { DefaultDailyTask } from "../types/interfaces/task";
-import Types, { DateFormat, StoredTask } from "../types/types/common";
-import { addPad, fullDateFormat } from "../utils/dateUtil";
+import { StoredTask } from "../types/types/common";
+import { addPad } from "../utils/dateUtil";
 import TaskDetail from "./TaskDetail";
+import { DailyTaskListState } from "../types/interfaces/state";
 
-const DailyTaskList = ({ idx, selectedDayTasks, taskDetailOn, setTaskDetailOn }: DailyTaskListProp): JSX.Element => {
+const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTaskListOn }: DailyTaskListProp): JSX.Element => {
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 
-  const initialValue = {
-    taskCreate: false as boolean,
-    taskDetail: false as boolean,
-    selectedTask: null as number | null,
-  } as any;
+  const initialValue: DailyTaskListState = {
+    taskCreate: false,
+    taskDetail: false,
+    selectedTask: null,
+  };
 
   const [taskCreate, setTaskCreate] = useState<boolean>(initialValue.taskCreate);
   const [taskDetail, setTaskDetail] = useState<boolean>(initialValue.taskDetail);
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(initialValue.selectedTask);
 
   const selectedTask = useMemo((): DefaultDailyTask | null => {
-    return selectedDayTasks ? selectedDayTasks.filter((task) => task.taskId === selectedTaskId)[0] ?? null : null;
+    return selectedDayDailyTasks ? selectedDayDailyTasks.filter((task) => task.taskId === selectedTaskId)[0] ?? null : null;
   }, [userTask, selectedTaskId]);
 
   useEffect(() => {
-    if (!taskDetailOn) {
+    if (!dailyTaskListOn) {
       setTaskCreate(initialValue.taskCreate);
       setTaskDetail(initialValue.taskDetail);
     }
-  }, [taskDetailOn]);
+  }, [dailyTaskListOn]);
 
   const closeTaskDetail = (): void => {
-    setTaskDetailOn(false);
+    setDailyTaskListOn(false);
   };
 
   const taskCreateToggle = (): void => {
@@ -60,8 +61,8 @@ const DailyTaskList = ({ idx, selectedDayTasks, taskDetailOn, setTaskDetailOn }:
   };
 
   const drawTasks = (index: number): (JSX.Element | undefined)[] | undefined => {
-    if (selectedDayTasks) {
-      const graph: (JSX.Element | undefined)[] = selectedDayTasks.map((task, idx) => {
+    if (selectedDayDailyTasks) {
+      const graph: (JSX.Element | undefined)[] = selectedDayDailyTasks.map((task, idx) => {
         const startHour: number = task.time.startAt.hour;
         const startMinute: number = task.time.startAt.minute;
         const startTotal = startHour * 60 + startMinute;
@@ -131,14 +132,26 @@ const DailyTaskList = ({ idx, selectedDayTasks, taskDetailOn, setTaskDetailOn }:
       </div>
       <div
         className={`task-child-modal ${
-          taskCreate ? (idx > 4 || idx === 2 ? "task-creator-appear-right" : "task-creator-appear-left") : idx > 4 || idx === 2 ? "task-creator-disappear-right" : "task-creator-disappear-left"
+          taskCreate
+            ? idx > 4 || idx === 2
+              ? "task-creator-appear-right"
+              : "task-creator-appear-left"
+            : idx > 4 || idx === 2
+            ? "task-creator-disappear-right"
+            : "task-creator-disappear-left"
         }`}
       >
         <TaskCreate setTaskCreate={setTaskCreate} />
       </div>
       <div
         className={`task-child-modal ${
-          taskDetail ? (idx > 4 || idx === 2 ? "task-creator-appear-right" : "task-creator-appear-left") : idx > 4 || idx === 2 ? "task-creator-disappear-right" : "task-creator-disappear-left"
+          taskDetail
+            ? idx > 4 || idx === 2
+              ? "task-creator-appear-right"
+              : "task-creator-appear-left"
+            : idx > 4 || idx === 2
+            ? "task-creator-disappear-right"
+            : "task-creator-disappear-left"
         }`}
       >
         <TaskDetail selectedTask={selectedTask} setTaskDetail={setTaskDetail} />

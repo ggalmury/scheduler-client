@@ -3,6 +3,8 @@ import { DefaultDailyTask } from "../interfaces/task";
 export const RouteName = {
   home: "home" as string,
   tasks: "tasks" as string,
+  daily: "daily" as string,
+  weekly: "weekly" as string,
   group: "group" as string,
   message: "message" as string,
 } as const;

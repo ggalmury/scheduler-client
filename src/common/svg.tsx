@@ -1,6 +1,11 @@
 export const CalendarSvg = () => {
   return (
-    <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="24px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Calendar / Calendar_Days">
         <path
           id="Vector"
@@ -26,7 +31,12 @@ export const CheckSvg = () => {
 
 export const ClockSvg = () => {
   return (
-    <svg width="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="20px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Calendar / Clock">
         <path
           id="Vector"
@@ -51,7 +61,12 @@ export const ForwardSvg = () => {
 
 export const HomeSvg = () => {
   return (
-    <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="24px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Navigation / House_01">
         <path
           id="Vector"
@@ -68,7 +83,12 @@ export const HomeSvg = () => {
 
 export const LocationSvg = () => {
   return (
-    <svg width="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="20px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Navigation / Map_Pin">
         <g id="Vector">
           <path
@@ -78,7 +98,13 @@ export const LocationSvg = () => {
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          <path d="M10 9C10 10.1046 10.8954 11 12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9Z" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d="M10 9C10 10.1046 10.8954 11 12 11C13.1046 11 14 10.1046 14 9C14 7.89543 13.1046 7 12 7C10.8954 7 10 7.89543 10 9Z"
+            stroke="#000000"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </g>
       </g>
     </svg>
@@ -103,7 +129,12 @@ export const LogoutSvg = () => {
 
 export const PlusSvg = () => {
   return (
-    <svg width="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="30px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Edit / Add_Plus_Square">
         <path
           id="Vector"
@@ -120,7 +151,12 @@ export const PlusSvg = () => {
 
 export const ScopeSvg = () => {
   return (
-    <svg width="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="20px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Interface / Lock">
         <path
           id="Vector"
@@ -156,27 +192,65 @@ export const TrashSvg = () => {
 
 export const NextSvg = () => {
   return (
-    <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-      <title />
-      <path d="M69.8437,43.3876,33.8422,13.3863a6.0035,6.0035,0,0,0-7.6878,9.223l30.47,25.39-30.47,25.39a6.0035,6.0035,0,0,0,7.6878,9.2231L69.8437,52.6106a6.0091,6.0091,0,0,0,0-9.223Z" />
+    <svg
+      width="30px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="Arrow / Caret_Right_SM">
+        <path
+          id="Vector"
+          d="M11 9L14 12L11 15"
+          stroke="#000000"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
     </svg>
   );
 };
 
 export const PrevSvg = () => {
   return (
-    <svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg">
-      <title />
-      <path d="M39.3756,48.0022l30.47-25.39a6.0035,6.0035,0,0,0-7.6878-9.223L26.1563,43.3906a6.0092,6.0092,0,0,0,0,9.2231L62.1578,82.615a6.0035,6.0035,0,0,0,7.6878-9.2231Z" />
+    <svg
+      width="30px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g id="Arrow / Caret_Left_SM">
+        <path
+          id="Vector"
+          d="M13 15L10 12L13 9"
+          stroke="#000000"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
     </svg>
   );
 };
 
 export const XSvg = () => {
   return (
-    <svg width="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="30px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Menu / Close_SM">
-        <path id="Vector" d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path
+          id="Vector"
+          d="M16 16L12 12M12 12L8 8M12 12L16 8M12 12L8 16"
+          stroke="#000000"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </g>
     </svg>
   );
@@ -184,7 +258,12 @@ export const XSvg = () => {
 
 export const DescriptionSvg = () => {
   return (
-    <svg width="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="20px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="File / File_Document">
         <path
           id="Vector"
@@ -201,7 +280,12 @@ export const DescriptionSvg = () => {
 
 export const GroupSvg = () => {
   return (
-    <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="24px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="User / Users_Group">
         <path
           id="Vector"
@@ -218,7 +302,12 @@ export const GroupSvg = () => {
 
 export const MessageSvg = () => {
   return (
-    <svg width="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      width="24px"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <g id="Communication / Chat_Conversation">
         <path
           id="Vector"

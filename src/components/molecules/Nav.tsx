@@ -1,50 +1,57 @@
-import { useState } from "react";
+import {Dispatch, useState} from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import {NavigateFunction, useNavigate} from "react-router-dom";
 import { CalendarSvg, GroupSvg, HomeSvg, LogoutSvg, MessageSvg } from "../../common/svg";
 import { RouteName } from "../../common/types/types/common";
 import { setClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/loginSlice";
+import {AnyAction} from "@reduxjs/toolkit";
 
-const Nav = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+const Nav = (): JSX.Element => {
+  const navigate: NavigateFunction = useNavigate();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const [activeButton, setActiveButton] = useState<string>(RouteName.home);
-  const [taskSubCategory, setTaskSubCategory] = useState<boolean>(false);
+  const initialValue = {
+    activeButton: RouteName.home as string,
+    taskSubCategory: false as boolean
+  } as any;
+
+
+  const [activeButton, setActiveButton] = useState<string>(initialValue.activeButton);
+  const [taskSubCategory, setTaskSubCategory] = useState<boolean>(initialValue.taskSubCategory);
 
   useState(() => {
     if (window.location.href === `${setClientEnv()}/main/home`) {
       setActiveButton(RouteName.home);
-    } else if (window.location.href === `${setClientEnv()}/main/task`) {
+    } else if (window.location.href === `${setClientEnv()}/main/task/daily` ||  `${setClientEnv()}/main/task/weekly`) {
       setActiveButton(RouteName.tasks);
     }
   });
 
-  const goToHome = () => {
+  const goToHome = (): void => {
     setActiveButton(RouteName.home);
     navigate("home");
   };
 
-  const goToDailyTasks = () => {
+  const goToDailyTasks = (): void => {
     setActiveButton(RouteName.tasks);
     navigate("task/daily");
   };
 
-  const goToWeeklyTasks = () => {
+  const goToWeeklyTasks = (): void => {
     setActiveButton(RouteName.tasks);
     navigate("task/weekly");
   };
 
-  const goToGroup = () => {
+  const goToGroup = (): void => {
     setActiveButton(RouteName.group);
   };
 
-  const goToMessage = () => {
+  const goToMessage = (): void => {
     setActiveButton(RouteName.message);
   };
 
-  const logOut = () => {
+  const logOut = (): void => {
     dispatch(logout(null));
   };
 

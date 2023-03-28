@@ -7,14 +7,15 @@ import { TaskDetailProp } from "../types/interfaces/props";
 import { DailyTaskDeleteOrDoneRequest } from "../types/interfaces/task";
 import { TodoCreateRequest } from "../types/interfaces/todo";
 import { addPad } from "../utils/dateUtil";
+import {TaskDetailState} from "../types/interfaces/state";
 
 const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Element => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const initialValue = {
-    createTodo: false as boolean,
-    todoDescription: "" as string,
-  } as any;
+  const initialValue: TaskDetailState = {
+    createTodo: false,
+    todoDescription: "",
+  };
 
   const [createTodo, setCreateTodo] = useState<boolean>(initialValue.createTodo);
   const [todoDescription, setTodoDescription] = useState<string>(initialValue.todoDescription);

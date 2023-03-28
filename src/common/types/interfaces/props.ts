@@ -1,6 +1,4 @@
-import { Dispatch } from "react";
-import Types from "../types/common";
-import { TaskCreatorType } from "../types/task";
+import React, { Dispatch } from "react";
 import { DefaultDailyTask, TaskTimeDetail } from "./task";
 
 export interface TimePickerProp {
@@ -10,9 +8,9 @@ export interface TimePickerProp {
 
 export interface DailyTaskListProp {
   idx: number;
-  selectedDayTasks: DefaultDailyTask[] | undefined;
-  taskDetailOn: boolean;
-  setTaskDetailOn: Dispatch<React.SetStateAction<boolean>>;
+  selectedDayDailyTasks: DefaultDailyTask[] | undefined;
+  dailyTaskListOn: boolean;
+  setDailyTaskListOn: Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface TaskDetailProp {
