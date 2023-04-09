@@ -1,21 +1,21 @@
-import {Dispatch, useState} from "react";
+import { Dispatch, ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
-import {NavigateFunction, useNavigate} from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { CalendarSvg, GroupSvg, HomeSvg, LogoutSvg, MessageSvg } from "../../common/svg";
 import { RouteName } from "../../common/types/types/common";
 import { setClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/loginSlice";
-import {AnyAction} from "@reduxjs/toolkit";
+import { AnyAction } from "@reduxjs/toolkit";
+import axios, { AxiosResponse } from "axios";
 
-const Nav = (): JSX.Element => {
+const Nav = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const initialValue = {
     activeButton: RouteName.home as string,
-    taskSubCategory: false as boolean
+    taskSubCategory: false as boolean,
   } as any;
-
 
   const [activeButton, setActiveButton] = useState<string>(initialValue.activeButton);
   const [taskSubCategory, setTaskSubCategory] = useState<boolean>(initialValue.taskSubCategory);
@@ -23,7 +23,7 @@ const Nav = (): JSX.Element => {
   useState(() => {
     if (window.location.href === `${setClientEnv()}/main/home`) {
       setActiveButton(RouteName.home);
-    } else if (window.location.href === `${setClientEnv()}/main/task/daily` ||  `${setClientEnv()}/main/task/weekly`) {
+    } else if (window.location.href === `${setClientEnv()}/main/task/daily` || `${setClientEnv()}/main/task/weekly`) {
       setActiveButton(RouteName.tasks);
     }
   });
@@ -53,6 +53,12 @@ const Nav = (): JSX.Element => {
 
   const logOut = (): void => {
     dispatch(logout(null));
+  };
+
+  const googleOAuth2UrlTest = async () => {
+    const url: AxiosResponse = await axios.get("http://localhost:3500/google/entry");
+    console.log(url.data);
+    window.open(url.data);
   };
 
   return (
@@ -107,6 +113,9 @@ const Nav = (): JSX.Element => {
         <div className="nav__content">
           <LogoutSvg></LogoutSvg>
         </div>
+      </div>
+      <div className="nav__logout" onClick={googleOAuth2UrlTest}>
+        <div className="nav__content">oAuth2 url test</div>
       </div>
     </div>
   );

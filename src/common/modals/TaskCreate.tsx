@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useRef, useState } from "react";
+import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TimePicker from "./TimePicker";
 import { ClockSvg, DescriptionSvg, LocationSvg, XSvg } from "../svg";
@@ -13,9 +13,9 @@ import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
 import { TaskCreateProp } from "../types/interfaces/props";
-import {TaskCreateState} from "../types/interfaces/state";
+import { TaskCreateState } from "../types/interfaces/state";
 
-const TaskCreate = ({ setTaskCreate }: TaskCreateProp) => {
+const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
@@ -121,7 +121,12 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp) => {
         const startNew: number = startTime.hour * 60 + startTime.minute;
         const endNew: number = endTime.hour * 60 + endTime.minute;
 
-        if ((startNew > startAlready && startNew < endAlready) || (endNew > startAlready && endNew < endAlready) || (startNew > startAlready && endNew < endAlready) || (startNew < startAlready && endNew > endAlready)) {
+        if (
+          (startNew > startAlready && startNew < endAlready) ||
+          (endNew > startAlready && endNew < endAlready) ||
+          (startNew > startAlready && endNew < endAlready) ||
+          (startNew < startAlready && endNew > endAlready)
+        ) {
           checker = true;
         }
       });

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { ReactElement, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import TaskCreate from "./TaskCreate";
 import { RootState } from "../../store/rootReducer";
@@ -11,7 +11,7 @@ import { addPad } from "../utils/dateUtil";
 import TaskDetail from "./TaskDetail";
 import { DailyTaskListState } from "../types/interfaces/state";
 
-const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTaskListOn }: DailyTaskListProp): JSX.Element => {
+const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTaskListOn }: DailyTaskListProp): ReactElement => {
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 

@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, Fragment, ReactElement, useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Types, { DateFormat, RouteName, StoredTask } from "../../../common/types/types/common";
 import { RootState } from "../../../store/rootReducer";
@@ -14,7 +14,7 @@ import DailyTaskList from "../../../common/modals/DailyTaskList";
 import { NavigateFunction, Route, useNavigate, useParams } from "react-router-dom";
 import { SelectedDate } from "../../../common/types/interfaces/store";
 
-const TaskContent = (): JSX.Element => {
+const TaskContent = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
 
   const dispatch: Dispatch<AnyAction> = useDispatch();

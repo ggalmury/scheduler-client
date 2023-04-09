@@ -28,6 +28,7 @@ export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, creden
 export const fetchRegister = createAsyncThunk("auth/signup", async ({ userName, email, credential }: RegisterRequest): Promise<RegisterResponse> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signup`, { userName, email, credential });
   const data: RegisterResponse = response.data;
+  console.log(data);
 
   return data;
 });
