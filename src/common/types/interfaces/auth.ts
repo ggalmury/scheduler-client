@@ -11,6 +11,7 @@ export interface RegisterRequest {
 
 export interface DefaultUser {
   uid: number;
+  uuid: string;
   userName: string;
   email: string;
   createdDt: Date;

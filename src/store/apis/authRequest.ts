@@ -12,6 +12,7 @@ export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, creden
 
   const account: Account = {
     uid: data.uid,
+    uuid: data.uuid,
     userName: data.userName,
     email: data.email,
     createdDt: data.createdDt,
@@ -36,10 +37,10 @@ export const fetchRegister = createAsyncThunk("auth/signup", async ({ userName, 
 export const fetchToken = createAsyncThunk("auth/token", async (_, thunkApi) => {
   const state = store.getState() as RootState;
 
-  const email: string = state.login.account.email;
+  const { uuid, email } = state.login.account;
   const { accessToken, refreshToken } = state.login.auth;
 
-  const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/token`, { email, accessToken, refreshToken });
+  const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/token`, { uuid, email, accessToken, refreshToken });
   const data: TokenResponse = response.data;
 
   return data;

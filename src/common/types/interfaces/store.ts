@@ -2,6 +2,7 @@ import { StoredTask } from "../types/common";
 
 export interface Account {
   uid: number;
+  uuid: string;
   userName: string;
   email: string;
   createdDt: Date;

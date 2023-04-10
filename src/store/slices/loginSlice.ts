@@ -7,6 +7,7 @@ import { normalFail, normalSuccess } from "../../common/utils/alert";
 const initialState = {
   account: {
     uid: 0,
+    uuid: "",
     userName: "user",
     email: "",
     createdDt: new Date(),
@@ -45,7 +46,7 @@ const loginSlice = createSlice({
         normalFail("Oops!", "Refresh token does not exist");
         return;
       }
-
+      console.log(action.payload);
       state.status = { loading: false, error: false, isLoggedin: true };
       state.account = action.payload.account;
       state.auth = action.payload.auth;
