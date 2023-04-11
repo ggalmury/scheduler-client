@@ -6,16 +6,35 @@ import { LoginRequest } from "../../../common/types/interfaces/auth";
 import { fetchLogin } from "../../../store/apis/authRequest";
 import axios, { AxiosResponse } from "axios";
 import { AnyAction } from "@reduxjs/toolkit";
-import { Account } from "../../../common/types/interfaces/store";
+import { Account, AccountStatus } from "../../../common/types/interfaces/store";
+import { login } from "../../../store/slices/loginSlice";
 
 const Login = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const userAccount: Account = useSelector((state: RootState) => state.login.account);
+  const userStatus: AccountStatus = useSelector((state: RootState) => state.login.status);
 
   const [email, setEmail] = useState<string>("");
   const [credential, setCredential] = useState<string>("");
+  const [childWindow, setChildWindow] = useState<Window | null>(null);
+
+  useEffect(() => {
+    window.addEventListener("message", messageHandler);
+    return () => {
+      window.removeEventListener("message", messageHandler);
+    };
+  }, [childWindow]);
+
+  const messageHandler = (event: MessageEvent) => {
+    if (event.origin !== "http://localhost:3000") return;
+    if (event.data) {
+      dispatch(login(event.data));
+      childWindow && childWindow.close();
+      setChildWindow(null);
+    }
+  };
 
   const attemptLogin = async (): Promise<void> => {
     const loginRequest: LoginRequest = { email, credential };
@@ -44,7 +63,8 @@ const Login = (): ReactElement => {
 
   const googleOAuth2UrlTest = async (): Promise<void> => {
     const url: AxiosResponse = await axios.get("http://localhost:3500/google/entry");
-    window.open(url.data, "Google", "width=400,height=600");
+    const child: Window | null = window.open(url.data, "Google", "width=400,height=600");
+    setChildWindow(child);
   };
 
   return (

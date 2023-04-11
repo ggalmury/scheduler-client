@@ -8,12 +8,10 @@ const useAuth = () => {
   useEffect(() => {
     if (window.location.pathname !== "/" && window.location.pathname !== "/signup") {
       if (!isLoggedIn) {
-        if (window.location.pathname !== "/") {
-          window.location.href = "/";
-        }
+        window.location.href = "/";
       }
     }
-  }, []);
+  }, [isLoggedIn]);
 };
 
 export default useAuth;

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { AccountStatus } from "../../../common/types/interfaces/store";
 import { RootState } from "../../../store/rootReducer";
 
 const Home = () => {
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
   const userStatus: AccountStatus = useSelector((state: RootState) => state.login.status);
 
   useEffect(() => {

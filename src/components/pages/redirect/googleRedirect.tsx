@@ -1,16 +1,15 @@
-import React, { Dispatch, ReactElement, useEffect, useMemo } from "react";
+import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Location, useLocation } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
 import { setServerEnv } from "../../../config/envConfig";
-import { AnyAction } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import { login } from "../../../store/slices/loginSlice";
+import { Account } from "../../../common/types/interfaces/store";
 
 const GoogleRedirect = (): ReactElement => {
-  const dispatch: Dispatch<AnyAction> = useDispatch();
   const location: Location = useLocation();
 
   const params = new URLSearchParams(location.search);
+
+  const [accountData, setAccountData] = useState<Account | null>(null);
 
   const code = useMemo((): string => {
     const code = params.get("code");
@@ -21,13 +20,16 @@ const GoogleRedirect = (): ReactElement => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    window.opener.postMessage(accountData, "http://localhost:3000");
+  }, [accountData]);
+
   const fetchData = async () => {
     const userData: AxiosResponse = await axios.post(`${setServerEnv()}/google/user`, { code });
-    dispatch(login(userData.data));
-    window.location.href = "/main/home";
+    setAccountData(userData.data);
   };
 
-  return <div></div>;
+  return <div>asdf</div>;
 };
 
 export default GoogleRedirect;

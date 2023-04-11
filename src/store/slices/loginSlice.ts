@@ -28,7 +28,6 @@ const loginSlice = createSlice({
   initialState,
   reducers: {
     login: (state, action) => {
-      console.log(action.payload);
       const account: Account = {
         uid: action.payload.uid,
         uuid: action.payload.uuid,
@@ -56,6 +55,7 @@ const loginSlice = createSlice({
       state.account = initialState.account;
       state.auth = initialState.auth;
       state.status = initialState.status;
+
       Swal.fire({ icon: "success", title: "Seeya!", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
         window.location.href = "/";
         return;

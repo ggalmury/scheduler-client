@@ -9,7 +9,7 @@ import { ReactElement } from "react";
 import GoogleRedirect from "../pages/redirect/googleRedirect";
 
 const MainRouter = (): ReactElement => {
-  useAuth();
+  // useAuth();
 
   return (
     <BrowserRouter>
