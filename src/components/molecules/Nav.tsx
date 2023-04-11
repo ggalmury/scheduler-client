@@ -55,12 +55,6 @@ const Nav = (): ReactElement => {
     dispatch(logout(null));
   };
 
-  const googleOAuth2UrlTest = async () => {
-    const url: AxiosResponse = await axios.get("http://localhost:3500/google/entry");
-    console.log(url.data);
-    window.open(url.data);
-  };
-
   return (
     <div className="nav">
       <div className="nav__menu">
@@ -113,9 +107,6 @@ const Nav = (): ReactElement => {
         <div className="nav__content">
           <LogoutSvg></LogoutSvg>
         </div>
-      </div>
-      <div className="nav__logout" onClick={googleOAuth2UrlTest}>
-        <div className="nav__content">oAuth2 url test</div>
       </div>
     </div>
   );

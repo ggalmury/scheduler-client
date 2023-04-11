@@ -88,12 +88,12 @@ const TaskContent = (): ReactElement => {
     dispatch(setDate(moment()));
   };
 
-  const taskCalendar = (): JSX.Element[] => {
+  const taskCalendar = (): ReactElement[] => {
     const today: moment.Moment = date.moment.clone();
     const firstWeek: number = today.clone().startOf("month").week();
     const lastWeek: number = today.clone().endOf("month").week() === 1 ? 53 : today.clone().endOf("month").week();
 
-    let result: JSX.Element[] = [];
+    let result: ReactElement[] = [];
     let week: number = firstWeek;
 
     const isToday = (days: moment.Moment): boolean => {

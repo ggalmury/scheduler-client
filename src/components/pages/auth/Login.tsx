@@ -1,14 +1,18 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Dispatch, ReactElement, useEffect, useState } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../store/rootReducer";
 import { LoginRequest } from "../../../common/types/interfaces/auth";
 import { fetchLogin } from "../../../store/apis/authRequest";
+import axios, { AxiosResponse } from "axios";
+import { AnyAction } from "@reduxjs/toolkit";
+import { Account } from "../../../common/types/interfaces/store";
 
-const Login = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const userAccount = useSelector((state: RootState) => state.login.account);
+const Login = (): ReactElement => {
+  const navigate: NavigateFunction = useNavigate();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
+
+  const userAccount: Account = useSelector((state: RootState) => state.login.account);
 
   const [email, setEmail] = useState<string>("");
   const [credential, setCredential] = useState<string>("");
@@ -36,6 +40,11 @@ const Login = () => {
   const goTosignUp = (event: React.MouseEvent<HTMLElement>): void => {
     event.preventDefault();
     navigate(`/signup`);
+  };
+
+  const googleOAuth2UrlTest = async (): Promise<void> => {
+    const url: AxiosResponse = await axios.get("http://localhost:3500/google/entry");
+    window.open(url.data, "Google", "width=400,height=600");
   };
 
   return (
@@ -68,6 +77,9 @@ const Login = () => {
           <div>Don't have an account?</div>
           <div className="auth__route" onClick={goTosignUp}>
             Sign Up
+          </div>
+          <div className="nav__logout" onClick={googleOAuth2UrlTest}>
+            <div className="nav__content">oAuth2 url test</div>
           </div>
         </div>
       </div>

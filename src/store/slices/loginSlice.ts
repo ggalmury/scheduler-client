@@ -27,6 +27,31 @@ const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
+    login: (state, action) => {
+      console.log(action.payload);
+      const account: Account = {
+        uid: action.payload.uid,
+        uuid: action.payload.uuid,
+        userName: action.payload.userName,
+        email: action.payload.email,
+        createdDt: action.payload.createdDt,
+      };
+
+      const auth: Auth = {
+        accessToken: action.payload.accessToken,
+        refreshToken: action.payload.refreshToken,
+      };
+
+      const status: AccountStatus = {
+        loading: false,
+        error: false,
+        isLoggedin: true,
+      };
+
+      state.account = account;
+      state.auth = auth;
+      state.status = status;
+    },
     logout: (state, action) => {
       state.account = initialState.account;
       state.auth = initialState.auth;
@@ -74,5 +99,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const { logout } = loginSlice.actions;
+export const { login, logout } = loginSlice.actions;
 export default loginSlice.reducer;
