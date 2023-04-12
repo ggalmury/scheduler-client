@@ -1,15 +1,15 @@
-import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from "axios";
 import { store } from "..";
 import { AxiosErrorMessage, CustomErrorMessage } from "../common/types/types/errorMsg";
 import { fetchToken } from "../store/apis/authRequest";
 import { RootState } from "../store/rootReducer";
 import { setServerEnv } from "./envConfig";
 
-export const customAxiosRequest = axios.create({ baseURL: `${setServerEnv()}` });
+export const customAxiosRequest: AxiosInstance = axios.create({ baseURL: `${setServerEnv()}` });
 
 customAxiosRequest.interceptors.request.use((req: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
-  const state = store.getState() as RootState;
-  const accessToken: string = state.login.auth.accessToken;
+  const state: RootState = store.getState();
+  const accessToken: string = state.account.auth.accessToken;
 
   req.headers.Authorization = `Bearer ${accessToken}`;
   return req;

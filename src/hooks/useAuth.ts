@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/rootReducer";
+import { normalFail } from "../common/utils/alert";
 
 const useAuth = () => {
-  const isLoggedIn = useSelector((state: RootState) => state.login.status.isLoggedin);
+  const isLoggedIn: boolean = useSelector((state: RootState) => state.account.status.isLoggedin);
 
   useEffect(() => {
-    if (window.location.pathname !== "/" && window.location.pathname !== "/signup") {
-      if (!isLoggedIn) {
+    if (!isLoggedIn) {
+      normalFail("Unauthenticate user!").then((res) => {
         window.location.href = "/";
-      }
+      });
     }
   }, [isLoggedIn]);
 };

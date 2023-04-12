@@ -1,38 +1,35 @@
 import React, { Dispatch, ReactElement, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../store/rootReducer";
+import { useDispatch } from "react-redux";
+import axios, { AxiosResponse } from "axios";
 import { LoginRequest } from "../../../common/types/interfaces/auth";
 import { fetchLogin } from "../../../store/apis/authRequest";
-import axios, { AxiosResponse } from "axios";
 import { AnyAction } from "@reduxjs/toolkit";
-import { Account, AccountStatus } from "../../../common/types/interfaces/store";
-import { login } from "../../../store/slices/loginSlice";
+import { User } from "../../../common/types/interfaces/store";
+import { login } from "../../../store/slices/accountSlice";
+import { useInput } from "../../../hooks/useInput";
 
 const Login = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const userAccount: Account = useSelector((state: RootState) => state.login.account);
-  const userStatus: AccountStatus = useSelector((state: RootState) => state.login.status);
-
-  const [email, setEmail] = useState<string>("");
-  const [credential, setCredential] = useState<string>("");
-  const [childWindow, setChildWindow] = useState<Window | null>(null);
+  const [email, setEmail, resetEmail] = useInput<string>("");
+  const [credential, setCredential, resetCredential] = useInput<string>("");
 
   useEffect(() => {
     window.addEventListener("message", messageHandler);
     return () => {
       window.removeEventListener("message", messageHandler);
     };
-  }, [childWindow]);
+  }, []);
 
   const messageHandler = (event: MessageEvent) => {
-    if (event.origin !== "http://localhost:3000") return;
-    if (event.data) {
-      dispatch(login(event.data));
-      childWindow && childWindow.close();
-      setChildWindow(null);
+    const origin: string = event.origin;
+    const data: User = event.data;
+
+    if (origin !== "http://localhost:3000") return;
+    if (data.uuid) {
+      dispatch(login(data));
     }
   };
 
@@ -42,29 +39,13 @@ const Login = (): ReactElement => {
     dispatch(fetchLogin(loginRequest) as any);
   };
 
-  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setEmail(event.target.value);
-  };
-
-  const inputCredential = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setCredential(event.target.value);
-  };
-
-  const resetPassword = (): void => {
-    // TODO: implememt password reset page
-    // alert("reset password!");
-    console.log(userAccount);
-  };
-
-  const goTosignUp = (event: React.MouseEvent<HTMLElement>): void => {
-    event.preventDefault();
+  const goTosignUp = (): void => {
     navigate(`/signup`);
   };
 
-  const googleOAuth2UrlTest = async (): Promise<void> => {
+  const googleoAuth2Login = async (): Promise<void> => {
     const url: AxiosResponse = await axios.get("http://localhost:3500/google/entry");
-    const child: Window | null = window.open(url.data, "Google", "width=400,height=600");
-    setChildWindow(child);
+    window.open(url.data, "Google", "width=500,height=600")!;
   };
 
   return (
@@ -73,8 +54,8 @@ const Login = (): ReactElement => {
         <div className="auth__header">HELLO!</div>
         <div className="auth__content">
           <div className="auth__form">
-            <input className="auth__input auth__input--email" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
-            <input className="auth__input auth__input--credential" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
+            <input className="auth__input auth__input--email" type="email" placeholder="email" value={email} onChange={setEmail}></input>
+            <input className="auth__input auth__input--credential" type="password" placeholder="password" value={credential} onChange={setCredential}></input>
           </div>
           <div className="auth__login-option">
             <div className="auth__save">
@@ -83,9 +64,7 @@ const Login = (): ReactElement => {
                 Remember Me!
               </label>
             </div>
-            <div className="auth__findpw" onClick={resetPassword}>
-              Forgot password?
-            </div>
+            <div className="auth__findpw">Forgot password?</div>
           </div>
           <div className="auth__signin">
             <button className="btn-submit" onClick={attemptLogin}>
@@ -98,7 +77,7 @@ const Login = (): ReactElement => {
           <div className="auth__route" onClick={goTosignUp}>
             Sign Up
           </div>
-          <div className="nav__logout" onClick={googleOAuth2UrlTest}>
+          <div className="nav__logout" onClick={googleoAuth2Login}>
             <div className="nav__content">oAuth2 url test</div>
           </div>
         </div>

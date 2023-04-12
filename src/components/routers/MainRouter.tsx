@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
@@ -9,8 +8,6 @@ import { ReactElement } from "react";
 import GoogleRedirect from "../pages/redirect/googleRedirect";
 
 const MainRouter = (): ReactElement => {
-  // useAuth();
-
   return (
     <BrowserRouter>
       <Routes>

@@ -6,7 +6,7 @@ import { RootState } from "../../../store/rootReducer";
 
 const Home = () => {
   const navigate: NavigateFunction = useNavigate();
-  const userStatus: AccountStatus = useSelector((state: RootState) => state.login.status);
+  const userStatus: AccountStatus = useSelector((state: RootState) => state.account.status);
 
   useEffect(() => {
     if (!userStatus.isLoggedin) {

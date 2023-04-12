@@ -2,15 +2,15 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 import { store } from "../..";
 import { LoginRequest, RegisterRequest, DefaultUser, RegisterResponse, TokenResponse } from "../../common/types/interfaces/auth";
-import { Account, Auth } from "../../common/types/interfaces/store";
+import { User, Auth } from "../../common/types/interfaces/store";
 import { setServerEnv } from "../../config/envConfig";
 import { RootState } from "../rootReducer";
 
-export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<{ account: Account; auth: Auth }> => {
+export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<{ user: User; auth: Auth }> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signin`, { email, credential });
   const data: DefaultUser = response.data;
 
-  const account: Account = {
+  const user: User = {
     uid: data.uid,
     uuid: data.uuid,
     userName: data.userName,
@@ -23,13 +23,12 @@ export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, creden
     refreshToken: data.refreshToken,
   };
 
-  return { account, auth };
+  return { user, auth };
 });
 
 export const fetchRegister = createAsyncThunk("auth/signup", async ({ userName, email, credential }: RegisterRequest): Promise<RegisterResponse> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signup`, { userName, email, credential });
   const data: RegisterResponse = response.data;
-  console.log(data);
 
   return data;
 });
@@ -37,8 +36,8 @@ export const fetchRegister = createAsyncThunk("auth/signup", async ({ userName, 
 export const fetchToken = createAsyncThunk("auth/token", async (_, thunkApi) => {
   const state = store.getState() as RootState;
 
-  const { uuid, email } = state.login.account;
-  const { accessToken, refreshToken } = state.login.auth;
+  const { uuid, email } = state.account.user;
+  const { accessToken, refreshToken } = state.account.auth;
 
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/token`, { uuid, email, accessToken, refreshToken });
   const data: TokenResponse = response.data;

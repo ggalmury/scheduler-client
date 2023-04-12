@@ -1,13 +1,13 @@
 import { persistReducer } from "redux-persist";
 import { combineReducers } from "@reduxjs/toolkit";
-import loginReducer from "./slices/loginSlice";
+import accountReducer from "./slices/accountSlice";
 import registerReducer from "./slices/registerSlice";
 import taskReducer from "./slices/taskSlice";
 import dateReducer from "./slices/dateSlice";
 import persistConfig from "./persistConfig";
 
 const rootReducer = combineReducers({
-  login: loginReducer,
+  account: accountReducer,
   register: registerReducer,
   task: taskReducer,
   date: dateReducer,

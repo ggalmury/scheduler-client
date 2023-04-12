@@ -1,9 +1,10 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import aatrox from "../../common/aatrox_circle.png";
+import { User } from "../../common/types/interfaces/store";
 
 const Header = () => {
-  const userAccount = useSelector((state: RootState) => state.login.account);
+  const userAccount: User = useSelector((state: RootState) => state.account.user);
 
   return (
     <div className="header">

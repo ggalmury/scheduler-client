@@ -11,7 +11,7 @@ import { DailyTaskListRequest, DefaultDailyTask } from "../../../common/types/in
 import { fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskList } from "../../../store/apis/taskRequest";
 import DailyTaskList from "../../../common/modals/DailyTaskList";
-import { NavigateFunction, Route, useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { SelectedDate } from "../../../common/types/interfaces/store";
 
 const TaskContent = (): ReactElement => {

@@ -1,34 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Account, AccountStatus, Auth } from "../../common/types/interfaces/store";
+import { User, AccountStatus, Auth, AuthInitialState } from "../../common/types/interfaces/store";
 import { fetchLogin, fetchToken } from "../apis/authRequest";
-import Swal from "sweetalert2";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
 
-const initialState = {
-  account: {
+const initialState: AuthInitialState = {
+  user: {
     uid: 0,
     uuid: "",
     userName: "user",
     email: "",
     createdDt: new Date(),
-  } as Account,
+  } as User,
   auth: {
     accessToken: "",
     refreshToken: "",
   } as Auth,
   status: {
-    loading: false,
-    error: false,
     isLoggedin: false,
   } as AccountStatus,
 };
 
-const loginSlice = createSlice({
-  name: "login",
+const accountSlice = createSlice({
+  name: "account",
   initialState,
   reducers: {
     login: (state, action) => {
-      const account: Account = {
+      const user: User = {
         uid: action.payload.uid,
         uuid: action.payload.uuid,
         userName: action.payload.userName,
@@ -42,56 +39,51 @@ const loginSlice = createSlice({
       };
 
       const status: AccountStatus = {
-        loading: false,
-        error: false,
         isLoggedin: true,
       };
 
-      state.account = account;
+      state.user = user;
       state.auth = auth;
       state.status = status;
+
+      normalSuccess(`Welcome, ${state.user.userName}!`).then((res) => {
+        window.location.href = "/main/home";
+      });
     },
     logout: (state, action) => {
-      state.account = initialState.account;
-      state.auth = initialState.auth;
-      state.status = initialState.status;
-
-      Swal.fire({ icon: "success", title: "Seeya!", showCancelButton: false, confirmButtonText: "confirm" }).then((res) => {
-        window.location.href = "/";
-        return;
-      });
+      normalSuccess("Seeya!")
+        .then((res) => {
+          window.location.href = "/";
+        })
+        .finally(() => {
+          state.user = initialState.user;
+          state.auth = initialState.auth;
+          state.status = initialState.status;
+        });
     },
   },
   extraReducers(builder) {
-    builder.addCase(fetchLogin.pending, (state, action) => {
-      state.status = { loading: true, error: false, isLoggedin: false };
-    });
     builder.addCase(fetchLogin.fulfilled, (state, action) => {
-      if (!action.payload.auth.refreshToken) {
-        normalFail("Oops!", "Refresh token does not exist");
-        return;
-      }
-      console.log(action.payload);
-      state.status = { loading: false, error: false, isLoggedin: true };
-      state.account = action.payload.account;
+      state.status = { isLoggedin: true };
+      state.user = action.payload.user;
       state.auth = action.payload.auth;
-      normalSuccess(`Welcome, ${state.account.userName}!`).then((res) => {
+
+      normalSuccess(`Welcome, ${state.user.userName}!`).then((res) => {
         window.location.href = "/main/home";
       });
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {
-      state.status = { loading: false, error: true, isLoggedin: false };
       normalFail("Oops!", "Invalid user");
     });
     builder.addCase(fetchToken.fulfilled, (state, action) => {
-      state.account.email = action.payload.email;
       state.auth.accessToken = action.payload.accessToken;
       state.auth.refreshToken = action.payload.refreshToken;
     });
     builder.addCase(fetchToken.rejected, (state, action) => {
-      state.account = initialState.account;
+      state.user = initialState.user;
       state.auth = initialState.auth;
       state.status = initialState.status;
+
       normalFail("Oops!", "Session expired. Please log in").then((res) => {
         window.location.href = "/";
       });
@@ -99,5 +91,5 @@ const loginSlice = createSlice({
   },
 });
 
-export const { login, logout } = loginSlice.actions;
-export default loginSlice.reducer;
+export const { login, logout } = accountSlice.actions;
+export default accountSlice.reducer;

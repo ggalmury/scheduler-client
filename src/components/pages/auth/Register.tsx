@@ -1,42 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Dispatch, ReactElement } from "react";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { RegisterRequest } from "../../../common/types/interfaces/auth";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchRegister } from "../../../store/apis/authRequest";
-import { RootState } from "../../../store/rootReducer";
+import { AnyAction } from "@reduxjs/toolkit";
+import { useInput } from "../../../hooks/useInput";
 
-const Register = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [userName, setUserName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [credential, setCredential] = useState<string>("");
+const Register = (): ReactElement => {
+  const navigate: NavigateFunction = useNavigate();
+  const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const userStatus = useSelector((state: RootState) => state.login.status);
+  const [userName, setUserName, resetUserName] = useInput<string>("");
+  const [email, setEmail, resetEmail] = useInput<string>("");
+  const [credential, setCredential, resetCredential] = useInput<string>("");
 
-  useEffect(() => {});
-
-  const attemptRegister = async () => {
+  const attemptRegister = async (): Promise<void> => {
     const registerRequest: RegisterRequest = { userName, email, credential };
 
     dispatch(fetchRegister(registerRequest) as any);
   };
 
-  const inputUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(event.target.value);
-  };
-
-  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-
-  const inputCredential = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCredential(event.target.value);
-  };
-
-  const goTosignIn = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
-    navigate(`/`);
+  const goTosignIn = (): void => {
+    navigate("/");
   };
 
   return (
@@ -45,9 +30,9 @@ const Register = () => {
         <div className="auth__header">BE OUR MEMBER!</div>
         <div className="auth__content">
           <div className="auth__form signup-form">
-            <input className="auth__input auth__input--register" placeholder="user name" value={userName} onChange={inputUserName}></input>
-            <input className="auth__input auth__input--register" type="email" placeholder="email" value={email} onChange={inputEmail}></input>
-            <input className="auth__input auth__input--register" type="password" placeholder="password" value={credential} onChange={inputCredential}></input>
+            <input className="auth__input auth__input--register" placeholder="user name" value={userName} onChange={setUserName}></input>
+            <input className="auth__input auth__input--register" type="email" placeholder="email" value={email} onChange={setEmail}></input>
+            <input className="auth__input auth__input--register" type="password" placeholder="password" value={credential} onChange={setCredential}></input>
           </div>
           <div className="auth__signin">
             <button className="btn-submit" onClick={attemptRegister}>

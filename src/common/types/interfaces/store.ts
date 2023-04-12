@@ -1,6 +1,6 @@
 import { StoredTask } from "../types/common";
 
-export interface Account {
+export interface User {
   uid: number;
   uuid: string;
   userName: string;
@@ -14,8 +14,6 @@ export interface Auth {
 }
 
 export interface AccountStatus {
-  loading: boolean;
-  error: boolean;
   isLoggedin: boolean;
 }
 
@@ -28,6 +26,12 @@ export interface SelectedDate {
   year: string;
   month: string;
   date: string;
+}
+
+export interface AuthInitialState {
+  user: User;
+  auth: Auth;
+  status: AccountStatus;
 }
 
 export interface TimeInitialState {

@@ -4,7 +4,7 @@ import { NavigateFunction, useNavigate } from "react-router-dom";
 import { CalendarSvg, GroupSvg, HomeSvg, LogoutSvg, MessageSvg } from "../../common/svg";
 import { RouteName } from "../../common/types/types/common";
 import { setClientEnv } from "../../config/envConfig";
-import { logout } from "../../store/slices/loginSlice";
+import { logout } from "../../store/slices/accountSlice";
 import { AnyAction } from "@reduxjs/toolkit";
 import axios, { AxiosResponse } from "axios";
 
