@@ -1,9 +1,9 @@
 import moment from "moment";
-import Types, { DateFormat } from "../types/types/common";
+import { DateFormatType } from "../types/types/common";
 
 export const getMoment = moment();
 
-export const getDate = (format: Types<typeof DateFormat> | string): string | number => {
+export const getDate = (format: DateFormatType | string): string | number => {
   return getMoment.format(format);
 };
 

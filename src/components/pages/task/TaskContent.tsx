@@ -1,18 +1,24 @@
 import React, { Dispatch, Fragment, ReactElement, useEffect, useMemo, useState } from "react";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Types, { DateFormat, RouteName, StoredTask } from "../../../common/types/types/common";
+import { AnyAction } from "@reduxjs/toolkit";
+import moment from "moment";
+import { DateFormat, RouteName, RouteNameType, RouteParam, StoredTask } from "../../../common/types/types/common";
 import { RootState } from "../../../store/rootReducer";
 import { NextSvg, PrevSvg } from "../../../common/svg";
-import { AnyAction } from "@reduxjs/toolkit";
 import { setDate } from "../../../store/slices/dateSlice";
-import moment from "moment";
-import { DailyTaskState } from "../../../common/types/interfaces/state";
 import { DailyTaskListRequest, DefaultDailyTask } from "../../../common/types/interfaces/task";
 import { fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskList } from "../../../store/apis/taskRequest";
 import DailyTaskList from "../../../common/modals/DailyTaskList";
-import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { SelectedDate } from "../../../common/types/interfaces/store";
+
+interface DailyTaskState {
+  routeName: RouteNameType;
+  isDailyDataFetched: boolean;
+  selectedDate: moment.Moment;
+  dailyTaskListOn: boolean;
+}
 
 const TaskContent = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
@@ -31,7 +37,7 @@ const TaskContent = (): ReactElement => {
     dailyTaskListOn: false,
   };
 
-  const [routeName, setRouteName] = useState<Types<typeof RouteName>>(initialState.routeName);
+  const [routeName, setRouteName] = useState<RouteNameType>(initialState.routeName);
   const [isDailyDataFetched, setIsDailyDataFetched] = useState<boolean>(initialState.isDailyDataFetched);
   const [selectedDate, setSelectedDate] = useState<moment.Moment>(initialState.selectedDate);
   const [dailyTaskListOn, setDailyTaskListOn] = useState<boolean>(initialState.dailyTaskListOn);
@@ -44,7 +50,7 @@ const TaskContent = (): ReactElement => {
     if (type !== RouteName.daily && type !== RouteName.weekly) {
       console.log("access to wrong path");
 
-      navigate("/main/home");
+      navigate(RouteParam.home);
       return;
     }
 

@@ -2,8 +2,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
 import aatrox from "../../common/aatrox_circle.png";
 import { User } from "../../common/types/interfaces/store";
+import { ReactElement } from "react";
 
-const Header = () => {
+const Header = (): ReactElement => {
   const userAccount: User = useSelector((state: RootState) => state.account.user);
 
   return (

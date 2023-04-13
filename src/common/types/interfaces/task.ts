@@ -1,5 +1,4 @@
-import Types from "../types/common";
-import { TaskPrivacy, TaskType } from "../types/task";
+import { TaskGroupType, TaskPrivacy, TaskPrivacyType } from "../types/task";
 import { DefaultTodo } from "./todo";
 
 export interface TaskTimeDetail {
@@ -18,8 +17,8 @@ export interface DailyTaskCreateRequest {
   location: string;
   date: string;
   time: TaskTime;
-  privacy: Types<typeof TaskPrivacy>;
-  type: Types<typeof TaskType>;
+  privacy: TaskPrivacyType;
+  type: TaskGroupType;
 }
 
 export interface DailyTaskListRequest {

@@ -3,7 +3,6 @@ import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import persistStore from "redux-persist/es/persistStore";
 import { PersistGate } from "redux-persist/integration/react";
-import TaskCreateModal from "./common/modals/TaskCreate";
 import MainRouter from "./components/routers/MainRouter";
 import reportWebVitals from "./reportWebVitals";
 import rootReducer from "./store/rootReducer";
@@ -22,7 +21,7 @@ root.render(
     <PersistGate loading={null} persistor={persistor}>
       <MainRouter />
     </PersistGate>
-  </Provider>
+  </Provider>,
 );
 
 // If you want to start measuring performance in your app, pass a function

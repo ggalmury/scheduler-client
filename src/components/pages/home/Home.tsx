@@ -1,18 +1,19 @@
-import { useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { AccountStatus } from "../../../common/types/interfaces/store";
 import { RootState } from "../../../store/rootReducer";
+import { RouteParam } from "../../../common/types/types/common";
 
-const Home = () => {
+const Home = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
   const userStatus: AccountStatus = useSelector((state: RootState) => state.account.status);
 
   useEffect(() => {
     if (!userStatus.isLoggedin) {
-      navigate("/");
+      navigate(RouteParam.index);
     }
-  });
+  }, [userStatus.isLoggedin]);
 
   return (
     <div className="home-content">

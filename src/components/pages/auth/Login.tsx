@@ -1,13 +1,15 @@
-import React, { Dispatch, ReactElement, useEffect, useState } from "react";
+import React, { Dispatch, ReactElement, useEffect } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios, { AxiosResponse } from "axios";
+import { AnyAction } from "@reduxjs/toolkit";
 import { LoginRequest } from "../../../common/types/interfaces/auth";
 import { fetchLogin } from "../../../store/apis/authRequest";
-import { AnyAction } from "@reduxjs/toolkit";
 import { User } from "../../../common/types/interfaces/store";
 import { login } from "../../../store/slices/accountSlice";
 import { useInput } from "../../../hooks/useInput";
+import { RouteParam } from "../../../common/types/types/common";
+import { setClientEnv, setServerEnv } from "../../../config/envConfig";
 
 const Login = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
@@ -27,7 +29,7 @@ const Login = (): ReactElement => {
     const origin: string = event.origin;
     const data: User = event.data;
 
-    if (origin !== "http://localhost:3000") return;
+    if (origin !== setClientEnv()) return;
     if (data.uuid) {
       dispatch(login(data));
     }
@@ -40,12 +42,18 @@ const Login = (): ReactElement => {
   };
 
   const goTosignUp = (): void => {
-    navigate(`/signup`);
+    navigate(RouteParam.signup);
   };
 
   const googleoAuth2Login = async (): Promise<void> => {
-    const url: AxiosResponse = await axios.get("http://localhost:3500/google/entry");
-    window.open(url.data, "Google", "width=500,height=600")!;
+    const url: AxiosResponse = await axios.get(`${setServerEnv()}/google/entry`);
+    const width: number = 500;
+    const height: number = 600;
+    const left: number = (window.screen.width - width) / 2;
+    const top: number = (window.screen.height - height) / 2;
+    const features: string = `width=${width},height=${height},left=${left},top=${top}`;
+
+    window.open(url.data, "Google", features);
   };
 
   return (

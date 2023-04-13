@@ -9,7 +9,12 @@ import { DefaultDailyTask } from "../types/interfaces/task";
 import { StoredTask } from "../types/types/common";
 import { addPad } from "../utils/dateUtil";
 import TaskDetail from "./TaskDetail";
-import { DailyTaskListState } from "../types/interfaces/state";
+
+interface DailyTaskListState {
+  taskCreate: boolean;
+  taskDetail: boolean;
+  selectedTask: number | null;
+}
 
 const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTaskListOn }: DailyTaskListProp): ReactElement => {
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);

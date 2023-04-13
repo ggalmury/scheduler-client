@@ -5,15 +5,27 @@ import { ClockSvg, DescriptionSvg, LocationSvg, XSvg } from "../svg";
 import { SelectedDate } from "../types/interfaces/store";
 import { DefaultDailyTask, TaskTimeDetail } from "../types/interfaces/task";
 import { DailyTaskCreateRequest } from "../types/interfaces/task";
-import Types, { StoredTask } from "../types/types/common";
-import { TaskPrivacy, TaskType } from "../types/types/task";
+import { StoredTask } from "../types/types/common";
+import { TaskGroup, TaskGroupType, TaskPrivacy, TaskPrivacyType } from "../types/types/task";
 import { normalFail } from "../utils/alert";
 import { addPad, fullDateFormat } from "../utils/dateUtil";
 import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
 import { TaskCreateProp } from "../types/interfaces/props";
-import { TaskCreateState } from "../types/interfaces/state";
+
+interface TaskCreateState {
+  title: string;
+  description: string;
+  location: string;
+  startTime: TaskTimeDetail;
+  endTime: TaskTimeDetail;
+  privacy: TaskPrivacyType;
+  type: TaskGroupType;
+  startTimePickerOn: boolean;
+  endTimePickerOn: boolean;
+  typeSelectBtn: string | null;
+}
 
 const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
@@ -31,7 +43,7 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
     startTime: { hour: 0, minute: 0 },
     endTime: { hour: 0, minute: 0 },
     privacy: TaskPrivacy.public,
-    type: TaskType.basic,
+    type: TaskGroup.basic,
     startTimePickerOn: false,
     endTimePickerOn: false,
     typeSelectBtn: null,
@@ -42,8 +54,8 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
   const [location, setLocation] = useState<string>(initialValue.location);
   const [startTime, setStartTime] = useState<TaskTimeDetail>(initialValue.startTime);
   const [endTime, setEndTime] = useState<TaskTimeDetail>(initialValue.endTime);
-  const [privacy, setPrivacy] = useState<Types<typeof TaskPrivacy>>(initialValue.privacy);
-  const [type, setType] = useState<Types<typeof TaskType>>(initialValue.type);
+  const [privacy, setPrivacy] = useState<TaskPrivacyType>(initialValue.privacy);
+  const [type, setType] = useState<TaskGroupType>(initialValue.type);
   const [startTimePickerOn, setStartTimePickerOn] = useState<boolean>(initialValue.startTimePickerOn);
   const [endTimePickerOn, setEndTimePickerOn] = useState<boolean>(initialValue.endTimePickerOn);
   const [typeSelectBtn, setTypeSelectBtn] = useState<string | null>(initialValue.typeSelectBtn);
@@ -84,19 +96,19 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
     setLocation(event.target.value);
   };
 
-  const getType = (type: Types<typeof TaskType>): void => {
-    if (typeSelectBtn === type.type) {
+  const getType = (taskGroup: TaskGroupType): void => {
+    if (typeSelectBtn === taskGroup.type) {
       setTypeSelectBtn(null);
       setType(initialValue.type);
       return;
     }
 
-    setTypeSelectBtn(type.type);
-    setType(type);
+    setTypeSelectBtn(taskGroup.type);
+    setType(taskGroup);
   };
 
   const getPrivacy = (event: React.ChangeEvent<HTMLSelectElement>): void => {
-    setPrivacy(event.target.value as Types<typeof TaskPrivacy>);
+    setPrivacy(event.target.value as TaskPrivacyType);
   };
 
   const submitTask = (): void => {
@@ -174,7 +186,7 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
       <div className="task-create__type">
         <div className="task-create__type-header">Task Type</div>
         <div className="task-create__type-content">
-          {Object.entries(TaskType).map(([key, task]) => (
+          {Object.entries(TaskGroup).map(([key, task]) => (
             <div
               key={key}
               className={`task-create__type-elem ${typeSelectBtn === task.type ? "btn-large" : ""}`}

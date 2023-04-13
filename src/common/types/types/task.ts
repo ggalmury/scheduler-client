@@ -1,29 +1,33 @@
 export const TaskPrivacy = {
-  public: "public" as string,
-  private: "private" as string,
-  relevant: "relevant" as string,
+  public: "public",
+  private: "private",
+  relevant: "relevant",
 } as const;
 
-export const TaskType = {
+export const TaskGroup = {
   basic: {
-    type: "basic" as string,
-    color: "#E6CDA3" as string,
+    type: "basic",
+    color: "#E6CDA3",
   },
   work: {
-    type: "work" as string,
-    color: "#95DBDA" as string,
+    type: "work",
+    color: "#95DBDA",
   },
   meeting: {
-    type: "meeting" as string,
-    color: "#9BAADD" as string,
+    type: "meeting",
+    color: "#9BAADD",
   },
   personal: {
-    type: "personal" as string,
-    color: "#EAB0E3" as string,
+    type: "personal",
+    color: "#EAB0E3",
   },
 } as const;
 
-export const TaskCreatorType = {
-  daily: "daily" as string,
-  weekly: "weekly" as string,
+export const TaskPeriod = {
+  daily: "daily",
+  weekly: "weekly",
 } as const;
+
+export type TaskPrivacyType = (typeof TaskPrivacy)[keyof typeof TaskPrivacy];
+export type TaskGroupType = (typeof TaskGroup)[keyof typeof TaskGroup];
+export type TaskPeriodType = (typeof TaskPeriod)[keyof typeof TaskPeriod];

@@ -1,29 +1,38 @@
 import { DefaultDailyTask } from "../interfaces/task";
 
 export const RouteName = {
-  home: "home" as string,
-  tasks: "tasks" as string,
-  daily: "daily" as string,
-  weekly: "weekly" as string,
-  group: "group" as string,
-  message: "message" as string,
+  home: "home",
+  task: "task",
+  daily: "daily",
+  weekly: "weekly",
+  group: "group",
+  message: "message",
 } as const;
 
+export const RouteParam = {
+  signin: "signin",
+  signup: "signup",
+  index: "/",
+  home: "home",
+  dailyTask: "task/daily",
+  weeklyTask: "task/weekly",
+};
+
 export const DateFormat = {
-  year4: "YYYY" as string,
-  year2: "YY" as string,
+  year4: "YYYY",
+  year2: "YY",
 
-  month4: "MMMM" as string,
-  month3: "MMM" as string,
-  month2: "MM" as string,
-  month1: "M" as string,
+  month4: "MMMM",
+  month3: "MMM",
+  month2: "MM",
+  month1: "M",
 
-  day4: "dddd" as string,
-  day2: "DD" as string,
-  day1: "D" as string,
+  day4: "dddd",
+  day2: "DD",
+  day1: "D",
 } as const;
 
 export type StoredTask = Map<string, DefaultDailyTask[]>;
-
-type Types<T> = T[keyof T];
-export default Types;
+export type RouteNameType = (typeof RouteName)[keyof typeof RouteName];
+export type RouteParamType = (typeof RouteParam)[keyof typeof RouteParam];
+export type DateFormatType = (typeof DateFormat)[keyof typeof DateFormat];

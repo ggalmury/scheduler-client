@@ -1,46 +1,53 @@
 import { Dispatch, ReactElement, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { CalendarSvg, GroupSvg, HomeSvg, LogoutSvg, MessageSvg } from "../../common/svg";
-import { RouteName } from "../../common/types/types/common";
+import { RouteName, RouteNameType, RouteParam } from "../../common/types/types/common";
 import { setClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/accountSlice";
 import { AnyAction } from "@reduxjs/toolkit";
-import axios, { AxiosResponse } from "axios";
+import { RootState } from "../../store/rootReducer";
+
+interface NavState {
+  activeButton: RouteNameType;
+  taskSubCategory: boolean;
+}
 
 const Nav = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
-  const initialValue = {
-    activeButton: RouteName.home as string,
-    taskSubCategory: false as boolean,
-  } as any;
+  const userName: string = useSelector((state: RootState) => state.account.user.userName);
+
+  const initialValue: NavState = {
+    activeButton: RouteName.home,
+    taskSubCategory: false,
+  };
 
   const [activeButton, setActiveButton] = useState<string>(initialValue.activeButton);
   const [taskSubCategory, setTaskSubCategory] = useState<boolean>(initialValue.taskSubCategory);
 
   useState(() => {
-    if (window.location.href === `${setClientEnv()}/main/home`) {
+    if (window.location.href === `${setClientEnv()}/${RouteParam.home}`) {
       setActiveButton(RouteName.home);
-    } else if (window.location.href === `${setClientEnv()}/main/task/daily` || `${setClientEnv()}/main/task/weekly`) {
-      setActiveButton(RouteName.tasks);
+    } else if (window.location.href === `${setClientEnv()}/${RouteParam.dailyTask}` || `${setClientEnv()}/${RouteParam.weeklyTask}`) {
+      setActiveButton(RouteName.task);
     }
   });
 
   const goToHome = (): void => {
     setActiveButton(RouteName.home);
-    navigate("home");
+    navigate(RouteParam.home);
   };
 
   const goToDailyTasks = (): void => {
-    setActiveButton(RouteName.tasks);
-    navigate("task/daily");
+    setActiveButton(RouteName.task);
+    navigate(RouteParam.dailyTask);
   };
 
   const goToWeeklyTasks = (): void => {
-    setActiveButton(RouteName.tasks);
-    navigate("task/weekly");
+    setActiveButton(RouteName.task);
+    navigate(RouteParam.weeklyTask);
   };
 
   const goToGroup = (): void => {
@@ -76,7 +83,7 @@ const Nav = (): ReactElement => {
             setTaskSubCategory(false);
           }}
         >
-          <div className={`nav__content nav__content--${activeButton === RouteName.tasks ? "click" : "hover"}`}>
+          <div className={`nav__content nav__content--${activeButton === RouteName.task ? "click" : "hover"}`}>
             <CalendarSvg></CalendarSvg>
             <span>Tasks</span>
           </div>

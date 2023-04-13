@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { User, AccountStatus, Auth, AuthInitialState } from "../../common/types/interfaces/store";
 import { fetchLogin, fetchToken } from "../apis/authRequest";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
+import { RouteParam } from "../../common/types/types/common";
 
 const initialState: AuthInitialState = {
   user: {
@@ -47,19 +48,17 @@ const accountSlice = createSlice({
       state.status = status;
 
       normalSuccess(`Welcome, ${state.user.userName}!`).then((res) => {
-        window.location.href = "/main/home";
+        window.location.href = `home`;
       });
     },
     logout: (state, action) => {
-      normalSuccess("Seeya!")
-        .then((res) => {
-          window.location.href = "/";
-        })
-        .finally(() => {
-          state.user = initialState.user;
-          state.auth = initialState.auth;
-          state.status = initialState.status;
-        });
+      state.user = initialState.user;
+      state.auth = initialState.auth;
+      state.status = initialState.status;
+
+      normalSuccess("Seeya!").then((res) => {
+        window.location.href = RouteParam.home;
+      });
     },
   },
   extraReducers(builder) {
@@ -69,7 +68,7 @@ const accountSlice = createSlice({
       state.auth = action.payload.auth;
 
       normalSuccess(`Welcome, ${state.user.userName}!`).then((res) => {
-        window.location.href = "/main/home";
+        window.location.href = RouteParam.home;
       });
     });
     builder.addCase(fetchLogin.rejected, (state, action) => {

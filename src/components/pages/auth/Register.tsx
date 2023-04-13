@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { fetchRegister } from "../../../store/apis/authRequest";
 import { AnyAction } from "@reduxjs/toolkit";
 import { useInput } from "../../../hooks/useInput";
+import { RouteParam } from "../../../common/types/types/common";
 
 const Register = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
@@ -21,7 +22,7 @@ const Register = (): ReactElement => {
   };
 
   const goTosignIn = (): void => {
-    navigate("/");
+    navigate(RouteParam.index);
   };
 
   return (

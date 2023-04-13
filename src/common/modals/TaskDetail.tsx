@@ -7,7 +7,11 @@ import { TaskDetailProp } from "../types/interfaces/props";
 import { DailyTaskDeleteOrDoneRequest } from "../types/interfaces/task";
 import { TodoCreateRequest } from "../types/interfaces/todo";
 import { addPad } from "../utils/dateUtil";
-import {TaskDetailState} from "../types/interfaces/state";
+
+interface TaskDetailState {
+  createTodo: boolean;
+  todoDescription: string;
+}
 
 const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Element => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
@@ -81,7 +85,8 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
               <div className="task-detail__svg">
                 <ClockSvg />
               </div>
-              {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp; - &nbsp;{addPad(selectedTask.time.endAt.hour)} :{addPad(selectedTask.time.endAt.minute)}
+              {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp; - &nbsp;{addPad(selectedTask.time.endAt.hour)} :
+              {addPad(selectedTask.time.endAt.minute)}
             </div>
             <div className="task-detail__content">
               <div className="task-detail__svg">
