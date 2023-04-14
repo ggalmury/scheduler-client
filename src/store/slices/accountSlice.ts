@@ -84,7 +84,7 @@ const accountSlice = createSlice({
       state.status = initialState.status;
 
       normalFail("Oops!", "Session expired. Please log in").then((res) => {
-        window.location.href = "/";
+        window.location.href = "/signin";
       });
     });
   },

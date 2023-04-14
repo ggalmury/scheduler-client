@@ -1,15 +1,18 @@
-import React, { Dispatch, ReactElement, useEffect } from "react";
+import React, { Dispatch, ReactElement, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios, { AxiosResponse } from "axios";
 import { AnyAction } from "@reduxjs/toolkit";
-import { LoginRequest } from "../../../common/types/interfaces/auth";
-import { fetchLogin } from "../../../store/apis/authRequest";
+import { LoginRequest, RegisterRequest } from "../../../common/types/interfaces/auth";
+import { fetchLogin, fetchRegister } from "../../../store/apis/authRequest";
 import { User } from "../../../common/types/interfaces/store";
 import { login } from "../../../store/slices/accountSlice";
 import { useInput } from "../../../hooks/useInput";
 import { RouteParam } from "../../../common/types/types/common";
 import { setClientEnv, setServerEnv } from "../../../config/envConfig";
+import InputAuth from "../../molecules/input/InputAuth";
+import BtnSubmitAuth from "../../molecules/button/BtnSubmitAuth";
+import AuthFormChanger from "../../../common/modals/AuthFormChanger";
 
 const Login = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
@@ -17,6 +20,11 @@ const Login = (): ReactElement => {
 
   const [email, setEmail, resetEmail] = useInput<string>("");
   const [credential, setCredential, resetCredential] = useInput<string>("");
+  const [userName, setUserName, resetUserName] = useInput<string>("");
+  const [registerEmail, setRegisterEmail, resetRegisterEmail] = useInput<string>("");
+  const [registerCredential, setRegisterCredential, resetRegisterCredential] = useInput<string>("");
+
+  const [isLoginWindow, setIsLoginWindow] = useState<boolean>(false);
 
   useEffect(() => {
     window.addEventListener("message", messageHandler);
@@ -41,8 +49,14 @@ const Login = (): ReactElement => {
     dispatch(fetchLogin(loginRequest) as any);
   };
 
-  const goTosignUp = (): void => {
-    navigate(RouteParam.signup);
+  const attemptRegister = async (): Promise<void> => {
+    const registerRequest: RegisterRequest = { userName, email: registerEmail, credential: registerCredential };
+
+    dispatch(fetchRegister(registerRequest) as any);
+  };
+
+  const changeWindow = (): void => {
+    setIsLoginWindow(!isLoginWindow);
   };
 
   const googleoAuth2Login = async (): Promise<void> => {
@@ -58,37 +72,52 @@ const Login = (): ReactElement => {
 
   return (
     <div className="auth">
-      <div className="auth__box">
-        <div className="auth__header">HELLO!</div>
-        <div className="auth__content">
-          <div className="auth__form">
-            <input className="auth__input auth__input--email" type="email" placeholder="email" value={email} onChange={setEmail}></input>
-            <input className="auth__input auth__input--credential" type="password" placeholder="password" value={credential} onChange={setCredential}></input>
-          </div>
-          <div className="auth__login-option">
-            <div className="auth__save">
-              <input className="user-save-check" type="checkbox"></input>
-              <label className="auth__save-label" htmlFor="user-save-check">
-                Remember Me!
-              </label>
+      <div className="auth__content">
+        <div className="auth__box">
+          <div className="auth__header">Schedy</div>
+          <div className="auth__body">
+            <div className="auth__form">
+              <InputAuth type="email" placeholder="email" value={email} onChange={setEmail} />
+              <InputAuth type="password" placeholder="password" value={credential} onChange={setCredential} />
             </div>
-            <div className="auth__findpw">Forgot password?</div>
+            <div className="auth__find-pw">
+              <div className="auth__findpw">Forgot password?</div>
+            </div>
+            <div className="auth__submit">
+              <BtnSubmitAuth text="Login" onClick={attemptLogin} />
+            </div>
           </div>
-          <div className="auth__signin">
-            <button className="btn-submit" onClick={attemptLogin}>
-              LOG IN
-            </button>
+          <div className="auth__footer">
+            <div className="auth__option">
+              <div>Don't have an account?</div>
+              <div className="auth__route" onClick={changeWindow}>
+                Sign Up
+              </div>
+            </div>
           </div>
         </div>
-        <div className="auth__footer">
-          <div>Don't have an account?</div>
-          <div className="auth__route" onClick={goTosignUp}>
-            Sign Up
+        <div className="auth__box">
+          <div className="auth__header">BE OUR MEMBER!</div>
+          <div className="auth__body">
+            <div className="auth__form ">
+              <InputAuth placeholder="name" value={userName} onChange={setUserName} />
+              <InputAuth type="email" placeholder="email" value={registerEmail} onChange={setRegisterEmail} />
+              <InputAuth type="password" placeholder="password" value={registerCredential} onChange={setRegisterCredential} />
+            </div>
+            <div className="auth__submit">
+              <BtnSubmitAuth text="Join" onClick={attemptRegister} />
+            </div>
           </div>
-          <div className="nav__logout" onClick={googleoAuth2Login}>
-            <div className="nav__content">oAuth2 url test</div>
+          <div className="auth__footer">
+            <div className="auth__option">
+              <div>Already have an account?</div>
+              <div className="auth__route" onClick={changeWindow}>
+                Sign In
+              </div>
+            </div>
           </div>
         </div>
+        <AuthFormChanger isLoginWindow={isLoginWindow} onClick={googleoAuth2Login} />
       </div>
     </div>
   );

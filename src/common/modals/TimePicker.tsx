@@ -1,5 +1,10 @@
-import { Fragment, useMemo } from "react";
-import { TimePickerProp } from "../types/interfaces/props";
+import { Dispatch, Fragment, useMemo } from "react";
+import { TaskTimeDetail } from "../types/interfaces/task";
+
+interface TimePickerProp {
+  setTime: React.Dispatch<React.SetStateAction<TaskTimeDetail>>;
+  setTimePickerOn: Dispatch<React.SetStateAction<boolean>>;
+}
 
 const TimePicker = ({ setTime, setTimePickerOn }: TimePickerProp): JSX.Element => {
   const hourArr = useMemo((): number[] => {

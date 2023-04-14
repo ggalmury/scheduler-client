@@ -7,7 +7,6 @@
 @import "base/font";
 
 // components
-@import "components/button";
 @import "components/calendarS";
 
 // layout
@@ -15,9 +14,14 @@
 @import "layout/nav";
 
 // modal
+@import "modal/authFormChanger";
 @import "modal/timepicker";
 @import "modal/taskcreate";
 @import "modal/taskdetail";
+
+//molecule
+@import "molecule/input";
+@import "molecule/button";
 
 // pages
 @import "pages/index";

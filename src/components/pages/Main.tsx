@@ -1,7 +1,7 @@
 import { Fragment, ReactElement } from "react";
 import { Outlet } from "react-router-dom";
-import Header from "../molecules/Header";
-import Nav from "../molecules/Nav";
+import Header from "../layouts/Header";
+import Nav from "../layouts/Nav";
 import useAuth from "../../hooks/useAuth";
 
 const Main = (): ReactElement => {

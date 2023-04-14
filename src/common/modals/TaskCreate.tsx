@@ -12,7 +12,6 @@ import { addPad, fullDateFormat } from "../utils/dateUtil";
 import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
-import { TaskCreateProp } from "../types/interfaces/props";
 
 interface TaskCreateState {
   title: string;
@@ -25,6 +24,10 @@ interface TaskCreateState {
   startTimePickerOn: boolean;
   endTimePickerOn: boolean;
   typeSelectBtn: string | null;
+}
+
+interface TaskCreateProp {
+  setTaskCreate: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {

@@ -1,75 +1,54 @@
 .auth {
+  @include centering;
+
   display: flex;
   width: 100vw;
   height: 100vh;
-  align-items: center;
-  justify-content: center;
   background: $main-background;
 
-  &__box {
+  &__content {
     display: flex;
-    flex-direction: column;
-    width: 480px;
+    flex-direction: row;
+    position: relative;
+    width: 950px;
     height: 550px;
-    background-color: rgb(245, 245, 245);
+    background-color: $background-white;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
   }
 
-  &__header {
+  &__box {
     display: flex;
-    height: 130px;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  &__header {
+    @include centering;
+
+    display: flex;
+    height: 100px;
     font-size: 2em;
     color: $main-color;
   }
 
-  &__form {
+  &__body {
     display: flex;
     flex-direction: column;
-    height: 200px;
-    align-items: center;
+    flex: 1;
   }
 
-  &__input {
-    width: 350px;
-    height: 40px;
-    background: none;
-    border: none;
-    border-bottom: 1px solid gray;
-    font-size: 1em;
-    text-indent: 15px;
+  &__form {
+    @include centering;
 
-    &:hover {
-      border-bottom: 2px solid $main-color;
-    }
-
-    &:focus {
-      width: 400px;
-      outline: none;
-      transition: 0.3s;
-      border-bottom: 2px solid $main-color;
-    }
-
-    &--email {
-      margin-top: 40px;
-    }
-
-    &--credential {
-      margin-top: 40px;
-    }
-
-    &--register {
-      margin-top: 30px;
-    }
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
 
-  &__login-option {
+  &__find-pw {
     display: flex;
     height: 40px;
-    margin-left: 35px;
-    margin-right: 40px;
     align-items: center;
   }
 
@@ -86,14 +65,14 @@
 
   &__findpw {
     flex: 1;
-    text-align: right;
     font-size: 0.8em;
     color: $main-color;
+    margin-left: 60px;
 
     cursor: pointer;
   }
 
-  &__signin {
+  &__submit {
     display: flex;
     height: 120px;
     align-items: center;
@@ -102,10 +81,17 @@
 
   &__footer {
     display: flex;
-    flex: 1;
+    flex-direction: column;
+    height: 70px;
     align-items: center;
     justify-content: center;
     font-size: 0.8em;
+  }
+
+  &__option {
+    @include centering;
+
+    display: flex;
   }
 
   &__route {
@@ -118,8 +104,4 @@
       scale: 120%;
     }
   }
-}
-
-.signup-form {
-  height: 240px;
 }

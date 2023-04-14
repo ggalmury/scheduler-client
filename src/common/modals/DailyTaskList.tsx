@@ -1,9 +1,8 @@
-import { ReactElement, useEffect, useMemo, useState } from "react";
+import { Dispatch, ReactElement, useEffect, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import TaskCreate from "./TaskCreate";
 import { RootState } from "../../store/rootReducer";
 import { PlusSvg, XSvg } from "../svg";
-import { DailyTaskListProp } from "../types/interfaces/props";
 import { SelectedDate } from "../types/interfaces/store";
 import { DefaultDailyTask } from "../types/interfaces/task";
 import { StoredTask } from "../types/types/common";
@@ -14,6 +13,13 @@ interface DailyTaskListState {
   taskCreate: boolean;
   taskDetail: boolean;
   selectedTask: number | null;
+}
+
+interface DailyTaskListProp {
+  idx: number;
+  selectedDayDailyTasks: DefaultDailyTask[] | undefined;
+  dailyTaskListOn: boolean;
+  setDailyTaskListOn: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTaskListOn }: DailyTaskListProp): ReactElement => {

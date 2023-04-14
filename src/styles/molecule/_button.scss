@@ -1,15 +1,32 @@
-.btn-submit {
-  width: 200px;
-  height: 40px;
-  background-color: $main-color;
-  border: none;
-  border-radius: 20px;
-  color: white;
-  cursor: pointer;
+.btn {
+  &__submit-auth {
+    @include defaultBtn(20px);
 
-  &:hover {
-    transition: 0.3s;
-    scale: 110%;
+    width: 200px;
+    height: 40px;
+    color: white;
+    background-color: $main-color;
+
+    &:hover {
+      transition: 0.3s;
+      scale: 110%;
+    }
+  }
+
+  &__login-oAuth2 {
+    @include defaultBtn(20px);
+
+    width: 200px;
+    height: 40px;
+    color: white;
+
+    &--google {
+      background-color: rgb(211, 95, 74);
+    }
+
+    &--facebook {
+      background-color: rgb(65, 93, 157);
+    }
   }
 }
 

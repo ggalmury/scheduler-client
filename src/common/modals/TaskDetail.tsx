@@ -1,16 +1,20 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import { Dispatch, Fragment, useEffect, useState } from "react";
+import { Dispatch, Fragment, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchTaskDelete, fetchTodoCreate } from "../../store/apis/taskRequest";
 import { CheckSvg, ClockSvg, DescriptionSvg, LocationSvg, ScopeSvg, XSvg } from "../svg";
-import { TaskDetailProp } from "../types/interfaces/props";
-import { DailyTaskDeleteOrDoneRequest } from "../types/interfaces/task";
+import { DailyTaskDeleteOrDoneRequest, DefaultDailyTask } from "../types/interfaces/task";
 import { TodoCreateRequest } from "../types/interfaces/todo";
 import { addPad } from "../utils/dateUtil";
 
 interface TaskDetailState {
   createTodo: boolean;
   todoDescription: string;
+}
+
+interface TaskDetailProp {
+  selectedTask: DefaultDailyTask | null;
+  setTaskDetail: Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Element => {

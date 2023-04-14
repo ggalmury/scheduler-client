@@ -12,11 +12,11 @@ const Register = (): ReactElement => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const [userName, setUserName, resetUserName] = useInput<string>("");
-  const [email, setEmail, resetEmail] = useInput<string>("");
-  const [credential, setCredential, resetCredential] = useInput<string>("");
+  const [registerEmail, setRegisterEmail, resetRegisterEmail] = useInput<string>("");
+  const [registerCredential, setRegisterCredential, resetRegisterCredential] = useInput<string>("");
 
   const attemptRegister = async (): Promise<void> => {
-    const registerRequest: RegisterRequest = { userName, email, credential };
+    const registerRequest: RegisterRequest = { userName, email: registerEmail, credential: registerCredential };
 
     dispatch(fetchRegister(registerRequest) as any);
   };
@@ -32,8 +32,8 @@ const Register = (): ReactElement => {
         <div className="auth__content">
           <div className="auth__form signup-form">
             <input className="auth__input auth__input--register" placeholder="user name" value={userName} onChange={setUserName}></input>
-            <input className="auth__input auth__input--register" type="email" placeholder="email" value={email} onChange={setEmail}></input>
-            <input className="auth__input auth__input--register" type="password" placeholder="password" value={credential} onChange={setCredential}></input>
+            <input className="auth__input auth__input--register" type="email" placeholder="email" value={registerEmail} onChange={setRegisterEmail}></input>
+            <input className="auth__input auth__input--register" type="password" placeholder="password" value={registerCredential} onChange={setRegisterCredential}></input>
           </div>
           <div className="auth__signin">
             <button className="btn-submit" onClick={attemptRegister}>
