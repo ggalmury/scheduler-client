@@ -10,6 +10,7 @@ const initialState: AuthInitialState = {
     uuid: "",
     userName: "user",
     email: "",
+    image: "",
     createdDt: new Date(),
   } as User,
   auth: {
@@ -31,6 +32,7 @@ const accountSlice = createSlice({
         uuid: action.payload.uuid,
         userName: action.payload.userName,
         email: action.payload.email,
+        image: action.payload.image,
         createdDt: action.payload.createdDt,
       };
 

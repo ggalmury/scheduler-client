@@ -5,23 +5,23 @@
   width: 185px;
 
   &__title {
+    @include centering;
+
     display: flex;
-    align-items: center;
-    justify-content: center;
     height: 80px;
 
     &--name {
-      font-size: 1.2em;
-      line-height: 54px;
+      font-size: 2.4rem;
     }
   }
 
   &__category {
+    @include centering;
+
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     margin-top: 10px;
+    font-size: 1.6rem;
     cursor: pointer;
 
     &:first-child {
@@ -36,10 +36,10 @@
     align-items: center;
     text-align: center;
     width: 140px;
+    font-size: 1.3rem;
     background-color: $select-color-gray;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
-    font-size: 0.8em;
     overflow: hidden;
     cursor: default;
 

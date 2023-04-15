@@ -14,6 +14,7 @@ export interface DefaultUser {
   uuid: string;
   userName: string;
   email: string;
+  image: string;
   createdDt: Date;
   accessToken: string;
   refreshToken: string;
@@ -21,9 +22,11 @@ export interface DefaultUser {
 
 export interface RegisterResponse {
   uid: number;
+  uuid: string;
   userName: string;
   email: string;
   createDt: Date;
+  success: boolean;
 }
 
 export interface TokenResponse {

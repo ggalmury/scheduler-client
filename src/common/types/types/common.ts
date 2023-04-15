@@ -11,7 +11,6 @@ export const RouteName = {
 
 export const RouteParam = {
   signin: "signin",
-  signup: "signup",
   index: "/",
   home: "home",
   dailyTask: "task/daily",

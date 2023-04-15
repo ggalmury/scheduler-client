@@ -1,21 +1,20 @@
 import React, { Dispatch, ReactElement, useEffect, useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import axios, { AxiosResponse } from "axios";
 import { AnyAction } from "@reduxjs/toolkit";
-import { LoginRequest, RegisterRequest } from "../../../common/types/interfaces/auth";
-import { fetchLogin, fetchRegister } from "../../../store/apis/authRequest";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { LoginRequest, RegisterRequest, RegisterResponse } from "../../../common/types/interfaces/auth";
+import { fetchLogin } from "../../../store/apis/authRequest";
 import { User } from "../../../common/types/interfaces/store";
 import { login } from "../../../store/slices/accountSlice";
 import { useInput } from "../../../hooks/useInput";
-import { RouteParam } from "../../../common/types/types/common";
 import { setClientEnv, setServerEnv } from "../../../config/envConfig";
 import InputAuth from "../../molecules/input/InputAuth";
 import BtnSubmitAuth from "../../molecules/button/BtnSubmitAuth";
 import AuthFormChanger from "../../../common/modals/AuthFormChanger";
+import { normalFail, normalSuccess } from "../../../common/utils/alert";
+import { AxiosErrorMessage } from "../../../common/types/types/errorMsg";
 
 const Login = (): ReactElement => {
-  const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const [email, setEmail, resetEmail] = useInput<string>("");
@@ -33,7 +32,7 @@ const Login = (): ReactElement => {
     };
   }, []);
 
-  const messageHandler = (event: MessageEvent) => {
+  const messageHandler = (event: MessageEvent): void => {
     const origin: string = event.origin;
     const data: User = event.data;
 
@@ -43,6 +42,14 @@ const Login = (): ReactElement => {
     }
   };
 
+  const resetInput = (): void => {
+    resetEmail();
+    resetCredential();
+    resetUserName();
+    resetRegisterEmail();
+    resetRegisterCredential();
+  };
+
   const attemptLogin = async (): Promise<void> => {
     const loginRequest: LoginRequest = { email, credential };
 
@@ -50,12 +57,26 @@ const Login = (): ReactElement => {
   };
 
   const attemptRegister = async (): Promise<void> => {
+    const url: string = `${setServerEnv()}/auth/signup`;
     const registerRequest: RegisterRequest = { userName, email: registerEmail, credential: registerCredential };
 
-    dispatch(fetchRegister(registerRequest) as any);
+    try {
+      const registeredUserRaw: AxiosResponse = await axios.post(url, registerRequest);
+      const registeredUser: RegisterResponse = registeredUserRaw.data;
+
+      registeredUser.success ? normalSuccess("Hooray!", "User successfully created") : normalFail("Oops!", "User not created");
+    } catch (err: any) {
+      if (err instanceof AxiosError) {
+        err.message === AxiosErrorMessage.conflict && normalFail("Oops!", "Account already exist");
+        return;
+      }
+
+      normalFail("Oops!", "Something went wrong");
+    }
   };
 
   const changeWindow = (): void => {
+    resetInput();
     setIsLoginWindow(!isLoginWindow);
   };
 
@@ -81,7 +102,7 @@ const Login = (): ReactElement => {
               <InputAuth type="password" placeholder="password" value={credential} onChange={setCredential} />
             </div>
             <div className="auth__find-pw">
-              <div className="auth__findpw">Forgot password?</div>
+              <h4>Forgot password?</h4>
             </div>
             <div className="auth__submit">
               <BtnSubmitAuth text="Login" onClick={attemptLogin} />
@@ -89,7 +110,7 @@ const Login = (): ReactElement => {
           </div>
           <div className="auth__footer">
             <div className="auth__option">
-              <div>Don't have an account?</div>
+              <h4>Don't have an account?</h4>
               <div className="auth__route" onClick={changeWindow}>
                 Sign Up
               </div>
@@ -97,7 +118,7 @@ const Login = (): ReactElement => {
           </div>
         </div>
         <div className="auth__box">
-          <div className="auth__header">BE OUR MEMBER!</div>
+          <div className="auth__header">Join Us!</div>
           <div className="auth__body">
             <div className="auth__form ">
               <InputAuth placeholder="name" value={userName} onChange={setUserName} />
@@ -110,7 +131,7 @@ const Login = (): ReactElement => {
           </div>
           <div className="auth__footer">
             <div className="auth__option">
-              <div>Already have an account?</div>
+              <h4>Already have an account?</h4>
               <div className="auth__route" onClick={changeWindow}>
                 Sign In
               </div>

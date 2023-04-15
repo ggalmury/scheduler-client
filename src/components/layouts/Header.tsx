@@ -1,11 +1,14 @@
+import { ReactElement } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/rootReducer";
-import aatrox from "../../common/aatrox_circle.png";
 import { User } from "../../common/types/interfaces/store";
-import { ReactElement } from "react";
+import { useInput } from "../../hooks/useInput";
+import InputTaskSearch from "../molecules/input/InputTaskSearch";
 
 const Header = (): ReactElement => {
   const userAccount: User = useSelector((state: RootState) => state.account.user);
+
+  const [searchedTask, setSearchedTask, resetSearchedTask] = useInput<string>("");
 
   return (
     <div className="header">
@@ -13,14 +16,13 @@ const Header = (): ReactElement => {
         <div className="header__greeting--hello">Hello, {userAccount.userName}!</div>
         <div className="header__greeting--how">How's everything going?</div>
       </div>
-
       <div className="header__content">
         <div className="header__search">
-          <input placeholder="Search your tasks"></input>
+          <InputTaskSearch placeholder="Search your tasks" value={searchedTask} onChange={setSearchedTask} onClick={resetSearchedTask} />
         </div>
         <div className="header__profile">
           <div className="header__profile--img">
-            <img src={aatrox}></img>
+            <img src={userAccount.image}></img>
           </div>
           <div className="header__user-detail">
             <div className="header__user-detail--username">{userAccount.userName}</div>

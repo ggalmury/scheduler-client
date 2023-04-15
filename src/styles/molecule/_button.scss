@@ -16,6 +16,9 @@
   &__login-oAuth2 {
     @include defaultBtn(20px);
 
+    display: flex;
+    position: relative;
+    align-items: center;
     width: 200px;
     height: 40px;
     color: white;

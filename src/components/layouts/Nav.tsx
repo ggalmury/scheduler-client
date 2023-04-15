@@ -1,12 +1,11 @@
 import { Dispatch, ReactElement, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { CalendarSvg, GroupSvg, HomeSvg, LogoutSvg, MessageSvg } from "../../common/svg";
 import { RouteName, RouteNameType, RouteParam } from "../../common/types/types/common";
 import { setClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/accountSlice";
 import { AnyAction } from "@reduxjs/toolkit";
-import { RootState } from "../../store/rootReducer";
 
 interface NavState {
   activeButton: RouteNameType;
@@ -16,8 +15,6 @@ interface NavState {
 const Nav = (): ReactElement => {
   const navigate: NavigateFunction = useNavigate();
   const dispatch: Dispatch<AnyAction> = useDispatch();
-
-  const userName: string = useSelector((state: RootState) => state.account.user.userName);
 
   const initialValue: NavState = {
     activeButton: RouteName.home,

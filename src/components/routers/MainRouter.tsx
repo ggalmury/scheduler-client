@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../pages/auth/Login";
-import Register from "../pages/auth/Register";
 import Home from "../pages/home/Home";
 import Main from "../pages/Main";
 import TaskContent from "../pages/task/TaskContent";
@@ -13,7 +12,6 @@ const MainRouter = (): ReactElement => {
     <BrowserRouter>
       <Routes>
         <Route path={RouteParam.signin} element={<Login />} />
-        <Route path={RouteParam.signup} element={<Register />} />
         <Route path={RouteParam.index} element={<Main />}>
           <Route path={RouteParam.home} element={<Home />} />
           <Route path="task/:type" element={<TaskContent />} />

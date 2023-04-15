@@ -5,6 +5,7 @@ export interface User {
   uuid: string;
   userName: string;
   email: string;
+  image: string;
   createdDt: Date;
 }
 

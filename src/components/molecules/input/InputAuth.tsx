@@ -8,7 +8,7 @@ interface Props {
 }
 
 const InputAuth = ({ type, placeholder, value, onChange }: Props): ReactElement => {
-  return <input className="input__auth" type={type} placeholder={placeholder} value={value} onChange={onChange}></input>;
+  return <input className="input__auth" type={type} placeholder={placeholder} value={value} onChange={onChange} />;
 };
 
 export default InputAuth;

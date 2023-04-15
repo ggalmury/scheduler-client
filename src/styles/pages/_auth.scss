@@ -12,7 +12,7 @@
     position: relative;
     width: 950px;
     height: 550px;
-    background-color: $background-white;
+    background-color: $white;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
   }
@@ -28,7 +28,9 @@
 
     display: flex;
     height: 100px;
-    font-size: 2em;
+    font-size: 3rem;
+    color: $main-color;
+    font-family: Chewy;
     color: $main-color;
   }
 
@@ -50,26 +52,18 @@
     display: flex;
     height: 40px;
     align-items: center;
+
+    & h4 {
+      font-size: 1.3rem;
+      text-indent: 70px;
+      cursor: pointer;
+    }
   }
 
   &__save {
     display: flex;
     width: 150px;
     align-items: center;
-  }
-
-  &__save-label {
-    font-size: 0.8em;
-    cursor: pointer;
-  }
-
-  &__findpw {
-    flex: 1;
-    font-size: 0.8em;
-    color: $main-color;
-    margin-left: 60px;
-
-    cursor: pointer;
   }
 
   &__submit {
@@ -82,10 +76,10 @@
   &__footer {
     display: flex;
     flex-direction: column;
-    height: 70px;
+    height: 50px;
     align-items: center;
     justify-content: center;
-    font-size: 0.8em;
+    font-size: 1.5rem;
   }
 
   &__option {

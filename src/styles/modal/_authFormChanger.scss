@@ -1,7 +1,8 @@
 .authchanger {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   position: absolute;
+  justify-content: space-between;
   width: 50%;
   height: 100%;
   top: 0;
@@ -23,6 +24,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    height: 120px;
+    height: 130px;
   }
 }
