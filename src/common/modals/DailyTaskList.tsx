@@ -19,10 +19,11 @@ interface DailyTaskListProp {
   idx: number;
   selectedDayDailyTasks: DefaultDailyTask[] | undefined;
   dailyTaskListOn: boolean;
+  weekCount: number;
   setDailyTaskListOn: Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTaskListOn }: DailyTaskListProp): ReactElement => {
+const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount, setDailyTaskListOn }: DailyTaskListProp): ReactElement => {
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 
@@ -71,6 +72,22 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTa
     setSelectedTaskId(taskId);
   };
 
+  const appearAnimation = (): string => {
+    return dailyTaskListOn
+      ? idx < 3
+        ? "task-detail-appear-left"
+        : "task-detail-appear-right"
+      : dailyTaskListOn === null
+      ? ""
+      : idx < 3
+      ? "task-detail-disappear-left"
+      : "task-detail-disappear-right";
+  };
+
+  const stopEventBubbling = (event: React.MouseEvent<HTMLElement>): void => {
+    event.stopPropagation();
+  };
+
   const drawTasks = (index: number): (JSX.Element | undefined)[] | undefined => {
     if (selectedDayDailyTasks) {
       const graph: (JSX.Element | undefined)[] = selectedDayDailyTasks.map((task, idx) => {
@@ -114,7 +131,7 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, setDailyTa
   };
 
   return (
-    <div className="daily-task">
+    <div className={`daily-task ${appearAnimation()}`} style={{ top: `${weekCount * -100}px` }} onClick={stopEventBubbling}>
       <div className="daily-task__header">
         <div className="daily-task__current-date">{date.moment.format("dddd, MM Do, YYYY")}</div>
         <div className="daily-task__options">

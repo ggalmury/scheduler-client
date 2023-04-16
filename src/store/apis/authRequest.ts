@@ -6,7 +6,12 @@ import { User, Auth } from "../../common/types/interfaces/store";
 import { setServerEnv } from "../../config/envConfig";
 import { RootState } from "../rootReducer";
 
-export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<{ user: User; auth: Auth }> => {
+interface fetchLoginParam {
+  user: User;
+  auth: Auth;
+}
+
+export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<fetchLoginParam> => {
   const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signin`, { email, credential });
   const data: DefaultUser = response.data;
 
@@ -27,7 +32,7 @@ export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, creden
   return { user, auth };
 });
 
-export const fetchToken = createAsyncThunk("auth/token", async (_, thunkApi) => {
+export const fetchToken = createAsyncThunk("auth/token", async (_, thunkApi): Promise<TokenResponse> => {
   const state = store.getState() as RootState;
 
   const { uuid, email } = state.account.user;

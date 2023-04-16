@@ -31,6 +31,77 @@
       background-color: rgb(65, 93, 157);
     }
   }
+
+  &__category {
+    @include centering;
+
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 1.3rem;
+
+    &:first-child {
+      margin-top: 30px;
+    }
+
+    &-box {
+      display: flex;
+      width: 170px;
+      line-height: 50px;
+      border-radius: 10px;
+      transition: 0.4s;
+      cursor: pointer;
+
+      &--click {
+        background-color: $select-color-black;
+        color: white;
+      }
+
+      &--hover {
+        &:hover {
+          background-color: $select-color-gray;
+        }
+      }
+
+      & > div {
+        @include centering;
+
+        display: flex;
+        width: 60px;
+      }
+    }
+
+    &-sub {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
+      text-align: center;
+      width: 140px;
+      font-size: 1.3rem;
+      background-color: $select-color-gray;
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+      overflow: hidden;
+
+      &--menu {
+        $height: 30px;
+
+        width: 100px;
+        height: $height;
+        line-height: $height;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+
+        &:hover {
+          background-color: $select-color-black;
+          color: white;
+        }
+      }
+    }
+  }
 }
 
 .btn-create {

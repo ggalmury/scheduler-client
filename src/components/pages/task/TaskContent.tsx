@@ -5,13 +5,14 @@ import { AnyAction } from "@reduxjs/toolkit";
 import moment from "moment";
 import { DateFormat, RouteName, RouteNameType, RouteParam, StoredTask } from "../../../common/types/types/common";
 import { RootState } from "../../../store/rootReducer";
-import { NextSvg, PrevSvg } from "../../../common/svg";
 import { setDate } from "../../../store/slices/dateSlice";
 import { DailyTaskListRequest, DefaultDailyTask } from "../../../common/types/interfaces/task";
 import { fullDateFormat } from "../../../common/utils/dateUtil";
 import { fetchTaskList } from "../../../store/apis/taskRequest";
 import DailyTaskList from "../../../common/modals/DailyTaskList";
 import { SelectedDate } from "../../../common/types/interfaces/store";
+import Svg from "../../shared/Svg";
+import { nextDraw, prevDraw } from "../../../common/utils/svgSources";
 
 interface DailyTaskState {
   routeName: RouteNameType;
@@ -78,10 +79,6 @@ const TaskContent = (): ReactElement => {
     }
   }, [isDailyDataFetched]);
 
-  const stopEventBubbling = (event: React.MouseEvent<HTMLElement>): void => {
-    event.stopPropagation();
-  };
-
   const prevMonth = (): void => {
     dispatch(setDate(date.moment.clone().subtract(1, "month")));
   };
@@ -94,6 +91,17 @@ const TaskContent = (): ReactElement => {
     dispatch(setDate(moment()));
   };
 
+  const taskDetailToggle = (day: moment.Moment): void => {
+    if (dailyTaskListOn) {
+      setDailyTaskListOn(false);
+      return;
+    }
+
+    dispatch(setDate(day));
+    setDailyTaskListOn(!dailyTaskListOn);
+    setSelectedDate(day);
+  };
+
   const taskCalendar = (): ReactElement[] => {
     const today: moment.Moment = date.moment.clone();
     const firstWeek: number = today.clone().startOf("month").week();
@@ -101,25 +109,6 @@ const TaskContent = (): ReactElement => {
 
     let result: ReactElement[] = [];
     let week: number = firstWeek;
-
-    const isToday = (days: moment.Moment): boolean => {
-      return moment().format("YYYYMMDD") === days.format("YYYYMMDD");
-    };
-
-    const isThisMonth = (days: moment.Moment): boolean => {
-      return days.format("MM") === today.format("MM");
-    };
-
-    const taskDetailToggle = (day: moment.Moment): void => {
-      if (dailyTaskListOn) {
-        setDailyTaskListOn(false);
-        return;
-      }
-
-      dispatch(setDate(day));
-      setDailyTaskListOn(!dailyTaskListOn);
-      setSelectedDate(day);
-    };
 
     for (week; week <= lastWeek; week++) {
       result.push(
@@ -145,23 +134,13 @@ const TaskContent = (): ReactElement => {
                       })}
                     </div>
                     {fullDateFormat(selectedDate) === fullDateFormat(day) && (
-                      <div
-                        className={`task-modal task-modal__daily  ${
-                          dailyTaskListOn
-                            ? idx < 3
-                              ? "task-detail-appear-left"
-                              : "task-detail-appear-right"
-                            : dailyTaskListOn === null
-                            ? ""
-                            : idx < 3
-                            ? "task-detail-disappear-left"
-                            : "task-detail-disappear-right"
-                        }`}
-                        style={{ top: `${weekCount * -120}px` }}
-                        onClick={stopEventBubbling}
-                      >
-                        <DailyTaskList idx={idx} selectedDayDailyTasks={selectedDayDailyTasks} dailyTaskListOn={dailyTaskListOn} setDailyTaskListOn={setDailyTaskListOn} />
-                      </div>
+                      <DailyTaskList
+                        idx={idx}
+                        weekCount={weekCount}
+                        selectedDayDailyTasks={selectedDayDailyTasks}
+                        dailyTaskListOn={dailyTaskListOn}
+                        setDailyTaskListOn={setDailyTaskListOn}
+                      />
                     )}
                   </td>
                 </Fragment>
@@ -179,17 +158,17 @@ const TaskContent = (): ReactElement => {
       <div className="task-content">
         <div className="task-content__header">
           <div className="task-content__datebox">
-            <span className="task-content__date" onClick={currentMonth}>
+            <span onClick={currentMonth}>
               {date.moment.format(DateFormat.month4)}, {date.moment.format(DateFormat.year4)}
             </span>
           </div>
           <div className="task-content__pickerbox">
             <div className="task-content__monthpicker">
               <div className="task-content__monthpicker--btn" onClick={prevMonth}>
-                <PrevSvg />
+                <Svg width={24} draw={prevDraw} />
               </div>
               <div className="task-content__monthpicker--btn" onClick={nextMonth}>
-                <NextSvg />
+                <Svg width={24} draw={nextDraw} />
               </div>
             </div>
           </div>

@@ -11,81 +11,9 @@
     height: 80px;
 
     &--name {
-      font-size: 2.4rem;
-    }
-  }
-
-  &__category {
-    @include centering;
-
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-    font-size: 1.6rem;
-    cursor: pointer;
-
-    &:first-child {
-      margin-top: 30px;
-    }
-  }
-
-  &__sub-category {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    text-align: center;
-    width: 140px;
-    font-size: 1.3rem;
-    background-color: $select-color-gray;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
-    overflow: hidden;
-    cursor: default;
-
-    &--menu {
-      $height: 30px;
-
-      width: 100px;
-      height: $height;
-      line-height: $height;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.3s;
-
-      &:hover {
-        background-color: $select-color-black;
-        color: white;
-      }
-    }
-  }
-
-  &__content {
-    width: 170px;
-    line-height: 50px;
-    border-radius: 10px;
-
-    &--click {
-      background-color: $select-color-black;
-      color: white;
-      transition: 0.4s;
-    }
-
-    &--hover {
-      &:hover {
-        background-color: $select-color-gray;
-        transition: 0.4s;
-      }
-    }
-
-    & > span {
-      margin-left: 20px;
-      font-size: 0.8em;
-    }
-
-    & > svg {
-      transform: translate(-5%, 28%);
-      margin-left: 20px;
+      font-size: 2rem;
+      color: $main-color;
+      font-family: Chewy;
     }
   }
 
