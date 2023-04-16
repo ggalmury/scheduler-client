@@ -3,9 +3,9 @@ import { store } from "..";
 import { AxiosErrorMessage, CustomErrorMessage } from "../common/types/types/errorMsg";
 import { fetchToken } from "../store/apis/authRequest";
 import { RootState } from "../store/rootReducer";
-import { setServerEnv } from "./envConfig";
+import { getServerEnv } from "./envConfig";
 
-export const customAxiosRequest: AxiosInstance = axios.create({ baseURL: `${setServerEnv()}` });
+export const customAxiosRequest: AxiosInstance = axios.create({ baseURL: `${getServerEnv()}` });
 
 customAxiosRequest.interceptors.request.use((req: InternalAxiosRequestConfig): InternalAxiosRequestConfig => {
   const state: RootState = store.getState();

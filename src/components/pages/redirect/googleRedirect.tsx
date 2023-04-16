@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useMemo, useState } from "react";
 import { Location, useLocation } from "react-router-dom";
 import axios, { AxiosResponse } from "axios";
-import { setServerEnv } from "../../../config/envConfig";
+import { getServerEnv } from "../../../config/envConfig";
 import { User } from "../../../common/types/interfaces/store";
 
 const GoogleRedirect = (): ReactElement => {
@@ -25,7 +25,7 @@ const GoogleRedirect = (): ReactElement => {
   }, []);
 
   const fetchData = async (): Promise<User> => {
-    const userDataRaw: AxiosResponse = await axios.post(`${setServerEnv()}/google/user`, { code });
+    const userDataRaw: AxiosResponse = await axios.post(`${getServerEnv()}/google/user`, { code });
     const userData: User = userDataRaw.data;
 
     return userData;

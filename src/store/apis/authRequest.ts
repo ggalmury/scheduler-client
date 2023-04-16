@@ -3,7 +3,7 @@ import axios, { AxiosResponse } from "axios";
 import { store } from "../..";
 import { LoginRequest, DefaultUser, TokenResponse } from "../../common/types/interfaces/auth";
 import { User, Auth } from "../../common/types/interfaces/store";
-import { setServerEnv } from "../../config/envConfig";
+import { getServerEnv } from "../../config/envConfig";
 import { RootState } from "../rootReducer";
 
 interface fetchLoginParam {
@@ -12,7 +12,7 @@ interface fetchLoginParam {
 }
 
 export const fetchLogin = createAsyncThunk("auth/signin", async ({ email, credential }: LoginRequest): Promise<fetchLoginParam> => {
-  const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/signin`, { email, credential });
+  const response: AxiosResponse = await axios.post(`${getServerEnv()}/auth/signin`, { email, credential });
   const data: DefaultUser = response.data;
 
   const user: User = {
@@ -38,7 +38,7 @@ export const fetchToken = createAsyncThunk("auth/token", async (_, thunkApi): Pr
   const { uuid, email } = state.account.user;
   const { accessToken, refreshToken } = state.account.auth;
 
-  const response: AxiosResponse = await axios.post(`${setServerEnv()}/auth/token`, { uuid, email, accessToken, refreshToken });
+  const response: AxiosResponse = await axios.post(`${getServerEnv()}/auth/token`, { uuid, email, accessToken, refreshToken });
   const data: TokenResponse = response.data;
 
   return data;

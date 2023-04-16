@@ -7,7 +7,7 @@ import { fetchLogin } from "../../../store/apis/authRequest";
 import { User } from "../../../common/types/interfaces/store";
 import { login } from "../../../store/slices/accountSlice";
 import { useInput } from "../../../hooks/useInput";
-import { setClientEnv, setServerEnv } from "../../../config/envConfig";
+import { getClientEnv, getServerEnv } from "../../../config/envConfig";
 import InputAuth from "../../molecules/input/InputAuth";
 import BtnSubmitAuth from "../../molecules/button/BtnSubmitAuth";
 import AuthFormChanger from "../../../common/modals/AuthFormChanger";
@@ -36,7 +36,7 @@ const Login = (): ReactElement => {
     const origin: string = event.origin;
     const data: User = event.data;
 
-    if (origin !== setClientEnv()) return;
+    if (origin !== getClientEnv()) return;
     if (data.uuid) {
       dispatch(login(data));
     }
@@ -57,7 +57,7 @@ const Login = (): ReactElement => {
   };
 
   const attemptRegister = async (): Promise<void> => {
-    const url: string = `${setServerEnv()}/auth/signup`;
+    const url: string = `${getServerEnv()}/auth/signup`;
     const registerRequest: RegisterRequest = { userName, email: registerEmail, credential: registerCredential };
 
     try {
@@ -81,7 +81,7 @@ const Login = (): ReactElement => {
   };
 
   const googleoAuth2Login = async (): Promise<void> => {
-    const url: AxiosResponse = await axios.get(`${setServerEnv()}/google/entry`);
+    const url: AxiosResponse = await axios.get(`${getServerEnv()}/google/entry`);
     const width: number = 500;
     const height: number = 600;
     const left: number = (window.screen.width - width) / 2;

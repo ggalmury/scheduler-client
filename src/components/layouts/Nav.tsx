@@ -2,7 +2,7 @@ import React, { Dispatch, Fragment, ReactElement, useEffect, useState } from "re
 import { useDispatch } from "react-redux";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { RouteName, RouteNameType, RouteParam } from "../../common/types/types/common";
-import { setClientEnv } from "../../config/envConfig";
+import { getClientEnv } from "../../config/envConfig";
 import { logout } from "../../store/slices/accountSlice";
 import { AnyAction } from "@reduxjs/toolkit";
 import BtnNavCategory from "../molecules/button/BtnNavCategory";
@@ -25,9 +25,9 @@ const Nav = (): ReactElement => {
   const [activeButton, setActiveButton] = useState<RouteNameType>(initialValue.activeButton);
 
   useEffect(() => {
-    if (window.location.href === `${setClientEnv()}/${RouteParam.home}`) {
+    if (window.location.href === `${getClientEnv()}/${RouteParam.home}`) {
       setActiveButton(RouteName.home);
-    } else if (window.location.href === `${setClientEnv()}/${RouteParam.dailyTask}` || `${setClientEnv()}/${RouteParam.weeklyTask}`) {
+    } else if (window.location.href === `${getClientEnv()}/${RouteParam.dailyTask}` || `${getClientEnv()}/${RouteParam.weeklyTask}`) {
       setActiveButton(RouteName.task);
     }
   }, []);
