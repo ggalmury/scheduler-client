@@ -15,6 +15,7 @@
 @import "modal/timepicker";
 @import "modal/taskcreate";
 @import "modal/taskdetail";
+@import "modal/dailyTaskList";
 
 //molecule
 @import "molecule/input";
@@ -26,3 +27,4 @@
 @import "pages/auth";
 @import "pages/home";
 @import "pages/taskcontent";
+@import "pages/taskCalendar";

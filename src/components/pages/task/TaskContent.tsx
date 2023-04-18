@@ -1,24 +1,18 @@
-import React, { Dispatch, Fragment, ReactElement, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, Fragment, ReactElement, useEffect, useState } from "react";
 import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AnyAction } from "@reduxjs/toolkit";
 import moment from "moment";
-import { DateFormat, RouteName, RouteNameType, RouteParam, StoredTask } from "../../../common/types/types/common";
+import { DateFormat, RouteName, RouteNameType, RouteParam } from "../../../common/types/types/common";
 import { RootState } from "../../../store/rootReducer";
 import { setDate } from "../../../store/slices/dateSlice";
-import { DailyTaskListRequest, DefaultDailyTask } from "../../../common/types/interfaces/task";
-import { fullDateFormat } from "../../../common/utils/dateUtil";
-import { fetchTaskList } from "../../../store/apis/taskRequest";
-import DailyTaskList from "../../../common/modals/DailyTaskList";
 import { SelectedDate } from "../../../common/types/interfaces/store";
 import Svg from "../../shared/Svg";
 import { nextDraw, prevDraw } from "../../../common/utils/svgSources";
+import TaskCalendar from "./TaskCalendar";
 
 interface DailyTaskState {
   routeName: RouteNameType;
-  isDailyDataFetched: boolean;
-  selectedDate: moment.Moment;
-  dailyTaskListOn: boolean;
 }
 
 const TaskContent = (): ReactElement => {
@@ -28,24 +22,13 @@ const TaskContent = (): ReactElement => {
 
   const { type } = useParams();
 
-  const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 
   const initialState: DailyTaskState = {
     routeName: RouteName.daily,
-    isDailyDataFetched: false,
-    selectedDate: moment(),
-    dailyTaskListOn: false,
   };
 
   const [routeName, setRouteName] = useState<RouteNameType>(initialState.routeName);
-  const [isDailyDataFetched, setIsDailyDataFetched] = useState<boolean>(initialState.isDailyDataFetched);
-  const [selectedDate, setSelectedDate] = useState<moment.Moment>(initialState.selectedDate);
-  const [dailyTaskListOn, setDailyTaskListOn] = useState<boolean>(initialState.dailyTaskListOn);
-
-  const selectedDayDailyTasks = useMemo((): DefaultDailyTask[] | undefined => {
-    return userTask.get(fullDateFormat(date.moment));
-  }, [date.moment, userTask]);
 
   useEffect(() => {
     if (type !== RouteName.daily && type !== RouteName.weekly) {
@@ -58,27 +41,6 @@ const TaskContent = (): ReactElement => {
     setRouteName(type);
   }, [type]);
 
-  useEffect(() => {
-    console.log("trigger fetch data per month");
-    setIsDailyDataFetched(false);
-  }, [date.month]);
-
-  useEffect(() => {
-    if (!isDailyDataFetched) {
-      console.log("fetch data");
-      const startWeek: number = date.moment.clone().startOf("month").week();
-      const endWeek: number = date.moment.clone().endOf("month").week();
-
-      const startOfWeek: Date = date.moment.clone().week(startWeek).startOf("week").toDate();
-      const endOfWeek: Date = date.moment.clone().week(endWeek).endOf("week").toDate();
-
-      const param: DailyTaskListRequest = { startOfWeek, endOfWeek };
-
-      dispatch(fetchTaskList(param) as any);
-      setIsDailyDataFetched(true);
-    }
-  }, [isDailyDataFetched]);
-
   const prevMonth = (): void => {
     dispatch(setDate(date.moment.clone().subtract(1, "month")));
   };
@@ -89,68 +51,6 @@ const TaskContent = (): ReactElement => {
 
   const currentMonth = (): void => {
     dispatch(setDate(moment()));
-  };
-
-  const taskDetailToggle = (day: moment.Moment): void => {
-    if (dailyTaskListOn) {
-      setDailyTaskListOn(false);
-      return;
-    }
-
-    dispatch(setDate(day));
-    setDailyTaskListOn(!dailyTaskListOn);
-    setSelectedDate(day);
-  };
-
-  const taskCalendar = (): ReactElement[] => {
-    const today: moment.Moment = date.moment.clone();
-    const firstWeek: number = today.clone().startOf("month").week();
-    const lastWeek: number = today.clone().endOf("month").week() === 1 ? 53 : today.clone().endOf("month").week();
-
-    let result: ReactElement[] = [];
-    let week: number = firstWeek;
-
-    for (week; week <= lastWeek; week++) {
-      result.push(
-        <tr key={week}>
-          {Array(7)
-            .fill(0)
-            .map((value, idx) => {
-              const day: moment.Moment = today.clone().week(week).startOf("week").add(idx, "day");
-              const formattedDay: string = day.format("D");
-              const weekCount: number = week - firstWeek;
-
-              return (
-                <Fragment key={idx}>
-                  <td
-                    onClick={() => {
-                      taskDetailToggle(day);
-                    }}
-                  >
-                    <span>{formattedDay}</span>
-                    <div className="daily-task__summ invisible-scroll">
-                      {userTask.get(fullDateFormat(day))?.map((task, idx) => {
-                        return <hr key={idx} style={{ backgroundColor: task.color }} />;
-                      })}
-                    </div>
-                    {fullDateFormat(selectedDate) === fullDateFormat(day) && (
-                      <DailyTaskList
-                        idx={idx}
-                        weekCount={weekCount}
-                        selectedDayDailyTasks={selectedDayDailyTasks}
-                        dailyTaskListOn={dailyTaskListOn}
-                        setDailyTaskListOn={setDailyTaskListOn}
-                      />
-                    )}
-                  </td>
-                </Fragment>
-              );
-            })}
-        </tr>,
-      );
-    }
-
-    return result;
   };
 
   return (
@@ -174,20 +74,7 @@ const TaskContent = (): ReactElement => {
           </div>
         </div>
         <div className="task-content__body">
-          <table>
-            <thead>
-              <tr>
-                <th>Sunday</th>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-              </tr>
-            </thead>
-            <tbody>{taskCalendar()}</tbody>
-          </table>
+          <TaskCalendar routeName={routeName} />
         </div>
       </div>
     </Fragment>

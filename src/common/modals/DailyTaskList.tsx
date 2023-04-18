@@ -16,14 +16,14 @@ interface DailyTaskListState {
 }
 
 interface DailyTaskListProp {
-  idx: number;
-  selectedDayDailyTasks: DefaultDailyTask[] | undefined;
-  dailyTaskListOn: boolean;
-  weekCount: number;
-  setDailyTaskListOn: Dispatch<React.SetStateAction<boolean>>;
+  xPos: number;
+  yPos: number;
+  tasks: DefaultDailyTask[] | undefined;
+  toggle: boolean;
+  setToggle: Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount, setDailyTaskListOn }: DailyTaskListProp): ReactElement => {
+const DailyTaskList = ({ xPos, yPos, tasks, toggle, setToggle }: DailyTaskListProp): ReactElement => {
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 
@@ -38,18 +38,18 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount,
   const [selectedTaskId, setSelectedTaskId] = useState<number | null>(initialValue.selectedTask);
 
   const selectedTask = useMemo((): DefaultDailyTask | null => {
-    return selectedDayDailyTasks ? selectedDayDailyTasks.filter((task) => task.taskId === selectedTaskId)[0] ?? null : null;
+    return tasks ? tasks.filter((task) => task.taskId === selectedTaskId)[0] ?? null : null;
   }, [userTask, selectedTaskId]);
 
   useEffect(() => {
-    if (!dailyTaskListOn) {
+    if (!toggle) {
       setTaskCreate(initialValue.taskCreate);
       setTaskDetail(initialValue.taskDetail);
     }
-  }, [dailyTaskListOn]);
+  }, [toggle]);
 
   const closeTaskDetail = (): void => {
-    setDailyTaskListOn(false);
+    setToggle(false);
   };
 
   const taskCreateToggle = (): void => {
@@ -73,15 +73,25 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount,
   };
 
   const appearAnimation = (): string => {
-    return dailyTaskListOn
-      ? idx < 3
+    return toggle
+      ? xPos < 3
         ? "task-detail-appear-left"
         : "task-detail-appear-right"
-      : dailyTaskListOn === null
+      : toggle === null
       ? ""
-      : idx < 3
+      : xPos < 3
       ? "task-detail-disappear-left"
       : "task-detail-disappear-right";
+  };
+
+  const childAppearAnimation = (condition: boolean): string => {
+    return condition
+      ? xPos > 4 || xPos === 2
+        ? "task-creator-appear-right"
+        : "task-creator-appear-left"
+      : xPos > 4 || xPos === 2
+      ? "task-creator-disappear-right"
+      : "task-creator-disappear-left";
   };
 
   const stopEventBubbling = (event: React.MouseEvent<HTMLElement>): void => {
@@ -89,8 +99,8 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount,
   };
 
   const drawTasks = (index: number): (JSX.Element | undefined)[] | undefined => {
-    if (selectedDayDailyTasks) {
-      const graph: (JSX.Element | undefined)[] = selectedDayDailyTasks.map((task, idx) => {
+    if (tasks) {
+      const graph: (JSX.Element | undefined)[] = tasks.map((task, idx) => {
         const startHour: number = task.time.startAt.hour;
         const startMinute: number = task.time.startAt.minute;
         const startTotal = startHour * 60 + startMinute;
@@ -131,7 +141,7 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount,
   };
 
   return (
-    <div className={`daily-task ${appearAnimation()}`} style={{ top: `${weekCount * -100}px` }} onClick={stopEventBubbling}>
+    <div className={`daily-task ${appearAnimation()}`} style={{ top: `${yPos * -100}px` }} onClick={stopEventBubbling}>
       <div className="daily-task__header">
         <div className="daily-task__current-date">{date.moment.format("dddd, MM Do, YYYY")}</div>
         <div className="daily-task__options">
@@ -158,30 +168,10 @@ const DailyTaskList = ({ idx, selectedDayDailyTasks, dailyTaskListOn, weekCount,
             );
           })}
       </div>
-      <div
-        className={`task-child-modal ${
-          taskCreate
-            ? idx > 4 || idx === 2
-              ? "task-creator-appear-right"
-              : "task-creator-appear-left"
-            : idx > 4 || idx === 2
-            ? "task-creator-disappear-right"
-            : "task-creator-disappear-left"
-        }`}
-      >
+      <div className={`task-child-modal ${childAppearAnimation(taskCreate)}`}>
         <TaskCreate setTaskCreate={setTaskCreate} />
       </div>
-      <div
-        className={`task-child-modal ${
-          taskDetail
-            ? idx > 4 || idx === 2
-              ? "task-creator-appear-right"
-              : "task-creator-appear-left"
-            : idx > 4 || idx === 2
-            ? "task-creator-disappear-right"
-            : "task-creator-disappear-left"
-        }`}
-      >
+      <div className={`task-child-modal ${childAppearAnimation(taskDetail)}`}>
         <TaskDetail selectedTask={selectedTask} setTaskDetail={setTaskDetail} />
       </div>
     </div>
