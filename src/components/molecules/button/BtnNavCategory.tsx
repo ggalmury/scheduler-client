@@ -1,16 +1,17 @@
 import React, { ReactElement, useState } from "react";
 import { RouteNameType } from "../../../common/types/types/common";
 import { capitalizeFirstLetter } from "../../../common/utils/common";
+import Svg from "../../shared/Svg";
 
 interface Props {
   title: string;
   activeButton?: RouteNameType;
   navigatePoint?: () => void;
-  svg?: ReactElement;
+  draw: ReactElement;
   subCategory?: () => ReactElement;
 }
 
-const BtnNavCategory = ({ title, activeButton, navigatePoint, svg, subCategory }: Props): ReactElement => {
+const BtnNavCategory = ({ title, activeButton, navigatePoint, draw, subCategory }: Props): ReactElement => {
   const [subCategoryStatus, setSubCategoryStatus] = useState<boolean>(false);
 
   const subCategoryOn = (): void => {
@@ -24,7 +25,9 @@ const BtnNavCategory = ({ title, activeButton, navigatePoint, svg, subCategory }
   return (
     <div className="btn__category" onMouseOver={subCategoryOn} onMouseLeave={subCategoryOff}>
       <div className={`btn__category-box btn__category-box--${activeButton === title.toLowerCase() ? "click" : "hover"}`} onClick={navigatePoint}>
-        <div>{svg}</div>
+        <div>
+          <Svg width={24} draw={draw} />
+        </div>
         <span>{capitalizeFirstLetter(title)}</span>
       </div>
       {subCategory && <div className={`btn__category-sub ${subCategoryStatus ? "category-down" : "category-up"}`}>{subCategory()}</div>}

@@ -4,7 +4,7 @@ import Svg from "../../shared/Svg";
 interface Props {
   text?: string | undefined;
   draw: ReactElement;
-  fill: string;
+  fill?: string;
   onClick?: MouseEventHandler | undefined;
 }
 

@@ -12,6 +12,10 @@ import { addPad, fullDateFormat } from "../utils/dateUtil";
 import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
+import InputTaskForm from "../../components/molecules/input/InputTaskForm";
+import { clockDraw, descriptionDraw, locationDraw } from "../utils/svgSources";
+import { useInput } from "../../hooks/useInput";
+import Svg from "../../components/shared/Svg";
 
 interface TaskCreateState {
   title: string;
@@ -52,9 +56,10 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
     typeSelectBtn: null,
   };
 
-  const [title, setTitle] = useState<string>(initialValue.title);
-  const [description, setDescription] = useState<string>(initialValue.description);
-  const [location, setLocation] = useState<string>(initialValue.location);
+  const [title, setTitle, resetTitle] = useInput<string>(initialValue.title);
+  const [description, setDescription, resetDescription] = useInput<string>(initialValue.description);
+  const [location, setLocation, resetLocation] = useInput<string>(initialValue.location);
+
   const [startTime, setStartTime] = useState<TaskTimeDetail>(initialValue.startTime);
   const [endTime, setEndTime] = useState<TaskTimeDetail>(initialValue.endTime);
   const [privacy, setPrivacy] = useState<TaskPrivacyType>(initialValue.privacy);
@@ -71,9 +76,9 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
   }, [startTimePickerOn, endTimePickerOn]);
 
   const setInitialValue = (): void => {
-    setTitle(initialValue.title);
-    setDescription(initialValue.description);
-    setLocation(initialValue.location);
+    resetTitle();
+    resetDescription();
+    resetLocation();
     setStartTime(initialValue.startTime);
     setEndTime(initialValue.endTime);
     setPrivacy(initialValue.privacy);
@@ -85,18 +90,6 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
 
   const taskCreateOff = (): void => {
     setTaskCreate(false);
-  };
-
-  const getTitle = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setTitle(event.target.value);
-  };
-
-  const getDescription = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setDescription(event.target.value);
-  };
-
-  const getLocation = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
-    setLocation(event.target.value);
   };
 
   const getType = (taskGroup: TaskGroupType): void => {
@@ -184,7 +177,7 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
         <XSvg />
       </div>
       <div className="task-create__input task-create__input--title">
-        <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" value={title} onChange={getTitle}></textarea>
+        <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" value={title} onChange={setTitle}></textarea>
       </div>
       <div className="task-create__type">
         <div className="task-create__type-header">Task Type</div>
@@ -205,7 +198,7 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
       </div>
       <div className="task-create__input task-create__input--extra">
         <div className="task-create__svg">
-          <ClockSvg></ClockSvg>
+          <Svg width={24} draw={clockDraw} />
         </div>
         <div className="task-create__timebox">
           <div className="task-create__time" onClick={changeStartTimePickerStatus}>
@@ -222,18 +215,8 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
           </div>
         </div>
       </div>
-      <div className="task-create__input task-create__input--extra">
-        <div className="task-create__svg">
-          <DescriptionSvg></DescriptionSvg>
-        </div>
-        <textarea className="task-create__textarea task-create__textarea--extra" value={description} placeholder="Description" onChange={getDescription}></textarea>
-      </div>
-      <div className="task-create__input task-create__input--extra">
-        <div className="task-create__svg">
-          <LocationSvg></LocationSvg>
-        </div>
-        <textarea className="task-create__textarea task-create__textarea--extra" value={location} placeholder="Loaction" onChange={getLocation}></textarea>
-      </div>
+      <InputTaskForm placeholder="Description" value={description} onChange={setDescription} draw={descriptionDraw} />
+      <InputTaskForm placeholder="Location" value={location} onChange={setLocation} draw={locationDraw} />
       <div className="task-create__submit">
         <button className="btn-submit-big" onClick={submitTask}>
           submit

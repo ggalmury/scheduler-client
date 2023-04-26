@@ -78,14 +78,14 @@ const Nav = (): ReactElement => {
         <div className="nav__title">
           <div className="nav__title--name">Schedy</div>
         </div>
-        <BtnNavCategory title={RouteName.home} activeButton={activeButton} navigatePoint={goToHome} svg={<Svg width={24} draw={homeDraw} />} />
-        <BtnNavCategory title={RouteName.task} activeButton={activeButton} svg={<Svg width={24} draw={taskDraw} />} subCategory={taskSubCategory} />
-        <BtnNavCategory title={RouteName.group} activeButton={activeButton} navigatePoint={goToGroup} svg={<Svg width={24} draw={groupDraw} />} />
-        <BtnNavCategory title={RouteName.message} activeButton={activeButton} navigatePoint={goToMessage} svg={<Svg width={24} draw={messageDraw} />} />
+        <BtnNavCategory title={RouteName.home} activeButton={activeButton} navigatePoint={goToHome} draw={homeDraw} />
+        <BtnNavCategory title={RouteName.task} activeButton={activeButton} draw={taskDraw} subCategory={taskSubCategory} />
+        <BtnNavCategory title={RouteName.group} activeButton={activeButton} navigatePoint={goToGroup} draw={groupDraw} />
+        <BtnNavCategory title={RouteName.message} activeButton={activeButton} navigatePoint={goToMessage} draw={messageDraw} />
         <hr className="nav__hr" />
       </div>
       <div className="nav__logout" onClick={logOut}>
-        <BtnNavCategory title="Logout" svg={<Svg width={24} draw={logoutDraw} />} />
+        <BtnNavCategory title="Logout" draw={logoutDraw} />
       </div>
     </div>
   );

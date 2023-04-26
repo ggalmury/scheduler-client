@@ -5,7 +5,7 @@ import { searchDraw } from "../../../common/utils/svgSources";
 interface Props {
   type?: HTMLInputTypeAttribute | undefined;
   placeholder?: string | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
+  value?: string | undefined;
   onChange?: ChangeEventHandler | undefined;
   onClick?: MouseEventHandler | undefined;
 }

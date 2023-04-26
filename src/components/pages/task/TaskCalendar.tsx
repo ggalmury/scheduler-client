@@ -93,13 +93,12 @@ const TaskCalendar = ({ routeName }: Props): ReactElement => {
                   const weekCount: number = week - calendarDrawCondition.firstWeek;
 
                   return (
-                    <Fragment>
+                    <Fragment key={dayIdx}>
                       {routeName === RouteName.daily ? (
                         <td
                           onClick={() => {
                             taskDetailToggle(day);
                           }}
-                          key={dayIdx}
                         >
                           <span>{formattedDay}</span>
                           <div className="daily-task__summ invisible-scroll">

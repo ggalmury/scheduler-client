@@ -3,7 +3,7 @@ import { DefaultDailyTask } from "../../common/types/interfaces/task";
 import { TaskInitialState } from "../../common/types/interfaces/store";
 import { fetchTaskCreate, fetchTaskDelete, fetchTaskDone, fetchTaskList, fetchTodoCreate, fetchTodoDelete } from "../apis/taskRequest";
 import { normalFail, normalSuccess } from "../../common/utils/alert";
-import { current, enableMapSet } from "immer";
+import { enableMapSet } from "immer";
 import { CustomErrorMessage } from "../../common/types/types/errorMsg";
 import { StoredTask } from "../../common/types/types/common";
 import { DefaultTodo } from "../../common/types/interfaces/todo";

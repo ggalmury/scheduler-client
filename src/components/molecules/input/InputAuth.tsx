@@ -3,7 +3,7 @@ import React, { ChangeEventHandler, HTMLInputTypeAttribute, ReactElement } from 
 interface Props {
   type?: HTMLInputTypeAttribute | undefined;
   placeholder?: string | undefined;
-  value?: string | ReadonlyArray<string> | number | undefined;
+  value?: string | undefined;
   onChange?: ChangeEventHandler | undefined;
 }
 

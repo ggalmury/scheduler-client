@@ -32,7 +32,7 @@ export interface DailyTaskDeleteOrDoneRequest {
 
 export interface DefaultDailyTask extends DailyTaskCreateRequest {
   taskId: number;
-  uid: number;
+  uuid: string;
   userName: string;
   email: string;
   color: string;
