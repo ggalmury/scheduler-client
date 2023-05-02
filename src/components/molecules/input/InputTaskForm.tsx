@@ -10,7 +10,7 @@ interface Props {
 
 const InputTaskForm = ({ placeholder, value, onChange, draw }: Props): ReactElement => {
   return (
-    <div className="task-create__input task-create__input--extra">
+    <div className="task-create__input">
       <div className="task-create__svg">
         <Svg width={20} draw={draw} />
       </div>

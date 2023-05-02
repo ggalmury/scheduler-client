@@ -1,86 +1,58 @@
 .task-create {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  position: absolute;
   width: 100%;
-  background-color: whitesmoke;
+  height: 88%;
+  bottom: -100%;
+  z-index: 9;
+  background-color: $white1;
   border-radius: 10px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
 
-  &__header {
-    margin: 3% 0 0 80%;
+  &__box {
+    display: flex;
+    align-items: center;
+    margin: 10px 20px;
+    border-radius: 15px;
+    background-color: $gray1;
   }
 
   &__input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 220px;
-    transition: 0.3s;
+    $height: 20px;
 
-    &--title {
-      border-bottom: 1px solid black;
-      margin-top: 20px;
-    }
-
-    &--extra {
-      height: 35px;
-    }
-  }
-
-  &__textarea {
+    width: 400px;
+    height: $height;
+    line-height: $height;
     background: none;
-    width: 100%;
     text-indent: 6px;
-
-    &:focus {
-      scale: 105%;
-      transition: 0.3s;
-    }
-
-    &--title {
-      $height: 20px;
-      height: $height;
-      line-height: $height;
-      font-size: 0.8em;
-    }
-
-    &--extra {
-      $height: 10px;
-      height: $height;
-      line-height: $height;
-      font-size: 0.7em;
-    }
+    font-size: 1rem;
   }
 
-  &__timebox {
-    display: flex;
-    width: 100%;
+  &__header {
+    $height: 80px;
+
+    height: $height;
+    line-height: $height;
+    font-size: 2rem;
+    text-indent: 30px;
   }
 
-  &__svg {
-    width: 25px;
-
-    & > svg {
-      transform: translate(0%, 15%);
-    }
+  &__title {
+    height: 70px;
+    padding: 0 10px;
   }
 
   &__type {
-    display: flex;
+    height: 110px;
     flex-direction: column;
-    height: 120px;
-    width: 100%;
-    left: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
+    flex-wrap: wrap;
 
     &-header {
-      $height: 40px;
+      $height: 50px;
 
       height: $height;
       line-height: $height;
-      font-size: 0.75em;
+      font-size: 2rem;
     }
 
     &-content {
@@ -91,29 +63,56 @@
     }
 
     &-elem {
+      @include centering;
       $height: 20px;
 
+      display: flex;
       min-width: 60px;
       height: $height;
       line-height: $height;
       padding: 4px 10px;
       margin-left: 7px;
       margin-right: 7px;
-      font-size: 0.65em;
-      color: white;
+      font-size: 1.3rem;
+      color: $white1;
       border-radius: 16px;
       cursor: pointer;
     }
   }
 
   &__time {
+    height: 60px;
+  }
+
+  &__description {
+    height: 150px;
+  }
+
+  &__location {
+    height: 50px;
+  }
+
+  &__timebox {
+    display: flex;
+    width: 100%;
+  }
+
+  &__svg {
+    @include centering;
+
+    display: flex;
+    padding: 0 0 0 15px;
+  }
+
+  &__timepicker {
     $height: 25px;
 
     width: 100px;
     height: $height;
     line-height: $height;
+    margin-left: 10px;
     border: none;
-    font-size: 0.7em;
+    font-size: 1.5rem;
     position: relative;
     cursor: pointer;
   }
@@ -141,6 +140,9 @@
   }
 
   &__submit {
-    margin: 20px 0;
+    @include centering;
+
+    display: flex;
+    flex: 1;
   }
 }

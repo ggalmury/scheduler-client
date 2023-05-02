@@ -1,7 +1,6 @@
 import React, { Dispatch, ReactElement, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import TimePicker from "./TimePicker";
-import { ClockSvg, DescriptionSvg, LocationSvg, XSvg } from "../svg";
 import { SelectedDate } from "../types/interfaces/store";
 import { DefaultDailyTask, TaskTimeDetail } from "../types/interfaces/task";
 import { DailyTaskCreateRequest } from "../types/interfaces/task";
@@ -12,10 +11,14 @@ import { addPad, fullDateFormat } from "../utils/dateUtil";
 import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
-import InputTaskForm from "../../components/molecules/input/InputTaskForm";
-import { clockDraw, descriptionDraw, locationDraw } from "../utils/svgSources";
+import { clockDraw, descriptionDraw, locationDraw, xDraw } from "../utils/svgSources";
 import { useInput } from "../../hooks/useInput";
 import Svg from "../../components/shared/Svg";
+
+interface TaskCreateProp {
+  toggle: boolean;
+  setToggle: () => void;
+}
 
 interface TaskCreateState {
   title: string;
@@ -30,11 +33,7 @@ interface TaskCreateState {
   typeSelectBtn: string | null;
 }
 
-interface TaskCreateProp {
-  setTaskCreate: Dispatch<React.SetStateAction<boolean>>;
-}
-
-const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
+const TaskCreate = ({ toggle, setToggle }: TaskCreateProp): ReactElement => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
@@ -86,10 +85,6 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
     setStartTimePickerOn(initialValue.startTimePickerOn);
     setEndTimePickerOn(initialValue.endTimePickerOn);
     setTypeSelectBtn(initialValue.typeSelectBtn);
-  };
-
-  const taskCreateOff = (): void => {
-    setTaskCreate(false);
   };
 
   const getType = (taskGroup: TaskGroupType): void => {
@@ -157,6 +152,7 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
 
     dispatch(fetchTaskCreate(taskRequest) as any);
     setInitialValue();
+    setToggle();
   };
 
   const changeStartTimePickerStatus = (): void => {
@@ -172,14 +168,12 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
   };
 
   return (
-    <div className="task-create">
-      <div className="task-create__header" onClick={taskCreateOff}>
-        <XSvg />
+    <div className={`task-create ${toggle ? "task-creator-appear" : "task-creator-disappear"}`}>
+      <div className="task-create__header">Create new task</div>
+      <div className="task-create__title task-create__box">
+        <input className="task-create__input" placeholder="Title" value={title} onChange={setTitle} />
       </div>
-      <div className="task-create__input task-create__input--title">
-        <textarea className="task-create__textarea task-create__textarea--title" placeholder="Title" value={title} onChange={setTitle}></textarea>
-      </div>
-      <div className="task-create__type">
+      <div className="task-create__type task-create__box">
         <div className="task-create__type-header">Task Type</div>
         <div className="task-create__type-content">
           {Object.entries(TaskGroup).map(([key, task]) => (
@@ -196,18 +190,18 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
           ))}
         </div>
       </div>
-      <div className="task-create__input task-create__input--extra">
+      <div className="task-create__time task-create__box">
         <div className="task-create__svg">
           <Svg width={24} draw={clockDraw} />
         </div>
         <div className="task-create__timebox">
-          <div className="task-create__time" onClick={changeStartTimePickerStatus}>
+          <div className="task-create__timepicker" onClick={changeStartTimePickerStatus}>
             From {`${addPad(startTime.hour)} : ${addPad(startTime.minute)}`}
             <div className="timepicker" ref={startTimePicker} onClick={stopEventBubbling}>
               <TimePicker setTime={setStartTime} setTimePickerOn={setStartTimePickerOn}></TimePicker>
             </div>
           </div>
-          <div className="task-create__time" onClick={changeEndTimePickerStatus}>
+          <div className="task-create__timepicker" onClick={changeEndTimePickerStatus}>
             To {`${addPad(endTime.hour)} : ${addPad(endTime.minute)}`}
             <div className="timepicker" ref={endTimePicker} onClick={stopEventBubbling}>
               <TimePicker setTime={setEndTime} setTimePickerOn={setEndTimePickerOn}></TimePicker>
@@ -215,8 +209,18 @@ const TaskCreate = ({ setTaskCreate }: TaskCreateProp): ReactElement => {
           </div>
         </div>
       </div>
-      <InputTaskForm placeholder="Description" value={description} onChange={setDescription} draw={descriptionDraw} />
-      <InputTaskForm placeholder="Location" value={location} onChange={setLocation} draw={locationDraw} />
+      <div className="task-create__description task-create__box">
+        <div className="task-create__svg">
+          <Svg width={20} draw={descriptionDraw} />
+        </div>
+        <input className="task-create__input" value={description} placeholder="Description" onChange={setDescription} />
+      </div>
+      <div className="task-create__location task-create__box">
+        <div className="task-create__svg">
+          <Svg width={20} draw={locationDraw} />
+        </div>
+        <input className="task-create__input" value={location} placeholder="Location" onChange={setLocation} />
+      </div>
       <div className="task-create__submit">
         <button className="btn-submit-big" onClick={submitTask}>
           submit

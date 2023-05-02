@@ -4,7 +4,7 @@ body {
   margin: 0;
   background: white;
   overflow: hidden;
-  color: $black;
+  color: $black1;
   font-family: Dongle;
 }
 
@@ -32,6 +32,8 @@ textarea {
 }
 
 input {
+  border: none;
+
   &:focus {
     outline: none;
   }

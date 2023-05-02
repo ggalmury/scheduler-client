@@ -12,22 +12,20 @@ const Header = (): ReactElement => {
 
   return (
     <div className="header">
-      <div className="header__greeting">
-        <div className="header__greeting--hello">Hello, {userAccount.userName}!</div>
-        <div className="header__greeting--how">How's everything going?</div>
-      </div>
-      <div className="header__content">
+      <div className="header__left">
+        <div className="header__title">
+          <div className="header__title--name">Schedy</div>
+        </div>
         <div className="header__search">
           <InputTaskSearch placeholder="Search your tasks" value={searchedTask} onChange={setSearchedTask} onClick={resetSearchedTask} />
         </div>
+      </div>
+      <div className="header__right">
         <div className="header__profile">
           <div className="header__profile--img">
-            <img src={userAccount.image}></img>
+            <img src={userAccount.image} />
           </div>
-          <div className="header__user-detail">
-            <div className="header__user-detail--username">{userAccount.userName}</div>
-            <div className="header__user-detail--role">role</div>
-          </div>
+          <div className="header__profile--hello">Hello, {userAccount.userName}!</div>
         </div>
       </div>
     </div>

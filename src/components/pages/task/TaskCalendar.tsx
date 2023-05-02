@@ -1,4 +1,4 @@
-import React, { Dispatch, Fragment, ReactElement, useMemo, useState } from "react";
+import React, { Dispatch, Fragment, ReactElement, useEffect, useMemo, useRef, useState } from "react";
 import { AnyAction } from "@reduxjs/toolkit";
 import moment from "moment";
 import { RouteName, StoredTask } from "../../../common/types/types/common";
@@ -10,13 +10,13 @@ import DailyTaskList from "../../../common/modals/DailyTaskList";
 import { DefaultDailyTask } from "../../../common/types/interfaces/task";
 import { setDate } from "../../../store/slices/dateSlice";
 
-interface DailyTaskState {
-  selectedDate: moment.Moment;
-  dailyTaskListOn: boolean;
-}
-
 interface Props {
   routeName: string;
+}
+
+interface DailyTaskState {
+  selectedDate: moment.Moment | null;
+  dailyTaskListOn: boolean;
 }
 
 interface CalendarDrawCondition {
@@ -32,12 +32,14 @@ const TaskCalendar = ({ routeName }: Props): ReactElement => {
   const userTask: StoredTask = useSelector((state: RootState) => state.task.dailyTasks);
   const date: SelectedDate = useSelector((state: RootState) => state.date.selectedDate);
 
+  const tableRef = useRef<HTMLTableElement>(null);
+
   const initialState: DailyTaskState = {
-    selectedDate: moment(),
+    selectedDate: null,
     dailyTaskListOn: false,
   };
 
-  const [selectedDate, setSelectedDate] = useState<moment.Moment>(initialState.selectedDate);
+  const [selectedDate, setSelectedDate] = useState<moment.Moment | null>(initialState.selectedDate);
   const [dailyTaskListOn, setDailyTaskListOn] = useState<boolean>(initialState.dailyTaskListOn);
 
   const calendarDrawCondition = useMemo((): CalendarDrawCondition => {
@@ -57,72 +59,76 @@ const TaskCalendar = ({ routeName }: Props): ReactElement => {
     return userTask.get(fullDateFormat(date.moment));
   }, [date.moment, userTask]);
 
+  useEffect((): void => {
+    if (tableRef.current) {
+      tableRef.current.style.opacity = dailyTaskListOn ? "30%" : "100%";
+    }
+  }, [dailyTaskListOn]);
+
   const taskDetailToggle = (day: moment.Moment): void => {
     if (dailyTaskListOn) {
       setDailyTaskListOn(false);
-      return;
+    } else {
+      dispatch(setDate(day));
+      setDailyTaskListOn(true);
+      setSelectedDate(day);
     }
-
-    dispatch(setDate(day));
-    setDailyTaskListOn(!dailyTaskListOn);
-    setSelectedDate(day);
   };
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Sunday</th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Saturday</th>
-        </tr>
-      </thead>
-      <tbody>
-        {calendarDrawCondition.weekArr.map((week, weekIdx) => {
-          return (
-            <tr key={weekIdx}>
-              {Array(7)
-                .fill(0)
-                .map((_, dayIdx) => {
-                  const day: moment.Moment = calendarDrawCondition.today.clone().week(week).startOf("week").add(dayIdx, "day");
-                  const formattedDay: string = day.format("D");
-                  const weekCount: number = week - calendarDrawCondition.firstWeek;
+    <Fragment>
+      <table ref={tableRef}>
+        <thead>
+          <tr>
+            <th>Sunday</th>
+            <th>Monday</th>
+            <th>Tuesday</th>
+            <th>Wednesday</th>
+            <th>Thursday</th>
+            <th>Friday</th>
+            <th>Saturday</th>
+          </tr>
+        </thead>
+        <tbody>
+          {calendarDrawCondition.weekArr.map((week, weekIdx) => {
+            return (
+              <tr key={weekIdx}>
+                {Array(7)
+                  .fill(0)
+                  .map((_, dayIdx) => {
+                    const day: moment.Moment = calendarDrawCondition.today.clone().week(week).startOf("week").add(dayIdx, "day");
+                    const formattedDay: string = day.format("D");
 
-                  return (
-                    <Fragment key={dayIdx}>
-                      {routeName === RouteName.daily ? (
-                        <td
-                          onClick={() => {
-                            taskDetailToggle(day);
-                          }}
-                        >
-                          <span>{formattedDay}</span>
-                          <div className="daily-task__summ invisible-scroll">
-                            {userTask.get(fullDateFormat(day))?.map((task, idx) => {
-                              return <hr key={idx} style={{ backgroundColor: task.color }} />;
-                            })}
-                          </div>
-                          {fullDateFormat(selectedDate) === fullDateFormat(day) && (
-                            <DailyTaskList xPos={dayIdx} yPos={weekCount} tasks={selectedDayDailyTasks} toggle={dailyTaskListOn} setToggle={setDailyTaskListOn} />
-                          )}
-                        </td>
-                      ) : (
-                        <td key={dayIdx}>
-                          <span>{formattedDay}</span>
-                        </td>
-                      )}
-                    </Fragment>
-                  );
-                })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                    return (
+                      <Fragment key={dayIdx}>
+                        {routeName === RouteName.daily ? (
+                          <td
+                            onClick={() => {
+                              taskDetailToggle(day);
+                            }}
+                          >
+                            <span>{formattedDay}</span>
+                            <div className="daily-task__summ invisible-scroll">
+                              {userTask.get(fullDateFormat(day))?.map((task, idx) => {
+                                return <hr key={idx} style={{ backgroundColor: task.color }} />;
+                              })}
+                            </div>
+                          </td>
+                        ) : (
+                          <td key={dayIdx}>
+                            <span>{formattedDay}</span>
+                          </td>
+                        )}
+                      </Fragment>
+                    );
+                  })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <DailyTaskList tasks={selectedDayDailyTasks} toggle={dailyTaskListOn} setToggle={setDailyTaskListOn} />
+    </Fragment>
   );
 };
 

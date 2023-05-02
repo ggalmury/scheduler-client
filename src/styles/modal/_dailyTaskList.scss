@@ -2,46 +2,65 @@
   display: flex;
   flex-direction: column;
   position: absolute;
-  width: 430px;
-  height: 550px;
+  top: -50px;
+  right: 0;
+  width: 450px;
+  height: 105%;
   z-index: 99;
-  border-radius: 10px;
-  background-color: whitesmoke;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+  background-color: $white1;
+  font-size: 1.7rem;
+  transition: 0.5s;
 
   &__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 50px;
+    height: 100px;
+    background-color: inherit;
+    border-radius: 20px;
+  }
+
+  &__desc {
+    display: flex;
+    flex-direction: column;
+    text-indent: 30px;
+  }
+
+  &__title {
+    $height: 50px;
+
+    height: $height;
+    line-height: $height;
+    font-size: 2.7rem;
   }
 
   &__current-date {
-    text-indent: 20px;
-    font-size: 0.8em;
+    $height: 25px;
+
+    font-size: 1.7rem;
+    height: $height;
+    line-height: $height;
+    color: $purple1;
   }
 
   &__options {
     display: flex;
 
     & div {
+      @include centering;
+
+      display: flex;
       padding: 5px;
     }
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     overflow: scroll;
-    margin: 20px;
-  }
-
-  &__timestamp {
-    $height: 90px;
-
-    display: flex;
-    height: $height;
-    line-height: $height;
-    border-bottom: $inner-border;
+    margin: 10px;
   }
 
   &__time {
@@ -52,7 +71,6 @@
   &__list {
     position: relative;
     flex: 1;
-    border-left: $inner-border;
   }
 
   &__summ {
@@ -72,43 +90,42 @@
 
 .drawable-task {
   display: flex;
-  flex-direction: column;
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-radius: 8px;
-  margin: 3px 10px;
-  color: white;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 80px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  background-color: $gray1;
+  margin: 10px;
+  padding: 0 12px;
   z-index: 1;
   cursor: pointer;
 
-  &__duration {
-    $height: 20px;
-
-    max-height: $height;
-    line-height: $height;
-    font-size: 0.6em;
-    text-align: start;
-    text-indent: 10px;
-  }
-
   &__title {
-    $height: 50px;
-
-    max-height: $height;
-    line-height: $height;
-    font-size: 0.8em;
-    text-align: start;
-    text-indent: 10px;
+    font-size: 1.4rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+
+  &__duration {
+    font-size: 1.2rem;
+    text-align: start;
+  }
+
+  &__no-task {
+    @include centering;
+
+    display: flex;
+    height: 100%;
+    font-size: 2rem;
   }
 }
 
 .task-child-modal {
   position: absolute;
-  width: 280px;
   top: 0;
+  left: 0;
+  bottom: 50%;
   margin: 0 5px;
 }

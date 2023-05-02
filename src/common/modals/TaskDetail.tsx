@@ -1,5 +1,5 @@
 import { AnyAction } from "@reduxjs/toolkit";
-import { Dispatch, Fragment, useState } from "react";
+import { Dispatch, Fragment, ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
 import { fetchTaskDelete, fetchTodoCreate } from "../../store/apis/taskRequest";
 import { CheckSvg, ClockSvg, DescriptionSvg, LocationSvg, ScopeSvg, XSvg } from "../svg";
@@ -17,7 +17,7 @@ interface TaskDetailProp {
   setTaskDetail: Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Element => {
+const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): ReactElement => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const initialValue: TaskDetailState = {
@@ -36,7 +36,7 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
     setCreateTodo(!createTodo);
   };
 
-  const todoBox = (): JSX.Element[] | undefined => {
+  const todoBox = (): ReactElement[] | undefined => {
     return selectedTask?.createdTodo.map((task, idx) => {
       return (
         <div key={idx} className="todolist__list">
@@ -64,7 +64,7 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
     setTodoDescription("");
   };
 
-  const deleteTask = () => {
+  const deleteTask = (): void => {
     if (selectedTask) {
       const taskDeleteRequest: DailyTaskDeleteOrDoneRequest = { taskId: selectedTask.taskId };
 
@@ -76,7 +76,7 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
 
   return (
     <Fragment>
-      {selectedTask ? (
+      {selectedTask && (
         <div className="task-detail" style={{ backgroundColor: `${selectedTask.color}` }}>
           <div className="task-detail__exp">
             <div className="task-detail__header">
@@ -89,7 +89,7 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
               <div className="task-detail__svg">
                 <ClockSvg />
               </div>
-              {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp; - &nbsp;{addPad(selectedTask.time.endAt.hour)} :
+              {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp; - &nbsp;{addPad(selectedTask.time.endAt.hour)} :&nbsp;
               {addPad(selectedTask.time.endAt.minute)}
             </div>
             <div className="task-detail__content">
@@ -138,7 +138,7 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): JSX.Elemen
             </button>
           </div>
         </div>
-      ) : null}
+      )}
     </Fragment>
   );
 };

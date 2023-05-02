@@ -1,64 +1,55 @@
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  min-height: 80px;
-  border-bottom: $inner-border;
-  padding-left: 3%;
+  height: 60px;
+  justify-content: space-between;
+  background-color: $white1;
 
-  &__content {
+  &__left {
     display: flex;
   }
 
-  &__greeting {
+  &__right {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 210px;
-
-    &--hello {
-      font-size: 2rem;
-    }
-
-    &--how {
-      font-size: 1.3rem;
-    }
   }
 
-  &__search {
-    margin: auto 25px;
+  &__title {
+    @include centering;
+
+    display: flex;
+    width: 200px;
+
+    &--name {
+      font-size: 1.7rem;
+      color: $purple1;
+      font-family: Chewy;
+    }
   }
 
   &__profile {
+    @include centering;
+
     display: flex;
-    width: 180px;
+    width: 200px;
+
+    &--hello {
+      font-size: 1.5rem;
+    }
 
     &--img {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 60px;
+      width: 45px;
 
       img {
-        width: 40px;
+        width: 27px;
         border-radius: 50%;
       }
     }
   }
 
-  &__user-detail {
-    display: flex;
-    flex-direction: column;
-    margin-left: 7px;
-
-    &--username {
-      font-size: 1.5rem;
-      line-height: 30px;
-    }
-
-    &--role {
-      font-size: 1.3rem;
-      line-height: 20px;
-    }
+  &__search {
+    margin: auto 25px;
   }
 }

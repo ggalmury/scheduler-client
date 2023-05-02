@@ -37,30 +37,29 @@
 
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    font-size: 1.3rem;
+    margin: 5px 0;
+    font-size: 1.2rem;
 
     &:first-child {
-      margin-top: 30px;
+      margin-top: 10px;
     }
 
     &-box {
       display: flex;
       width: 170px;
-      line-height: 50px;
-      border-radius: 10px;
+      line-height: 40px;
       transition: 0.4s;
+      box-sizing: border-box;
       cursor: pointer;
 
       &--click {
-        background-color: $select-color-black;
-        color: white;
+        border-left: 3px solid $purple1;
+        color: $purple1;
       }
 
       &--hover {
         &:hover {
-          background-color: $select-color-gray;
+          border-left: 3px solid $gray1;
         }
       }
 
@@ -80,7 +79,7 @@
       text-align: center;
       width: 140px;
       font-size: 1.3rem;
-      background-color: $select-color-gray;
+      background-color: $gray1;
       border-bottom-left-radius: 12px;
       border-bottom-right-radius: 12px;
       overflow: hidden;
@@ -96,7 +95,7 @@
         transition: 0.3s;
 
         &:hover {
-          background-color: $select-color-black;
+          background-color: $black1;
           color: white;
         }
       }
@@ -108,12 +107,12 @@
   border: $inner-border;
   width: 120px;
   height: 30px;
-  background-color: rgba(209, 209, 209, 0.659);
+  background-color: $gray1;
   border-radius: 10px;
   cursor: pointer;
 
   &:hover {
-    background-color: rgba(132, 132, 132, 0.66);
+    background-color: $gray1;
     transition: 0.2s;
   }
 }
@@ -121,7 +120,7 @@
 .btn-submit-small {
   width: 70px;
   height: 25px;
-  background-color: whitesmoke;
+  background-color: $white1;
   color: black;
   border: none;
   border-radius: 8px;
@@ -138,11 +137,11 @@
 .btn-submit-big {
   width: 160px;
   height: 45px;
-  background-color: $select-color-black;
+  background-color: $purple1;
   color: white;
   border: none;
   border-radius: 12px;
-  font-size: 0.9em;
+  font-size: 1.2rem;
   cursor: pointer;
 
   &:hover {

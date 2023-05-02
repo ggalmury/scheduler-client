@@ -49,10 +49,10 @@ const Main = (): ReactElement => {
 
   return (
     <Fragment>
-      <Nav></Nav>
       <div id="content">
         <Header></Header>
         <div id="article">
+          <Nav></Nav>
           <Outlet />
         </div>
       </div>

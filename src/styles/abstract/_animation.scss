@@ -1,41 +1,17 @@
-.task-detail-appear-left {
-  animation: task-detail-appear-left 0.2s ease forwards;
+.task-detail-appear {
+  animation: task-detail-appear 0.3s ease forwards;
 }
 
-.task-detail-appear-right {
-  animation: task-detail-appear-right 0.2s ease forwards;
+.task-detail-disappear {
+  animation: task-detail-disappear 0.3s ease forwards;
 }
 
-.task-detail-disappear-right {
-  animation: task-detail-disappear-right 0.2s ease forwards;
+.task-creator-appear {
+  animation: task-creator-appear 0.3s ease forwards;
 }
 
-.task-detail-disappear-left {
-  animation: task-detail-disappear-left 0.2s ease forwards;
-}
-
-.task-creator-appear-left {
-  animation: task-creator-appear-left 0.2s ease forwards;
-}
-
-.task-creator-appear-right {
-  animation: task-creator-appear-right 0.2s ease forwards;
-}
-
-.task-creator-disappear-right {
-  animation: task-creator-disappear-right 0.2s ease forwards;
-}
-
-.task-creator-disappear-left {
-  animation: task-creator-disappear-left 0.2s ease forwards;
-}
-
-.slide-up {
-  animation: slide-up 0.5s ease forwards;
-}
-
-.slide-down {
-  animation: slide-down 0.5s ease forwards;
+.task-creator-disappear {
+  animation: task-creator-disappear 0.3s ease forwards;
 }
 
 .btn-large {
@@ -54,51 +30,20 @@
   animation: selected-day 0.8s ease forwards;
 }
 
-@keyframes task-detail-appear-left {
+@keyframes task-detail-appear {
   0% {
-    left: 0;
-    visibility: visible;
-  }
-
-  100% {
-    left: 100%;
-  }
-}
-
-@keyframes task-detail-appear-right {
-  0% {
-    right: 0;
-    visibility: visible;
-  }
-
-  100% {
-    right: 100%;
-  }
-}
-
-@keyframes task-detail-disappear-left {
-  0% {
-    left: 100%;
-  }
-
-  50% {
-    opacity: 50%;
-  }
-
-  100% {
-    left: 0;
     opacity: 0;
-    visibility: hidden;
+    visibility: visible;
+  }
+
+  100% {
+    right: 20px;
   }
 }
 
-@keyframes task-detail-disappear-right {
+@keyframes task-detail-disappear {
   0% {
-    right: 100%;
-  }
-
-  50% {
-    opacity: 50%;
+    right: 20px;
   }
 
   100% {
@@ -108,90 +53,24 @@
   }
 }
 
-@keyframes task-creator-appear-left {
+@keyframes task-creator-appear {
   0% {
-    left: 80%;
     visibility: visible;
-    opacity: 0;
-  }
-
-  50% {
-    opacity: 50%;
   }
 
   100% {
-    left: 100%;
+    bottom: 0;
   }
 }
 
-@keyframes task-creator-appear-right {
+@keyframes task-creator-disappear {
   0% {
-    right: 80%;
-    visibility: visible;
-    opacity: 0;
-  }
-
-  50% {
-    opacity: 50%;
+    bottom: 0;
   }
 
   100% {
-    right: 100%;
-  }
-}
-
-@keyframes task-creator-disappear-left {
-  0% {
-    left: 100%;
-  }
-
-  50% {
-    opacity: 50%;
-  }
-
-  100% {
-    left: 80%;
-    opacity: 0;
+    bottom: -100%;
     visibility: hidden;
-  }
-}
-
-@keyframes task-creator-disappear-right {
-  0% {
-    right: 100%;
-  }
-
-  50% {
-    opacity: 50%;
-  }
-
-  100% {
-    right: 80%;
-    opacity: 0;
-    visibility: hidden;
-  }
-}
-
-@keyframes slide-up {
-  0% {
-    top: 0;
-  }
-
-  100% {
-    visibility: hidden;
-    top: -40px;
-    height: 0;
-  }
-}
-
-@keyframes slide-down {
-  0% {
-    top: -40px;
-  }
-
-  100% {
-    visibility: visible;
-    top: 0;
   }
 }
 

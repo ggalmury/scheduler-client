@@ -9,9 +9,10 @@ interface Props {
   navigatePoint?: () => void;
   draw: ReactElement;
   subCategory?: () => ReactElement;
+  onClick?: () => void;
 }
 
-const BtnNavCategory = ({ title, activeButton, navigatePoint, draw, subCategory }: Props): ReactElement => {
+const BtnNavCategory = ({ title, activeButton, navigatePoint, draw, subCategory, onClick }: Props): ReactElement => {
   const [subCategoryStatus, setSubCategoryStatus] = useState<boolean>(false);
 
   const subCategoryOn = (): void => {
@@ -23,10 +24,10 @@ const BtnNavCategory = ({ title, activeButton, navigatePoint, draw, subCategory 
   };
 
   return (
-    <div className="btn__category" onMouseOver={subCategoryOn} onMouseLeave={subCategoryOff}>
+    <div className="btn__category" onMouseOver={subCategoryOn} onMouseLeave={subCategoryOff} onClick={onClick}>
       <div className={`btn__category-box btn__category-box--${activeButton === title.toLowerCase() ? "click" : "hover"}`} onClick={navigatePoint}>
         <div>
-          <Svg width={24} draw={draw} />
+          <Svg width={15} draw={draw} />
         </div>
         <span>{capitalizeFirstLetter(title)}</span>
       </div>
