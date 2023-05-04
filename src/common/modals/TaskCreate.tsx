@@ -11,7 +11,7 @@ import { addPad, fullDateFormat } from "../utils/dateUtil";
 import { fetchTaskCreate } from "../../store/apis/taskRequest";
 import { RootState } from "../../store/rootReducer";
 import { AnyAction } from "@reduxjs/toolkit";
-import { clockDraw, descriptionDraw, locationDraw, xDraw } from "../utils/svgSources";
+import { clockDraw, description2Draw, descriptionDraw, locationDraw, xDraw } from "../utils/svgSources";
 import { useInput } from "../../hooks/useInput";
 import Svg from "../../components/shared/Svg";
 
@@ -179,7 +179,7 @@ const TaskCreate = ({ toggle, setToggle }: TaskCreateProp): ReactElement => {
           {Object.entries(TaskGroup).map(([key, task]) => (
             <div
               key={key}
-              className={`task-create__type-elem ${typeSelectBtn === task.type ? "btn-large" : ""}`}
+              className={`task-create__type-elem ${typeSelectBtn === task.type && "btn-large"}`}
               style={{ backgroundColor: task.color }}
               onClick={() => {
                 getType(task);
@@ -211,7 +211,7 @@ const TaskCreate = ({ toggle, setToggle }: TaskCreateProp): ReactElement => {
       </div>
       <div className="task-create__description task-create__box">
         <div className="task-create__svg">
-          <Svg width={20} draw={descriptionDraw} />
+          <Svg width={20} draw={description2Draw} />
         </div>
         <input className="task-create__input" value={description} placeholder="Description" onChange={setDescription} />
       </div>

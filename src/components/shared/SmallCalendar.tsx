@@ -1,9 +1,10 @@
 import moment from "moment";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NextSvg, PrevSvg } from "../../common/svg";
 import { RootState } from "../../store/rootReducer";
 import { setDate } from "../../store/slices/dateSlice";
+import Svg from "./Svg";
+import { nextDraw, prevDraw } from "../../common/utils/svgSources";
 
 const SmallCalendar = () => {
   const dispatch = useDispatch();
@@ -73,7 +74,7 @@ const SmallCalendar = () => {
                 );
               }
             })}
-        </tr>
+        </tr>,
       );
     }
 
@@ -86,10 +87,10 @@ const SmallCalendar = () => {
         <span onClick={returnToday}>{today.format("MMM, YYYY")}</span>
         <div className="small-cal__month-select">
           <div className="small-cal__svg" onClick={prevMonth}>
-            <PrevSvg></PrevSvg>
+            <Svg width={24} draw={prevDraw} />
           </div>
           <div className="small-cal__svg" onClick={nextMonth}>
-            <NextSvg></NextSvg>
+            <Svg width={24} draw={nextDraw} />
           </div>
         </div>
       </div>

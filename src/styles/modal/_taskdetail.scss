@@ -1,50 +1,75 @@
 .task-detail {
   display: flex;
   flex-direction: column;
-  width: 380px;
-  height: 450px;
-  background-color: $white1;
+  position: absolute;
+  width: 100%;
+  height: 88%;
+  bottom: -100%;
+  z-index: 9;
   border-radius: 10px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.25);
-  box-sizing: border-box;
-
-  & hr {
-    width: 80%;
-    margin-top: 15px;
-  }
 
   &__svg {
-    padding: 0 8px 0 20px;
-    transform: translate(0%, 10%);
-  }
-
-  &__exp {
-    height: 200px;
-  }
-
-  &__header {
     display: flex;
-    height: 60px;
-    justify-content: space-between;
-    align-items: center;
+    padding: 0 10px 0 30px;
 
     &--title {
-      margin-left: 17px;
-      padding: 5px;
-      font-size: 1.1em;
-      font-weight: 900;
+      margin-top: 10px;
+    }
+
+    &--description {
+      margin-top: 5px;
     }
   }
 
-  &__content {
+  &__exp {
+    display: flex;
+    flex-direction: column;
+    height: 430px;
+  }
+
+  &__title {
+    display: flex;
+    height: 110px;
+    align-items: flex-start;
+    padding: 30px 0;
+
+    &-word {
+      width: 320px;
+      height: 100%;
+      font-size: 2.2rem;
+      font-weight: 900;
+      word-break: break-all;
+      overflow: scroll;
+    }
+  }
+
+  &__description {
+    display: flex;
+    flex: 1;
+    align-items: flex-start;
+
+    &-word {
+      width: 300px;
+      height: 100%;
+      font-size: 1.5rem;
+      font-weight: 700;
+      word-break: break-all;
+      overflow: scroll;
+    }
+  }
+
+  &__common {
     display: flex;
     align-items: center;
-    height: 30px;
-    font-size: 0.65em;
+    height: 50px;
+    font-size: 1.4rem;
     margin-right: 20px;
   }
 
   &__footer {
+    @include centering;
+
+    display: flex;
     $height: 50px;
     height: $height;
     line-height: $height;
@@ -64,52 +89,54 @@
     text-indent: 20px;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.9em;
+    font-size: 2rem;
+  }
+
+  &__btn-create {
+    margin-right: 200px;
   }
 
   &__body {
     flex: 1;
   }
 
-  &__new-todo {
+  &__todo-create-box {
     display: flex;
+    flex-direction: column;
     position: relative;
-    align-items: center;
     margin-left: 14px;
   }
 
-  &__input {
+  &__todobox {
+    display: flex;
+    margin: 0 14px 10px 0;
+  }
+
+  &__text {
     display: flex;
     align-items: center;
-    width: 200px;
-    height: 30px;
-    background-color: #ffffff;
-    border-radius: 10px;
-  }
-
-  &__textarea {
-    height: 10px;
-    line-height: 10px;
-    font-size: 0.7em;
-  }
-
-  &__list {
-    $height: 30px;
-
-    width: 200px;
-    height: $height;
-    line-height: $height;
-    background-color: #ffffff;
-    border-radius: 10px;
-    margin: 10px 14px;
-  }
-
-  &__description {
-    text-indent: 14px;
-    font-size: 0.8em;
-  }
-
-  &__footer {
+    width: 250px;
     height: 40px;
+    background-color: $white1;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    text-indent: 14px;
+
+    & > input {
+      font-size: 1rem;
+      text-indent: 14px;
+    }
+  }
+
+  &__svg {
+    @include centering;
+
+    display: flex;
+    width: 50px;
+    height: 40px;
+    background-color: $white1;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    cursor: pointer;
   }
 }

@@ -26,6 +26,13 @@
     }
   }
 
+  &__today {
+    @include centering;
+
+    display: flex;
+    font-size: 1.7rem;
+  }
+
   &__profile {
     @include centering;
 

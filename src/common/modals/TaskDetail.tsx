@@ -1,23 +1,25 @@
 import { AnyAction } from "@reduxjs/toolkit";
 import { Dispatch, Fragment, ReactElement, useState } from "react";
 import { useDispatch } from "react-redux";
-import { fetchTaskDelete, fetchTodoCreate } from "../../store/apis/taskRequest";
-import { CheckSvg, ClockSvg, DescriptionSvg, LocationSvg, ScopeSvg, XSvg } from "../svg";
+import { fetchTaskDelete, fetchTodoCreate, fetchTodoDelete } from "../../store/apis/taskRequest";
 import { DailyTaskDeleteOrDoneRequest, DefaultDailyTask } from "../types/interfaces/task";
-import { TodoCreateRequest } from "../types/interfaces/todo";
+import { DefaultTodo, TodoCreateRequest, TodoDeleteRequest } from "../types/interfaces/todo";
 import { addPad } from "../utils/dateUtil";
+import Svg from "../../components/shared/Svg";
+import { clockDraw, description2Draw, descriptionDraw, locationDraw, plusDraw, scopeDraw, tagDraw, trashDraw, xDraw } from "../utils/svgSources";
+
+interface TaskDetailProp {
+  selectedTask: DefaultDailyTask | null;
+  toggle: boolean;
+  setTaskDetail: Dispatch<React.SetStateAction<boolean>>;
+}
 
 interface TaskDetailState {
   createTodo: boolean;
   todoDescription: string;
 }
 
-interface TaskDetailProp {
-  selectedTask: DefaultDailyTask | null;
-  setTaskDetail: Dispatch<React.SetStateAction<boolean>>;
-}
-
-const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): ReactElement => {
+const TaskDetail = ({ selectedTask, toggle, setTaskDetail }: TaskDetailProp): ReactElement => {
   const dispatch: Dispatch<AnyAction> = useDispatch();
 
   const initialValue: TaskDetailState = {
@@ -37,16 +39,24 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): ReactEleme
   };
 
   const todoBox = (): ReactElement[] | undefined => {
-    return selectedTask?.createdTodo.map((task, idx) => {
+    return selectedTask?.createdTodo.map((todo, idx) => {
       return (
-        <div key={idx} className="todolist__list">
-          <div className="todolist__description">{task.description}</div>
+        <div key={idx} className="todolist__todobox">
+          <div className="todolist__text">{todo.description}</div>
+          <div
+            className="todolist__svg"
+            onClick={() => {
+              deleteTodo(todo);
+            }}
+          >
+            <Svg width={24} draw={trashDraw} />
+          </div>
         </div>
       );
     });
   };
 
-  const getTodoDescription = (event: React.ChangeEvent<HTMLTextAreaElement>): void => {
+  const getTodoDescription = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setTodoDescription(event.target.value);
   };
 
@@ -74,68 +84,83 @@ const TaskDetail = ({ selectedTask, setTaskDetail }: TaskDetailProp): ReactEleme
     }
   };
 
+  const deleteTodo = (todo: DefaultTodo): void => {
+    const todoDeleteRequest: TodoDeleteRequest = {
+      todoId: todo.todoId,
+    };
+
+    dispatch(fetchTodoDelete(todoDeleteRequest) as any);
+  };
+
   return (
     <Fragment>
       {selectedTask && (
-        <div className="task-detail" style={{ backgroundColor: `${selectedTask.color}` }}>
+        <div className={`task-detail ${toggle ? "task-creator-appear" : "task-creator-disappear"}`} style={{ backgroundColor: `${selectedTask.color}` }}>
           <div className="task-detail__exp">
-            <div className="task-detail__header">
-              <div className="task-detail__header--title invisible-scroll">{selectedTask.title}</div>
-              <div className="task-detail__svg" onClick={taskDetailOff}>
-                <XSvg />
+            <div className="task-detail__title">
+              <div className="task-detail__svg task-detail__svg--title">
+                <Svg width={24} draw={tagDraw} />
+              </div>
+              <div className="task-detail__title-word invisible-scroll">{selectedTask.title}</div>
+            </div>
+            <div className="task-detail__common">
+              <div className="task-detail__svg">
+                <Svg width={24} draw={clockDraw} />
+              </div>
+              <div>
+                {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp; - &nbsp;{addPad(selectedTask.time.endAt.hour)} :&nbsp;
+                {addPad(selectedTask.time.endAt.minute)}
               </div>
             </div>
-            <div className="task-detail__content">
+            <div className="task-detail__common">
               <div className="task-detail__svg">
-                <ClockSvg />
-              </div>
-              {addPad(selectedTask.time.startAt.hour)} : {addPad(selectedTask.time.startAt.minute)} &nbsp; - &nbsp;{addPad(selectedTask.time.endAt.hour)} :&nbsp;
-              {addPad(selectedTask.time.endAt.minute)}
-            </div>
-            <div className="task-detail__content">
-              <div className="task-detail__svg">
-                <LocationSvg />
+                <Svg width={24} draw={locationDraw} />
               </div>
               <div className="invisible-scroll">{selectedTask.location}</div>
             </div>
-            <div className="task-detail__content">
+            <div className="task-detail__common">
               <div className="task-detail__svg">
-                <ScopeSvg />
+                <Svg width={24} draw={scopeDraw} />
               </div>
               <div className="invisible-scroll">{selectedTask.privacy}</div>
             </div>
-            <div className="task-detail__content">
-              <div className="task-detail__svg">
-                <DescriptionSvg />
+            <div className="task-detail__description">
+              <div className="task-detail__svg task-detail__svg--description">
+                <Svg width={24} draw={description2Draw} />
               </div>
-              <div className="invisible-scroll">{selectedTask.description}</div>
+              <div className="task-detail__description-word invisible-scroll">{selectedTask.description}</div>
             </div>
-            <hr />
           </div>
           <div className="todolist">
             <div className="todolist__header">
-              Todolist
-              <button className="btn-submit-small task-detail__btn--create" onClick={todoCreateToggle}>
+              <div>Todolist</div>
+              <button className="btn-submit-small todolist__btn-create" onClick={todoCreateToggle}>
                 create
               </button>
             </div>
             <div className="todolist__body invisible-scroll">
-              <div className={`todolist__new-todo ${createTodo ? "slide-down" : "slide-up"}`}>
-                <div className="todolist__input">
-                  <textarea className="todolist__textarea" onChange={getTodoDescription}></textarea>
-                </div>
-                <div className="task-detail__svg" onClick={submitTodo}>
-                  <CheckSvg />
+              <div className={`todolist__todo-create-box ${createTodo ? "slide-down" : "slide-up"}`}>
+                <div className="todolist__todobox">
+                  <div className="todolist__text">
+                    <input onChange={getTodoDescription} />
+                  </div>
+                  <div className="todolist__svg" onClick={submitTodo}>
+                    <Svg width={24} draw={plusDraw} />
+                  </div>
                 </div>
               </div>
-              <div>{todoBox()}</div>
+              <div className="todolist__todo-create-box">{todoBox()}</div>
             </div>
           </div>
           <div className="task-detail__footer">
-            <button className="btn-submit-small task-detail__btn--modify">modify</button>
-            <button className="btn-submit-small task-detail__btn--delete" onClick={deleteTask}>
-              delete
-            </button>
+            <div>
+              <button className="btn-submit-small" onClick={taskDetailOff}>
+                confirm
+              </button>
+              <button className="btn-submit-small btn-submit-small--negative" onClick={deleteTask}>
+                delete
+              </button>
+            </div>
           </div>
         </div>
       )}

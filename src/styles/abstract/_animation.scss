@@ -1,9 +1,9 @@
-.task-detail-appear {
-  animation: task-detail-appear 0.3s ease forwards;
+.task-list-appear {
+  animation: task-list-appear 0.3s ease forwards;
 }
 
-.task-detail-disappear {
-  animation: task-detail-disappear 0.3s ease forwards;
+.task-list-disappear {
+  animation: task-list-disappear 0.3s ease forwards;
 }
 
 .task-creator-appear {
@@ -12,6 +12,22 @@
 
 .task-creator-disappear {
   animation: task-creator-disappear 0.3s ease forwards;
+}
+
+.task-detail-appear {
+  animation: task-detail-appear 0.5s ease forwards;
+}
+
+.task-detail-disappear {
+  animation: task-detail-disappear 0.3s ease forwards;
+}
+
+.slide-up {
+  animation: slide-up 0.5s ease forwards;
+}
+
+.slide-down {
+  animation: slide-down 0.5s ease forwards;
 }
 
 .btn-large {
@@ -30,7 +46,7 @@
   animation: selected-day 0.8s ease forwards;
 }
 
-@keyframes task-detail-appear {
+@keyframes task-list-appear {
   0% {
     opacity: 0;
     visibility: visible;
@@ -41,7 +57,7 @@
   }
 }
 
-@keyframes task-detail-disappear {
+@keyframes task-list-disappear {
   0% {
     right: 20px;
   }
@@ -71,6 +87,50 @@
   100% {
     bottom: -100%;
     visibility: hidden;
+  }
+}
+
+@keyframes task-detail-appear {
+  0% {
+    top: 0;
+  }
+
+  100% {
+    position: fixed;
+  }
+}
+
+@keyframes task-detail-disappear {
+  0% {
+    bottom: 0;
+  }
+
+  100% {
+    bottom: -100%;
+    visibility: hidden;
+  }
+}
+
+@keyframes slide-up {
+  0% {
+    top: 0;
+  }
+
+  100% {
+    visibility: hidden;
+    top: -40px;
+    height: 0;
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    top: -40px;
+  }
+
+  100% {
+    visibility: visible;
+    top: 0;
   }
 }
 

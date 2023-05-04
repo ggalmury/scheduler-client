@@ -1,11 +1,11 @@
 .daily-task {
   display: flex;
   flex-direction: column;
-  position: absolute;
-  top: -50px;
+  position: fixed;
+  top: 70px;
   right: 0;
   width: 450px;
-  height: 105%;
+  height: 90%;
   z-index: 99;
   border-radius: 20px;
   background-color: $white1;
@@ -45,14 +45,7 @@
   }
 
   &__options {
-    display: flex;
-
-    & div {
-      @include centering;
-
-      display: flex;
-      padding: 5px;
-    }
+    margin-right: 20px;
   }
 
   &__content {
@@ -92,6 +85,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   min-height: 80px;
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -120,12 +114,4 @@
     height: 100%;
     font-size: 2rem;
   }
-}
-
-.task-child-modal {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 50%;
-  margin: 0 5px;
 }

@@ -6,9 +6,8 @@ import { SelectedDate } from "../types/interfaces/store";
 import { DefaultDailyTask } from "../types/interfaces/task";
 import { StoredTask } from "../types/types/common";
 import { addPad } from "../utils/dateUtil";
+import BtnDefaultSmall from "../../components/molecules/button/BtnDefaultSmall";
 import TaskDetail from "./TaskDetail";
-import Svg from "../../components/shared/Svg";
-import { plusDraw, xDraw } from "../utils/svgSources";
 
 interface DailyTaskListState {
   taskCreate: boolean;
@@ -54,10 +53,6 @@ const DailyTaskList = ({ tasks, toggle, setToggle }: DailyTaskListProp): ReactEl
     }
   }, [toggle]);
 
-  const closeTaskDetail = (): void => {
-    setToggle(false);
-  };
-
   const taskCreateToggle = (): void => {
     if (taskDetail) {
       setTaskDetail(false);
@@ -87,19 +82,14 @@ const DailyTaskList = ({ tasks, toggle, setToggle }: DailyTaskListProp): ReactEl
   };
 
   return (
-    <div className={`daily-task ${toggle ? "task-detail-appear" : "task-detail-disappear"}`} onClick={stopEventBubbling}>
+    <div className={`daily-task ${toggle ? "task-list-appear" : "task-list-disappear"}`} onClick={stopEventBubbling}>
       <div className="daily-task__header">
         <div className="daily-task__desc">
           <div className="daily-task__title">{title}</div>
           <div className="daily-task__current-date">{date.moment.format("dddd, MM Do, YYYY")}</div>
         </div>
         <div className="daily-task__options">
-          <div onClick={taskCreateToggle}>
-            <Svg width={25} draw={plusDraw} />
-          </div>
-          <div onClick={closeTaskDetail}>
-            <Svg width={24} draw={xDraw} />
-          </div>
+          <BtnDefaultSmall name={`${taskCreate ? "cancle" : "create"}`} onClick={taskCreateToggle} />
         </div>
       </div>
       <div className="daily-task__content invisible-scroll">
@@ -129,9 +119,7 @@ const DailyTaskList = ({ tasks, toggle, setToggle }: DailyTaskListProp): ReactEl
         )}
       </div>
       <TaskCreate toggle={taskCreate} setToggle={taskCreateToggle} />
-      {/* <div className={`task-child-modal`}>
-        <TaskDetail selectedTask={selectedTask} setTaskDetail={setTaskDetail} />
-      </div> */}
+      <TaskDetail selectedTask={selectedTask} toggle={taskDetail} setTaskDetail={setTaskDetail} />
     </div>
   );
 };

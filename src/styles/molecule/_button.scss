@@ -120,8 +120,8 @@
 .btn-submit-small {
   width: 70px;
   height: 25px;
-  background-color: $white1;
-  color: black;
+  background-color: $purple1;
+  color: $white1;
   border: none;
   border-radius: 8px;
   margin: 10px;
@@ -132,13 +132,18 @@
     transition: 0.2s;
     scale: 110%;
   }
+
+  &--negative {
+    background-color: $white1;
+    color: red;
+  }
 }
 
 .btn-submit-big {
   width: 160px;
   height: 45px;
   background-color: $purple1;
-  color: white;
+  color: $white1;
   border: none;
   border-radius: 12px;
   font-size: 1.2rem;

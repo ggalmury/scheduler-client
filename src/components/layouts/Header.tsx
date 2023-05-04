@@ -4,6 +4,9 @@ import { RootState } from "../../store/rootReducer";
 import { User } from "../../common/types/interfaces/store";
 import { useInput } from "../../hooks/useInput";
 import InputTaskSearch from "../molecules/input/InputTaskSearch";
+import moment from "moment";
+import { DateFormat } from "../../common/types/types/common";
+import { fullDateFormat } from "../../common/utils/dateUtil";
 
 const Header = (): ReactElement => {
   const userAccount: User = useSelector((state: RootState) => state.account.user);
@@ -21,6 +24,7 @@ const Header = (): ReactElement => {
         </div>
       </div>
       <div className="header__right">
+        <div className="header__today">Today is {fullDateFormat(moment())}</div>
         <div className="header__profile">
           <div className="header__profile--img">
             <img src={userAccount.image} />
